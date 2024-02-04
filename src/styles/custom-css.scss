@@ -1,0 +1,48 @@
+$primary: #019D5F;
+$success: #2eb82e;
+$danger: #ff3300;
+
+.logo {
+    width: 100px;
+}
+
+.banner-row {
+    background: url('../../public/assets/images/Banner_bg.jpg') no-repeat;
+    background-size: cover;
+    height: 30rem;
+}
+
+.find-book-heading {
+    font-family: "bold-font";
+}
+
+.heading {
+    span {
+        font-family: "bold-font";
+    }
+}
+
+.menu-bar {
+    font-family: "medium-font";
+    color: #000;
+}
+
+.page-scrolled {
+    transition: 0.5s all;
+    background-color: #cccccc !important;
+    padding-top: 0;
+}
+
+.book-card {
+    .author-name {
+        opacity: 70%;
+    }
+
+    .book-name {
+        font-family: "medium-font";
+    }
+
+    .book-price {
+        color: $primary;
+    }
+}
