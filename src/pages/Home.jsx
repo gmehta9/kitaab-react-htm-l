@@ -40,6 +40,8 @@ const books = [
     }
 ]
 
+const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
+
 function HomePage() {
 
     return (
@@ -71,7 +73,11 @@ function HomePage() {
                     Book By <span>Categories</span>
                 </div>
                 <div className="">
-
+                    <div className="p-0 d-flex justify-content-center my-4">
+                        {CategoriesList.map((cl, index) =>
+                            <button type="button" className="btn mx-2 border-0 bg-transparent" key={index + 'cl'}>{cl}</button>
+                        )}
+                    </div>
                 </div>
 
                 <Row lg={"5"} md={"4"} sm={"2"} xs={"2"}>
