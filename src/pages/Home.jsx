@@ -75,7 +75,7 @@ function HomePage() {
                 <div className="">
                     <div className="p-0 d-flex justify-content-center my-4">
                         {CategoriesList.map((cl, index) =>
-                            <button type="button" className="btn mx-2 border-0 bg-transparent" key={index + 'cl'}>{cl}</button>
+                            <button type="button" className="btn mx-2 border-0 bg-transparent px-0 mx-3" key={index + 'cl'}>{cl}</button>
                         )}
                     </div>
                 </div>

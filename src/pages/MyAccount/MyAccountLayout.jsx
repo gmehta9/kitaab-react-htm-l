@@ -1,10 +1,19 @@
-function MyAccount() {
+import { Container } from "react-bootstrap";
+import { Outlet } from "react-router-dom";
+import Footer from "../../components/Footer";
+
+function MyAccountLayout() {
 
     return (
-        <>
-            MyAccount
-        </>
+        <div className="inner-pages row border-top ">
+            <Container>
+
+                <Outlet />
+
+            </Container>
+            <Footer />
+        </div>
     )
 }
 
-export default MyAccount;
+export default MyAccountLayout;
