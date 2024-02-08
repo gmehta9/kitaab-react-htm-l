@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter, createHashRouter } from 'react-router-dom';
 import './App.scss';
 import React, { Suspense } from 'react';
 import PagesLayout from './pages/PagesLayout';
@@ -14,7 +14,7 @@ import Wishlist from './pages/MyAccount/Wishlist';
 import ProfilePage from './pages/MyAccount/ProfilePage';
 
 function App() {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: '',
       element: <PagesLayout />,

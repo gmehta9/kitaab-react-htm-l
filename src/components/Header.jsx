@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { Container, Image, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Login from "../pages/onboarding/Login";
 
 function Header() {
     const [pageScroll, setPageScroll] = useState('')
+    const [loginModalShow, setLoginModalShow] = useState(false)
     useEffect(() => {
         window.addEventListener("scroll", (event) => {
             console.log(window.scrollY);
@@ -38,16 +41,19 @@ function Header() {
                                 <Image width="35" alt="cart kitaab Jun" src="./assets/images/cart-icon.png" />
                             </Nav.Link>
 
-                            <Nav.Link
-                                href="#link"
+                            <Button
+                                type="button"
+                                onClick={() => setLoginModalShow(true)}
                                 className="btn btn-primary text-white px-3 ml-3 align-self-center">
                                 <Image src="./assets/images/user-icon.svg" />  Login
-                            </Nav.Link>
+                            </Button>
 
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+
+            <Login loginModalShow={loginModalShow} setLoginModalShow={setLoginModalShow} />
         </>
     )
 }
