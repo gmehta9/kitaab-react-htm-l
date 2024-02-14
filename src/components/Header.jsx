@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Login from "../pages/onboarding/Login";
+import { srcPriFixLocal } from "../helper/Helper";
 
 function Header() {
     const [pageScroll, setPageScroll] = useState('')
@@ -23,29 +24,35 @@ function Header() {
                 <Container>
                     <Navbar.Brand href="/">
                         <Image
-                            src="./assets/images/KJ-Logo-(1).png"
+                            src={`${srcPriFixLocal}KJ-Logo-(1).png`}
                             className="logo" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="align-items-start">
                         <Nav className="ml-auto menu-bar">
                             <Nav.Link href="/" className="mr-4 align-self-center">Home</Nav.Link>
-                            <Nav.Link href="" className="mr-4 align-self-center">Sell</Nav.Link>
-                            <Nav.Link href="" className="mr-4 align-self-center">Share</Nav.Link>
-                            <Nav.Link href="" className="mr-4 align-self-center">My List</Nav.Link>
+                            <Nav.Link href="/#/product" className="mr-4 align-self-center">Sell</Nav.Link>
+                            <Nav.Link href="/#/product" className="mr-4 align-self-center">Share</Nav.Link>
+                            <Nav.Link href="/#/product" className="mr-4 align-self-center">My List</Nav.Link>
                             <Nav.Link href="" className="mr-4 align-self-center position-relative">
                                 <span
                                     className="position-absolute bg-primary text-white rounded-circle text-center cart-count">
                                     0
                                 </span>
-                                <Image width="35" alt="cart kitaab Jun" src="./assets/images/cart-icon.png" />
+                                <Image
+                                    width="35"
+                                    alt="cart kitaab Jun"
+                                    src={`${srcPriFixLocal}cart-icon.png`}
+                                />
                             </Nav.Link>
 
                             <Button
                                 type="button"
                                 onClick={() => setLoginModalShow(true)}
                                 className="btn btn-primary text-white px-3 ml-3 align-self-center">
-                                <Image src="./assets/images/user-icon.svg" />  Login
+                                <Image
+                                    src={`${srcPriFixLocal}user-icon.svg`}
+                                />  Login
                             </Button>
 
                         </Nav>

@@ -2,6 +2,8 @@ $primary: #019D5F;
 $success: #2eb82e;
 $danger: #ff3300;
 
+$secondry: #868686;
+
 .logo {
     width: 100px;
 }
@@ -29,7 +31,7 @@ $danger: #ff3300;
 
 .page-scrolled {
     transition: 0.5s all;
-    background-color: rgba(204, 204, 204, 0.445) !important;
+    background: linear-gradient(90deg, rgba(251, 236, 232, 1) 0%, rgba(235, 231, 243, 1) 50%) !important;
     padding-top: 0;
 }
 
@@ -44,6 +46,36 @@ $danger: #ff3300;
 
     .book-price {
         color: $primary;
+    }
+
+    transition: 0.5s all;
+
+    .product-icon {
+        display: none;
+        opacity: 0;
+    }
+
+    &:hover {
+        border-radius: 5px;
+        box-shadow: 0 0 5px #868686;
+
+        .product-icon {
+            display: block;
+            opacity: 1;
+            width: 25px;
+            height: 25px;
+            top: 5px;
+            background-color: #fff !important;
+            padding: 2px;
+
+            &.right {
+                right: 5px;
+            }
+
+            &.left {
+                left: 5px;
+            }
+        }
     }
 }
 
@@ -67,4 +99,73 @@ $danger: #ff3300;
 
 .close-btn {
     right: 10px;
+}
+
+.checkbox-item {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    font-size: .8123rem;
+    color: #000;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .checkbox {
+        position: relative;
+        height: 22px;
+        width: 22px;
+        border-radius: 5px;
+        background-color: transparent;
+        border: 1px solid $secondry;
+        transition: all 0.15s;
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 1.5px;
+            width: 0px;
+            height: 0px;
+            border: solid $secondry;
+            border-width: 2px 2px 0 0;
+            opacity: 0;
+            transform-origin: left top;
+            transform: scaleX(-1) rotate(135deg);
+            transition: width 0.08s ease 0.1s, height 0.1s ease, border-color 0.3s ease,
+                opacity 0.1s ease 0.2s, border-width 0.1s ease;
+        }
+
+
+    }
+
+    input:checked~.checkbox:after {
+        opacity: 1;
+        width: 7px;
+        height: 15px;
+        border-color: $primary;
+        transition: width 0.1s ease, height 0.08s ease 0.1s, border-color 0.3s ease,
+            border-width 0.1s ease;
+    }
+
+    input:focus-visible~.checkbox {
+        border: 1px solid $primary;
+    }
+
+    &:hover input~.checkbox {
+        border: 1px solid $primary;
+    }
+}
+
+.clickable {
+    cursor: pointer;
 }

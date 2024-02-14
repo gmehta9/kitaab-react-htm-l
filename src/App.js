@@ -7,11 +7,15 @@ import HomePage from './pages/Home';
 import Login from './pages/onboarding/Login';
 import ForgotPassword from './pages/onboarding/ForgotPassword';
 import SignUp from './pages/onboarding/SignUp';
-import MyAccountLayout from './pages/MyAccount/MyAccountLayout';
-import OrderHistory from './pages/MyAccount/OrderHistory';
-import Chat from './pages/MyAccount/Chat';
-import Wishlist from './pages/MyAccount/Wishlist';
-import ProfilePage from './pages/MyAccount/ProfilePage';
+import MyAccountLayout from './pages/myAccount/MyAccountLayout';
+import OrderHistory from './pages/myAccount/OrderHistory';
+import Chat from './pages/myAccount/Chat';
+import Wishlist from './pages/myAccount/Wishlist';
+import ProfilePage from './pages/myAccount/ProfilePage';
+import ProductModuleLayout from './pages/ProductModule/ProductModuleLayout';
+import ProductByList from './pages/ProductModule/ProductByList';
+import ProductByID from './pages/ProductModule/ProductByID';
+
 
 function App() {
   const router = createHashRouter([
@@ -35,7 +39,20 @@ function App() {
           path: 'sign-up',
           element: <SignUp />,
         },
-
+        {
+          path: 'product',
+          element: <ProductModuleLayout />,
+          children: [
+            {
+              path: '',
+              element: <ProductByList />,
+            },
+            {
+              path: 'product-detail',
+              element: <ProductByID />,
+            },
+          ]
+        },
         {
           path: 'account',
           element: <MyAccountLayout />,

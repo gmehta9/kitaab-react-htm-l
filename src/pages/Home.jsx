@@ -1,6 +1,9 @@
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import { useNavigate } from "react-router-dom";
+import ProductItemUI from "../components/ProductItemUI";
+import { srcPriFixLocal } from "../helper/Helper";
 
 const books = [
     {
@@ -43,7 +46,7 @@ const books = [
 const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
 
 function HomePage() {
-
+    const navigate = useNavigate()
     return (
         <>
             <Row className="banner-row justify-content-center align-items-center">
@@ -59,7 +62,7 @@ function HomePage() {
                         <Button id="basic-addon2" className="ml-2 px-4 align-items-center d-flex">
                             <Image
                                 className="mr-2"
-                                src="./assets/images/search-icon-white.svg"
+                                src={`${srcPriFixLocal}search-icon-white.svg`}
                             />
                             Find Book
                         </Button>
@@ -75,34 +78,17 @@ function HomePage() {
                 <div className="">
                     <div className="p-0 d-flex justify-content-center my-4">
                         {CategoriesList.map((cl, index) =>
-                            <button type="button" className="btn mx-2 border-0 bg-transparent px-0 mx-3" key={index + 'cl'}>{cl}</button>
+                            <button type="button"
+                                onClick={() => navigate('/product', { state: cl })}
+                                className="btn mx-2 border-0 bg-transparent px-0 mx-3" key={index + 'cl'}>{cl}</button>
                         )}
                     </div>
                 </div>
 
                 <Row lg={"5"} md={"4"} sm={"2"} xs={"2"}>
                     {books.map(items =>
-                        <Col>
-                            <div className="book-card">
-                                <Image
-                                    src={items.cpver_image}
-                                    className="thumbnail rounded w-100" />
-                                <div className="book-info text-center mt-2">
-                                    <div className="author-name">
-                                        {items.author}
-                                    </div>
-                                    <div className="book-name">
-                                        {items.title}
-                                    </div>
-                                    <div className="book-price">
-                                        ₹ {items.price}/-
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
+                        <ProductItemUI items={items} />
                     )}
-
-
                 </Row>
 
                 <Button className="ml-2 px-4 align-items-center d-flex mx-auto mt-4">

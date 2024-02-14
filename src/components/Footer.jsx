@@ -1,5 +1,6 @@
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { srcPriFixLocal } from "../helper/Helper";
 
 function Footer() {
 
@@ -8,7 +9,7 @@ function Footer() {
             <Image
                 className="mr-2 "
                 width={241}
-                src="./assets/images/Kitaab-Junction-footer.png"
+                src={`${srcPriFixLocal}Kitaab-Junction-footer.png`}
             />
             <Container>
                 <Row className="mt-4">
@@ -36,25 +37,25 @@ function Footer() {
                             <span title="Twitter">
                                 <Image
                                     className="mr-2"
-                                    src="./assets/images/facebook.svg"
+                                    src={`${srcPriFixLocal}facebook.svg`}
                                 />
                             </span>
                             <span title="linkedin">
                                 <Image
                                     className="mr-2"
-                                    src="./assets/images/linkedin.svg"
+                                    src={`${srcPriFixLocal}linkedin.svg`}
                                 />
                             </span>
                             <span title="insta">
                                 <Image
                                     className="mr-2"
-                                    src="./assets/images/instagram.svg"
+                                    src={`${srcPriFixLocal}instagram.svg`}
                                 />
                             </span>
                             <span title="twitter">
                                 <Image
                                     className="mr-2"
-                                    src="./assets/images/twitter.svg"
+                                    src={`${srcPriFixLocal}twitter.svg`}
                                 />
                             </span>
                         </div>
