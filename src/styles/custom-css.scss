@@ -169,3 +169,15 @@ $secondry: #868686;
 .clickable {
     cursor: pointer;
 }
+
+.product {
+    &-heading {
+        color: #000;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    &-short-detail {
+        color: #6B6B6B;
+    }
+}
