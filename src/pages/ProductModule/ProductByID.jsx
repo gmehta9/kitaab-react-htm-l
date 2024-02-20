@@ -1,4 +1,4 @@
-import { Col, Image, Row } from "react-bootstrap";
+import { Button, Col, Image, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { srcPriFixLocal } from "../../helper/Helper";
 
@@ -26,8 +26,21 @@ function ProductByID() {
                         <div className="product-short-rating">
 
                         </div>
+                        <div className="product-price font-weight-bold my-4">
+                            $210 <span className="text-decoration-line-through">$250</span>
+                        </div>
+                        <div className="product-cart-btn my-4">
+                            <Button type="button" className="px-4">Add to Cart</Button>
+                        </div>
                     </div>
 
+                </Col>
+            </Row>
+            <Row>
+                <Col xl={12} className="mt-4 mb-4">
+                    <div className="h4 font-weight-bold">Description</div>
+                    <p> Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur,, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero.
+                    </p>
                 </Col>
             </Row>
         </>

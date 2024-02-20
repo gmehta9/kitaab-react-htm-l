@@ -50,7 +50,7 @@ function HomePage() {
     return (
         <>
             <Row className="banner-row justify-content-center align-items-center">
-                <Col lg={6} className="text-center">
+                <Col lg={9} className="text-center mt-4">
                     <span className="h3 find-book-heading ">Find the books that you are looking for</span>
                     <InputGroup className="mb-3 mt-3 bg-white p-2 rounded">
                         <Form.Control

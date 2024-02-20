@@ -181,3 +181,48 @@ $secondry: #868686;
         color: #6B6B6B;
     }
 }
+
+.profile-avtar {
+    &:active {
+        // outline: none;
+        box-shadow: none;
+    }
+
+    img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.account-sidebar {
+    &-item {
+        &-heading {
+            font-weight: 700;
+            margin-bottom: 15px;
+
+            i {
+                margin-right: 10px;
+                font-size: 25px;
+            }
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 29px;
+            border-bottom: 1px solid #DFDFDF;
+
+            li {
+                margin: 7px 0;
+            }
+        }
+    }
+}
+
+.icon-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through !important;
+}

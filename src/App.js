@@ -9,12 +9,17 @@ import ForgotPassword from './pages/onboarding/ForgotPassword';
 import SignUp from './pages/onboarding/SignUp';
 import MyAccountLayout from './pages/myAccount/MyAccountLayout';
 import OrderHistory from './pages/myAccount/OrderHistory';
-import Chat from './pages/myAccount/Chat';
+
 import Wishlist from './pages/myAccount/Wishlist';
 import ProfilePage from './pages/myAccount/ProfilePage';
 import ProductModuleLayout from './pages/ProductModule/ProductModuleLayout';
 import ProductByList from './pages/ProductModule/ProductByList';
 import ProductByID from './pages/ProductModule/ProductByID';
+import ChatLayout from './pages/chat/ChatLayout';
+import Chat from './pages/chat/Chat';
+import ManageAddress from './pages/myAccount/ManageAddress';
+import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
+import MyCoupons from './pages/myAccount/MyCoupons';
 
 
 function App() {
@@ -66,14 +71,35 @@ function App() {
               element: <OrderHistory />,
             },
             {
-              path: 'chat',
-              element: <Chat />,
+              path: 'manage-address',
+              element: <ManageAddress />,
+            },
+            {
+              path: 'my-coupons',
+              element: <MyCoupons />,
+            },
+            {
+              path: 'my-reviews-ratings',
+              element: <MyReviewsRatings />,
+            },
+            {
+              path: 'order-history',
+              element: <OrderHistory />,
             },
             {
               path: 'wishlist',
               element: <Wishlist />,
             },
-
+          ]
+        },
+        {
+          path: 'chat',
+          element: <ChatLayout />,
+          children: [
+            {
+              path: '',
+              element: <Chat />,
+            },
           ]
         },
       ]

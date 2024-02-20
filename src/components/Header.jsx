@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { Button, Container, Image, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Button, Container, Dropdown, Image, Nav, Navbar } from "react-bootstrap";
 import Login from "../pages/onboarding/Login";
 import { srcPriFixLocal } from "../helper/Helper";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Header() {
-    const [pageScroll, setPageScroll] = useState('')
-    const [loginModalShow, setLoginModalShow] = useState(false)
+    const [pageScroll, setPageScroll] = useState('');
+    const [loginModalShow, setLoginModalShow] = useState(false);
+    const location = useLocation()
+    const navigate = useNavigate()
     useEffect(() => {
         window.addEventListener("scroll", (event) => {
             console.log(window.scrollY);
@@ -18,23 +20,37 @@ function Header() {
         });
         return () => window.removeEventListener("scroll", () => { })
     }, [])
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [location.pathname])
+
     return (
         <>
             <Navbar expand="lg" className={`bg-transparent fixed-top top-0 ${pageScroll}`}>
-                <Container>
-                    <Navbar.Brand href="/">
+                <Container fluid>
+                    <Navbar.Brand
+                        onClick={() => navigate('/')}>
                         <Image
                             src={`${srcPriFixLocal}KJ-Logo-(1).png`}
                             className="logo" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="align-items-start">
-                        <Nav className="ml-auto menu-bar">
-                            <Nav.Link href="/" className="mr-4 align-self-center">Home</Nav.Link>
-                            <Nav.Link href="/#/product" className="mr-4 align-self-center">Sell</Nav.Link>
-                            <Nav.Link href="/#/product" className="mr-4 align-self-center">Share</Nav.Link>
-                            <Nav.Link href="/#/product" className="mr-4 align-self-center">My List</Nav.Link>
-                            <Nav.Link href="" className="mr-4 align-self-center position-relative">
+                        <Nav className="ml-auto menu-bar position-relative">
+                            <Nav.Link
+                                onClick={() => navigate('/')}
+                                className="mr-5 mb-0 h4 align-self-center">Home</Nav.Link >
+                            <Nav.Link
+                                onClick={() => navigate('/product')}
+                                className="mr-5 mb-0 h4 align-self-center">Sell</Nav.Link>
+                            <Nav.Link
+                                onClick={() => navigate('/product')}
+                                className="mr-5 mb-0 h4 align-self-center">Share</Nav.Link>
+                            <Nav.Link
+                                onClick={() => navigate('/product')}
+                                className="mr-5 mb-0 h4 align-self-center">My List</Nav.Link>
+                            <Nav.Link href="" className="mr-4  align-self-center position-relative">
                                 <span
                                     className="position-absolute bg-primary text-white rounded-circle text-center cart-count">
                                     0
@@ -54,6 +70,35 @@ function Header() {
                                     src={`${srcPriFixLocal}user-icon.svg`}
                                 />  Login
                             </Button>
+
+                            <Dropdown className="position-relative pl-5" drop={'end'}>
+
+                                <Dropdown.Toggle variant="" className="profile-avtar ml-4" drop={'end'}>
+                                    <Image
+                                        className="rounded-circle"
+                                        src="https://avatars.githubusercontent.com/u/872310?v=4"
+                                    />
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu drop={'end'} className="p-0">
+                                    <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
+                                        <i class='bx bxs-user-account'></i> Account
+                                    </Dropdown.Item>
+                                    <Dropdown.Item href="#/account/order-history" className="border-bottom py-2 pl-3">
+                                        <i class='bx bx-notepad'></i> Order History
+                                    </Dropdown.Item>
+                                    <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
+                                        <i class='bx bx-chat'></i> Chat
+                                    </Dropdown.Item>
+                                    <Dropdown.Item href="#/account/wishlist" className="border-bottom py-2 pl-3">
+                                        <i class='bx bx-bookmark'></i> Wishlist
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="py-2 pl-3">
+                                        <i class='bx bx-log-in-circle'></i> Logout
+                                    </Dropdown.Item>
+
+                                </Dropdown.Menu>
+                            </Dropdown>
 
                         </Nav>
                     </Navbar.Collapse>
