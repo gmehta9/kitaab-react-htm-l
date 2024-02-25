@@ -2,6 +2,7 @@ import { Button, Col, Image, Row } from "react-bootstrap";
 import ProductItemUI from "../../components/ProductItemUI";
 import { srcPriFixLocal } from "../../helper/Helper";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const books = [
     {
@@ -45,6 +46,8 @@ const CategoriesList = ["All", "School", "Professional Courses", "Regular Course
 
 
 function ProductByList() {
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -95,13 +98,15 @@ function ProductByList() {
                     )}
                 </ul>
             </Col>
-            <Col lg={9}>
+            <Col lg={9} >
+                <div className="text-right">
+                    <Button className="mb-3" onClick={() => navigate('add')} type="button">Add Product</Button>
+                </div>
                 <Row md={"4"} sm={"2"} xs={"2"} >
+
                     {books.map(items =>
                         <ProductItemUI items={items} className="mb-4" />
                     )}
-
-
                 </Row>
             </Col>
         </Row>

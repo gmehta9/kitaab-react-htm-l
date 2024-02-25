@@ -20,6 +20,7 @@ import Chat from './pages/chat/Chat';
 import ManageAddress from './pages/myAccount/ManageAddress';
 import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
 import MyCoupons from './pages/myAccount/MyCoupons';
+import ProductForm from './pages/ProductModule/ProductForm';
 
 
 function App() {
@@ -51,6 +52,14 @@ function App() {
             {
               path: '',
               element: <ProductByList />,
+            },
+            {
+              path: 'add',
+              element: <ProductForm />,
+            },
+            {
+              path: 'edit',
+              element: <ProductForm />,
             },
             {
               path: 'product-detail',

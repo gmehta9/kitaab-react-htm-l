@@ -3,12 +3,18 @@ import { Button, Container, Dropdown, Image, Nav, Navbar } from "react-bootstrap
 import Login from "../pages/onboarding/Login";
 import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
+import Auth from "../Auth/Auth";
 
 function Header() {
     const [pageScroll, setPageScroll] = useState('');
     const [loginModalShow, setLoginModalShow] = useState(false);
-    const location = useLocation()
-    const navigate = useNavigate()
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    const logoutHandler = () => {
+        Auth.logout()
+    }
+
     useEffect(() => {
         window.addEventListener("scroll", (event) => {
             console.log(window.scrollY);
@@ -43,12 +49,15 @@ function Header() {
                                 className="mr-5 mb-0 h4 align-self-center">Home</Nav.Link >
                             <Nav.Link
                                 onClick={() => navigate('/product')}
-                                className="mr-5 mb-0 h4 align-self-center">Sell</Nav.Link>
+                                className="mr-5 mb-0 h4 align-self-center">Sell/Share</Nav.Link>
                             <Nav.Link
-                                onClick={() => navigate('/product')}
-                                className="mr-5 mb-0 h4 align-self-center">Share</Nav.Link>
+                                onClick={() => alert('In progress')}
+                                className="mr-5 mb-0 h4 align-self-center">Community</Nav.Link>
                             <Nav.Link
-                                onClick={() => navigate('/product')}
+                                onClick={() => alert('In progress')}
+                                className="mr-5 mb-0 h4 align-self-center">Library</Nav.Link>
+                            <Nav.Link
+                                onClick={() => alert('In progress')}
                                 className="mr-5 mb-0 h4 align-self-center">My List</Nav.Link>
                             <Nav.Link href="" className="mr-4  align-self-center position-relative">
                                 <span
@@ -61,44 +70,44 @@ function Header() {
                                     src={`${srcPriFixLocal}cart-icon.png`}
                                 />
                             </Nav.Link>
-
-                            <Button
-                                type="button"
-                                onClick={() => setLoginModalShow(true)}
-                                className="btn btn-primary text-white px-3 ml-3 align-self-center">
-                                <Image
-                                    src={`${srcPriFixLocal}user-icon.svg`}
-                                />  Login
-                            </Button>
-
-                            <Dropdown className="position-relative pl-5" drop={'end'}>
-
-                                <Dropdown.Toggle variant="" className="profile-avtar ml-4" drop={'end'}>
+                            {!Auth.isUserAuthenticated() ?
+                                <Button
+                                    type="button"
+                                    onClick={() => setLoginModalShow(true)}
+                                    className="btn btn-primary text-white px-3 ml-3 align-self-center">
                                     <Image
-                                        className="rounded-circle"
-                                        src="https://avatars.githubusercontent.com/u/872310?v=4"
-                                    />
-                                </Dropdown.Toggle>
+                                        src={`${srcPriFixLocal}user-icon.svg`}
+                                    />  Login
+                                </Button>
+                                :
+                                <Dropdown className="position-relative pl-2" drop={'end'}>
+                                    <Dropdown.Toggle variant="" className="profile-avtar ml-4" drop={'end'}>
+                                        <Image
+                                            className="rounded-circle"
+                                            src="https://avatars.githubusercontent.com/u/872310?v=4"
+                                        />
+                                    </Dropdown.Toggle>
 
-                                <Dropdown.Menu drop={'end'} className="p-0">
-                                    <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
-                                        <i class='bx bxs-user-account'></i> Account
-                                    </Dropdown.Item>
-                                    <Dropdown.Item href="#/account/order-history" className="border-bottom py-2 pl-3">
-                                        <i class='bx bx-notepad'></i> Order History
-                                    </Dropdown.Item>
-                                    <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
-                                        <i class='bx bx-chat'></i> Chat
-                                    </Dropdown.Item>
-                                    <Dropdown.Item href="#/account/wishlist" className="border-bottom py-2 pl-3">
-                                        <i class='bx bx-bookmark'></i> Wishlist
-                                    </Dropdown.Item>
-                                    <Dropdown.Item className="py-2 pl-3">
-                                        <i class='bx bx-log-in-circle'></i> Logout
-                                    </Dropdown.Item>
+                                    <Dropdown.Menu drop={'end'} className="p-0">
+                                        <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
+                                            <i class='bx bxs-user-account'></i> Account
+                                        </Dropdown.Item>
+                                        <Dropdown.Item href="#/account/order-history" className="border-bottom py-2 pl-3">
+                                            <i class='bx bx-notepad'></i> Order History
+                                        </Dropdown.Item>
+                                        <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
+                                            <i class='bx bx-chat'></i> Chat
+                                        </Dropdown.Item>
+                                        <Dropdown.Item href="#/account/wishlist" className="border-bottom py-2 pl-3">
+                                            <i class='bx bx-bookmark'></i> Wishlist
+                                        </Dropdown.Item>
+                                        <Dropdown.Item className="py-2 pl-3" onClick={logoutHandler}>
+                                            <i class='bx bx-log-in-circle'></i> Logout
+                                        </Dropdown.Item>
 
-                                </Dropdown.Menu>
-                            </Dropdown>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            }
 
                         </Nav>
                     </Navbar.Collapse>

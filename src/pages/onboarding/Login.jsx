@@ -1,12 +1,23 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
+import Auth from "../../Auth/Auth";
 
 function Login({ loginModalShow, setLoginModalShow }) {
     const [signUpShowModal, setSignUpShowModal] = useState(false)
     const [forgotShowModal, setForgotShowModal] = useState(false)
+    const [userType, setUserType] = useState('')
+
+    const loginFormHandler = () => {
+        if (userType) {
+            Auth.login('userLoeged', userType)
+            setLoginModalShow(false)
+        }
+
+    }
+
     return (
         <>
             <Modal backdrop="static" centered show={loginModalShow} onHide={() => setLoginModalShow(false)}>
@@ -20,6 +31,33 @@ function Login({ loginModalShow, setLoginModalShow }) {
                 </Modal.Header>
                 <Form autoComplete="false">
                     <Modal.Body className="border-0 px-5">
+                        <Row className="mb-3 border-bottom">
+                            <Col className="text-center">
+                                <div className="radio-ui">
+                                    <input
+                                        type="radio"
+                                        id="buyerUser"
+                                        checked={userType === 'buyerUser'}
+                                        onClick={() => setUserType('buyerUser')}
+                                        name="userType"
+                                        className="d-none" />
+                                    <label htmlFor="buyerUser" className="radio-label">Buyer</label>
+                                </div>
+                            </Col>
+                            <Col className="text-center">
+                                <div className="radio-ui">
+                                    <input
+                                        type="radio"
+                                        id="sellerUser"
+                                        name="userType"
+                                        checked={userType === 'sellerUser'}
+                                        onClick={() => setUserType('sellerUser')}
+                                        className="d-none" />
+                                    <label htmlFor="sellerUser" className="radio-label">Seller</label>
+                                </div>
+                            </Col>
+
+                        </Row>
                         <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                             <Form.Label>Email & Phone no</Form.Label>
                             <Form.Control
@@ -53,7 +91,7 @@ function Login({ loginModalShow, setLoginModalShow }) {
                             className="px-4 mb-3"
                             variant="primary"
                             type="button"
-                            onClick={() => setLoginModalShow(false)}>
+                            onClick={() => loginFormHandler()}>
                             Sign In
                         </Button>
                         <div className="mb-4">

@@ -17,7 +17,9 @@ function MyAccountLayout() {
                                 <li
                                     class={`${location.pathname === '/account/profile' ? 'text-primary' : ''} clickable`}
                                     onClick={() => navigate('/account/profile')}
-                                >Profile Information</li>
+                                >
+                                    Profile Information
+                                </li>
                                 <li
                                     class={`${location.pathname === '/account/manage-address' ? 'text-primary' : ''} clickable`}
                                     onClick={() => navigate('/account/manage-address')}
@@ -28,12 +30,12 @@ function MyAccountLayout() {
                             <div className="account-sidebar-item-heading d-flex">
                                 <i class='bx bxs-user-detail'></i> My Stuff</div>
                             <ul className=" border-0">
-                                <li
+                                {/* <li
                                     class={`${location.pathname === '/account/my-coupons' ? 'text-primary' : ''} clickable`}
                                     onClick={() => navigate('/account/my-coupons')}>My Coupons</li>
                                 <li
                                     class={`${location.pathname === '/account/my-reviews-ratings' ? 'text-primary' : ''} clickable`}
-                                    onClick={() => navigate('/account/my-reviews-ratings')}>My Reviews & Ratings</li>
+                                    onClick={() => navigate('/account/my-reviews-ratings')}>My Reviews & Ratings</li> */}
                                 <li
                                     class={`${location.pathname === '/account/order-history' ? 'text-primary' : ''} clickable`}
                                     onClick={() => navigate('/account/order-history')}>Order History</li>
