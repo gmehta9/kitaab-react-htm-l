@@ -4,11 +4,17 @@ import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import Auth from "../../Auth/Auth";
+import { axiosInstance } from "../../axios/axios-config";
+import toast from 'react-hot-toast';
+import { useForm } from "react-hook-form";
+
 
 function Login({ loginModalShow, setLoginModalShow }) {
     const [signUpShowModal, setSignUpShowModal] = useState(false)
     const [forgotShowModal, setForgotShowModal] = useState(false)
     const [userType, setUserType] = useState('')
+
+    const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const loginFormHandler = () => {
         if (userType) {
@@ -17,7 +23,21 @@ function Login({ loginModalShow, setLoginModalShow }) {
         }
 
     }
-
+    const formSubmitHandler = (data) => {
+        axiosInstance.post("sign-in-pin", data, {
+            // headers: headers,
+        }).then((res) => {
+            // setLoading(false);
+            if (res) {
+                toast.success("Login Successfully!");
+                Auth.login(res.data, true)
+                Auth.removePatientInfo()
+                // navigate("/gfe/select-treatment");
+            }
+        }).catch((error) => {
+            // setLoading(false);
+        });
+    }
     return (
         <>
             <Modal backdrop="static" centered show={loginModalShow} onHide={() => setLoginModalShow(false)}>
@@ -29,7 +49,7 @@ function Login({ loginModalShow, setLoginModalShow }) {
                         ✖
                     </button>
                 </Modal.Header>
-                <Form autoComplete="false">
+                <Form autoComplete="false" onSubmit={handleSubmit(formSubmitHandler)}>
                     <Modal.Body className="border-0 px-5">
                         {/* <Row className="mb-3 border-bottom">
                             <Col className="text-center">
