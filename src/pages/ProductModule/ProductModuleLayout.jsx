@@ -5,9 +5,11 @@ import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductModuleLayout() {
     const location = useLocation()
+
+    console.log('location.pathname', location.pathname);
     return (
         <div className="inner-pages row border-top ">
-            {location.pathname !== '/product/add' &&
+            {(location.pathname !== '/product/add' && location.pathname !== '/product/product-detail') &&
                 <Container fluid className="border-bottom mb-3">
 
                     <Container>

@@ -22,8 +22,8 @@ import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
 import MyCoupons from './pages/myAccount/MyCoupons';
 import ProductForm from './pages/ProductModule/ProductForm';
 
-
 function App() {
+
   const router = createHashRouter([
     {
       path: '',

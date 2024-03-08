@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
@@ -31,7 +31,7 @@ function Login({ loginModalShow, setLoginModalShow }) {
                 </Modal.Header>
                 <Form autoComplete="false">
                     <Modal.Body className="border-0 px-5">
-                        <Row className="mb-3 border-bottom">
+                        {/* <Row className="mb-3 border-bottom">
                             <Col className="text-center">
                                 <div className="radio-ui">
                                     <input
@@ -57,7 +57,7 @@ function Login({ loginModalShow, setLoginModalShow }) {
                                 </div>
                             </Col>
 
-                        </Row>
+                        </Row> */}
                         <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                             <Form.Label>Email & Phone no</Form.Label>
                             <Form.Control

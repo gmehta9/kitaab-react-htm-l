@@ -8,7 +8,7 @@ function ProductByID() {
     console.log('location', location);
     return (
         <>
-            <Row>
+            <Row className="mt-5">
                 <Col xl={4} md={4}>
 
                     <Image

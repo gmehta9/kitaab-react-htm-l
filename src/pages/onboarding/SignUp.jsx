@@ -19,7 +19,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                 </Modal.Header>
                 <Modal.Body className="border-0 px-5">
                     <Form autoComplete="false">
-                        <Row className="mb-3">
+                        {/* <Row className="mb-3">
                             <Col className="text-center">
                                 <div className="radio-ui">
                                     <input type="radio" id="buyerUser" name="userType" className="d-none" />
@@ -32,7 +32,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                     <label htmlFor="sellerUser" className="radio-label">Seller</label>
                                 </div>
                             </Col>
-                        </Row>
+                        </Row> */}
                         <Form.Group className="mb-4" controlId="name">
                             <Form.Label>Name</Form.Label>
                             <Form.Control
@@ -71,7 +71,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                             </Col>
                         </Row>
 
-                        <Form.Group className="mb-4" >
+                        <Form.Group className="mb-4" controlId="password">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 autoComplete="false"
@@ -79,12 +79,20 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                 type="password"
                             />
                         </Form.Group>
-                        <Form.Group className="mb-4" controlId="name">
+                        <Form.Group className="mb-4" controlId="organization">
+                            <Form.Label>Organization</Form.Label>
+                            <Form.Control
+                                autoComplete="false"
+                                name="organization"
+                                type="text"
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-4" controlId="pincode">
                             <Form.Label>Location Pin Code</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
-                                name="phoneEmailInput"
+                                name="pincode"
                                 placeholder="Enter Pin Code"
                                 autoFocus
                             />
