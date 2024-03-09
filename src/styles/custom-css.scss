@@ -327,3 +327,15 @@ $secondry: #868686;
 
 
 }
+
+@media (max-width: 992px) {
+    .navbar-collapse.collapse {
+        background-color: #DFDFDF;
+
+        a {
+            text-align: left;
+            padding-left: 25px;
+            border-bottom: 1px solid rgba(70, 70, 70, 0.338);
+        }
+    }
+}

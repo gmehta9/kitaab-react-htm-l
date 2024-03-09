@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import Input from "../../components/Input";
+import ReactQuill from "react-quill";
 
 function ProductForm() {
     const [years, setYears] = useState();
+    const { register, handleSubmit, reset, getValues, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         const years = Array.from({ length: 20 }, (_, index) => (currentYear - index).toString());
@@ -17,13 +21,21 @@ function ProductForm() {
                     <Col lg={6}>
 
                         <div className="form-group mb-3">
-                            <label htmlFor="productTitle">Product Title <span className="text-danger small">*</span></label>
-                            <input type="text" className="form-control" id="productTitle" aria-describedby="productTitle" />
+                            <label
+                                htmlFor="productTitle">Product Title <span className="text-danger small">*</span></label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="productTitle"
+                                {...register('productTitle')}
+                                aria-describedby="productTitle" />
                         </div>
 
                         <div className="form-group mb-3">
                             <label htmlFor="exampleInputEmail1">Category </label>
-                            <select className="form-control">
+                            <select
+                                {...register('category')}
+                                className="form-control">
                                 <option value="option1">Category 1</option>
                                 <option value="option2">Category 2</option>
                                 <option value="option3">Category 3</option>
@@ -35,26 +47,44 @@ function ProductForm() {
                             <Col lg={4} className="col-md-6">
                                 <div className="form-group mb-3">
                                     <label htmlFor="priceInput">Price<span className="text-danger small">*</span></label>
-                                    <input type="number" className="form-control" id="priceInput" aria-describedby="priceInput" />
+                                    <input
+                                        {...register('price')}
+                                        type="number"
+                                        className="form-control"
+                                        id="priceInput"
+                                        aria-describedby="priceInput" />
                                 </div>
                             </Col>
 
                             <Col lg={4}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="salePriceInput">Sale Price</label>
-                                    <input type="number" className="form-control" id="salePriceInput" aria-describedby="salePriceInput" />
+                                    <input
+                                        {...register('salePrice')}
+                                        type="number"
+                                        className="form-control"
+                                        id="salePriceInput"
+                                        aria-describedby="salePriceInput" />
                                 </div>
                             </Col>
                             <Col lg={4}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="AuthorInput">Author <span className="text-danger small">*</span></label>
-                                    <input type="text" className="form-control" id="AuthorInput" aria-describedby="AuthorInput" />
+                                    <input
+                                        {...register('author')}
+                                        type="text"
+                                        className="form-control"
+                                        id="AuthorInput"
+                                        aria-describedby="AuthorInput" />
                                 </div>
                             </Col>
                             <Col lg={6}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="transactType">Transact Type </label>
-                                    <select className="form-control" id="transactType">
+                                    <select
+                                        {...register('transactType')}
+                                        className="form-control"
+                                        id="transactType">
                                         <option value="Sharing">Sell</option>
                                         <option value="sharing">Sharing for 60 days</option>
                                     </select>
@@ -63,7 +93,10 @@ function ProductForm() {
                             <Col lg={6}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="yearofPublication">Year of Publication <span className="text-danger small">*</span></label>
-                                    <select className="form-control" id="yearofPublication">
+                                    <select
+                                        {...register('yearofPublication')}
+                                        className="form-control"
+                                        id="yearofPublication">
                                         {years?.map((y, index) =>
                                             <option value={y} key={index + 'y'}>{y}</option>
                                         )}
@@ -75,10 +108,13 @@ function ProductForm() {
                             <Col lg={12}>
                                 <div className="form-group mb-3">
                                     <label htmlFor="short_description">Short Description<span className="text-danger small">*</span></label>
-                                    <textarea
-                                        className="form-control"
-                                        name="short_description"
-                                        id="short_description"></textarea>
+                                    <ReactQuill
+                                        className="edit-class"
+                                        theme="snow"
+                                        value={getValues('shortDescription')}
+                                        onChange={(data) => setValue("shortDescription", data)
+                                        }
+                                    />
                                 </div>
                             </Col>
 
@@ -102,10 +138,12 @@ function ProductForm() {
                     <Col lg={12} className="col-md-12 mb-3">
                         <div className="form-group mb-3">
                             <label htmlFor="description">Description</label>
-                            <textarea
-                                className="form-control"
-                                name="description"
-                                id="description"></textarea>
+                            <ReactQuill
+                                className="edit-class"
+                                theme="snow"
+                                value={getValues('description')}
+                                onChange={(data) => setValue("description", data)}
+                            />
                         </div>
                     </Col>
 

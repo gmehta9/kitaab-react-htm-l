@@ -46,20 +46,20 @@ function Header() {
                         <Nav className="ml-auto menu-bar position-relative">
                             <Nav.Link
                                 onClick={() => navigate('/')}
-                                className="mr-5 mb-0 h4 align-self-center">Home</Nav.Link >
+                                className="mr-lg-5 mb-0 h4 align-self-lg-center">Home</Nav.Link >
                             <Nav.Link
                                 onClick={() => navigate('/product')}
-                                className="mr-5 mb-0 h4 align-self-center">Sell/Share</Nav.Link>
+                                className="mr-lg-5 mb-0 h4 align-self-lg-center">Sell/Share</Nav.Link>
                             <Nav.Link
                                 onClick={() => alert('In progress')}
-                                className="mr-5 mb-0 h4 align-self-center">Community</Nav.Link>
+                                className="mr-lg-5 mb-0 h4 align-self-lg-center">Community</Nav.Link>
                             <Nav.Link
                                 onClick={() => alert('In progress')}
-                                className="mr-5 mb-0 h4 align-self-center">Library</Nav.Link>
+                                className="mr-lg-5 mb-0 h4 align-self-lg-center">Library</Nav.Link>
                             <Nav.Link
                                 onClick={() => alert('In progress')}
-                                className="mr-5 mb-0 h4 align-self-center">My List</Nav.Link>
-                            <Nav.Link href="" className="mr-4  align-self-center position-relative">
+                                className="mr-lg-5 mb-0 h4 align-self-lg-center">My List</Nav.Link>
+                            <Nav.Link href="" className="mr-lg-4  align-self-lg-center position-relative">
                                 <span
                                     className="position-absolute bg-primary text-white rounded-circle text-center cart-count">
                                     0
@@ -74,7 +74,7 @@ function Header() {
                                 <Button
                                     type="button"
                                     onClick={() => setLoginModalShow(true)}
-                                    className="btn btn-primary text-white px-3 ml-3 align-self-center">
+                                    className="btn btn-primary text-white px-3 ml-3 align-self-lg-center">
                                     <Image
                                         src={`${srcPriFixLocal}user-icon.svg`}
                                     />  Login

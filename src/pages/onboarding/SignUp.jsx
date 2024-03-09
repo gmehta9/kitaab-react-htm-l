@@ -1,9 +1,28 @@
 
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { axiosInstance } from "../../axios/axios-config";
+import toast from "react-hot-toast";
 
 function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
 
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+
+    const formSubmitHandler = (data) => {
+        console.log(data);
+        axiosInstance.post("sign-in-pin", data, {
+            // headers: headers,
+        }).then((res) => {
+
+            if (res) {
+                toast.success("SignUp Successfully!");
+                setLoginModalShow()
+            }
+        }).catch((error) => {
+
+        });
+    }
     return (
         <>
             <Modal backdrop="static" centered show={signUpShowModal} onHide={() => setSignUpShowModal(false)}>
@@ -11,14 +30,18 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                     <Modal.Title className="font-weight-bold">Create Account</Modal.Title>
 
                     <button
-                        onClick={() => setSignUpShowModal(false)}
+                        onClick={() => {
+                            reset()
+                            setSignUpShowModal(false)
+                        }}
                         className="bg-transparent border-0 position-absolute close-btn">
                         ✖
                     </button>
 
                 </Modal.Header>
-                <Modal.Body className="border-0 px-5">
-                    <Form autoComplete="false">
+                <Form autoComplete="false" onSubmit={handleSubmit(formSubmitHandler)}>
+                    <Modal.Body className="border-0 px-5">
+
                         {/* <Row className="mb-3">
                             <Col className="text-center">
                                 <div className="radio-ui">
@@ -38,10 +61,19 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
-                                name="phoneEmailInput"
+                                name="name"
+                                {...register('name', {
+                                    required: 'Please enter name.'
+                                })}
                                 placeholder="Enter your Name"
                                 autoFocus
                             />
+
+                            {errors?.name &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.name?.message}
+                                </span>
+                            }
                         </Form.Group>
 
                         <Row>
@@ -51,10 +83,18 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
-                                        name="phoneEmailInput"
+                                        name="email"
+                                        {...register('email', {
+                                            required: 'Please enter your email.'
+                                        })}
                                         placeholder="Enter Your Email ID"
                                         autoFocus
                                     />
+                                    {errors?.email &&
+                                        <span className="text-danger small position-absolute">
+                                            {errors?.email?.message}
+                                        </span>
+                                    }
                                 </Form.Group>
                             </Col>
                             <Col lg="6">
@@ -63,10 +103,18 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
-                                        name="phoneEmailInput"
+                                        name="phoneno"
+                                        {...register('phoneno', {
+                                            required: 'Please enter your phone no.'
+                                        })}
                                         placeholder="Enter Your Phone"
                                         autoFocus
                                     />
+                                    {errors?.phoneno &&
+                                        <span className="text-danger small position-absolute">
+                                            {errors?.phoneno?.message}
+                                        </span>
+                                    }
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -76,16 +124,33 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                             <Form.Control
                                 autoComplete="false"
                                 name="password"
+                                // isValid={!errors?.password}
+                                {...register('password', {
+                                    required: 'Please enter password.'
+                                })}
                                 type="password"
                             />
+                            {errors?.password &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.password?.message}
+                                </span>
+                            }
                         </Form.Group>
                         <Form.Group className="mb-4" controlId="organization">
                             <Form.Label>Organization</Form.Label>
                             <Form.Control
                                 autoComplete="false"
                                 name="organization"
+                                {...register('organization', {
+                                    required: 'Please enter organization.'
+                                })}
                                 type="text"
                             />
+                            {errors?.organization &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.organization?.message}
+                                </span>
+                            }
                         </Form.Group>
                         <Form.Group className="mb-4" controlId="pincode">
                             <Form.Label>Location Pin Code</Form.Label>
@@ -93,27 +158,38 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                 type="text"
                                 autoComplete="false"
                                 name="pincode"
+                                {...register('pincode', {
+                                    required: 'Please enter pincode.'
+                                })}
                                 placeholder="Enter Pin Code"
                                 autoFocus
                             />
+                            {errors?.pincode &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.pincode?.message}
+                                </span>
+                            }
                         </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
 
-                    <Button
-                        className="px-4 mb-3"
-                        variant="primary"
-                        onClick={() => setSignUpShowModal(false)}>
-                        Submit
-                    </Button>
-                    <div className="mb-4">
-                        <Link type="button" onClick={() => {
-                            setLoginModalShow(true)
-                            setSignUpShowModal(false)
-                        }} >Login</Link>
-                    </div>
-                </Modal.Footer>
+                    </Modal.Body>
+                    <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
+
+                        <Button
+                            className="px-4 mb-3"
+                            variant="primary"
+                            type="submit"
+                        // onClick={() => setSignUpShowModal(false)}
+                        >
+                            Submit
+                        </Button>
+                        <div className="mb-4">
+                            <Link type="button" onClick={() => {
+                                setLoginModalShow(true)
+                                setSignUpShowModal(false)
+                            }} >Login</Link>
+                        </div>
+                    </Modal.Footer>
+                </Form>
             </Modal>
         </>
     )

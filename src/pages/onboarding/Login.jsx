@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
@@ -14,7 +14,7 @@ function Login({ loginModalShow, setLoginModalShow }) {
     const [forgotShowModal, setForgotShowModal] = useState(false)
     const [userType, setUserType] = useState('')
 
-    const { register, handleSubmit, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const loginFormHandler = () => {
         if (userType) {
@@ -38,13 +38,20 @@ function Login({ loginModalShow, setLoginModalShow }) {
             // setLoading(false);
         });
     }
+
+    useEffect(() => {
+
+    }, [reset])
     return (
         <>
-            <Modal backdrop="static" centered show={loginModalShow} onHide={() => setLoginModalShow(false)}>
+            <Modal backdrop="static" centered show={loginModalShow} >
                 <Modal.Header className="position-relative justify-content-center border-0">
                     <Modal.Title className="font-weight-bold">Login</Modal.Title>
                     <button
-                        onClick={() => setLoginModalShow(false)}
+                        onClick={() => {
+                            reset()
+                            setLoginModalShow(false)
+                        }}
                         className="bg-transparent border-0 position-absolute close-btn">
                         ✖
                     </button>
@@ -83,18 +90,35 @@ function Login({ loginModalShow, setLoginModalShow }) {
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
-                                name="phoneEmailInput"
-                                placeholder="Enter your phone or email"
+                                name="phoneEmail"
+                                {...register('phoneEmail', {
+                                    required: 'Please enter your phone or email.'
+                                })}
+                                placeholder="Enter your phone or email."
                                 autoFocus
                             />
+                            {errors?.phoneEmail &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.phoneEmail?.message}
+                                </span>
+                            }
                         </Form.Group>
                         <Form.Group className="mb-2" >
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 autoComplete="false"
+                                {...register('password', {
+                                    required: 'Please enter your password.'
+                                })}
                                 name="password"
+                                placeholder="Enter your password."
                                 type="password"
                             />
+                            {errors?.password &&
+                                <span className="text-danger small position-absolute">
+                                    {errors?.password?.message}
+                                </span>
+                            }
                         </Form.Group>
                         <div className="text-right">
                             <Link
@@ -110,8 +134,8 @@ function Login({ loginModalShow, setLoginModalShow }) {
                         <Button
                             className="px-4 mb-3"
                             variant="primary"
-                            type="button"
-                            onClick={() => loginFormHandler()}>
+                            type="submit"
+                        >
                             Sign In
                         </Button>
                         <div className="mb-4">
