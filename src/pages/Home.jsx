@@ -49,6 +49,7 @@ function HomePage() {
     const navigate = useNavigate()
     return (
         <>
+
             <Row className="banner-row justify-content-center align-items-center">
                 <Col lg={9} className="text-center mt-4">
                     <span className="h3 find-book-heading ">Find the books that you are looking for</span>

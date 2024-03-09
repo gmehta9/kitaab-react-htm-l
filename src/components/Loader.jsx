@@ -8,6 +8,7 @@ function Loader() {
                 <figure class="page"></figure>
                 <figure class="page"></figure>
             </div>
+            <span className='position-absolute loading-text'>Loading...</span>
         </div>
     )
 }

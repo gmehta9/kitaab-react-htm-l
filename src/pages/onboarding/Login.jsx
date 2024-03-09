@@ -3,7 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
-import Auth from "../../Auth/Auth";
+import Auth from "../../auth/Auth";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";

@@ -3,7 +3,7 @@ import { Button, Container, Dropdown, Image, Nav, Navbar } from "react-bootstrap
 import Login from "../pages/onboarding/Login";
 import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
-import Auth from "../Auth/Auth";
+import Auth from "../auth/Auth";
 
 function Header() {
     const [pageScroll, setPageScroll] = useState('');

@@ -8,10 +8,10 @@ import HomePage from './pages/Home';
 import Login from './pages/onboarding/Login';
 import ForgotPassword from './pages/onboarding/ForgotPassword';
 import SignUp from './pages/onboarding/SignUp';
-import MyAccountLayout from './pages/MyAccount/MyAccountLayout';
+// import MyAccountLayout from './pages/MyAccount/MyAccountLayout';
 import OrderHistory from './pages/myAccount/OrderHistory';
 
-import Wishlist from './pages/MyAccount/Wishlist';
+// import Wishlist from './pages/MyAccount/Wishlist';
 import ProfilePage from './pages/myAccount/ProfilePage';
 import ProductModuleLayout from './pages/ProductModule/ProductModuleLayout';
 import ProductByList from './pages/ProductModule/ProductByList';
@@ -70,7 +70,7 @@ function App() {
         },
         {
           path: 'account',
-          element: <MyAccountLayout />,
+          // element: <MyAccountLayout />,
           children: [
             {
               path: 'profile',
@@ -96,10 +96,10 @@ function App() {
               path: 'order-history',
               element: <OrderHistory />,
             },
-            {
-              path: 'wishlist',
-              element: <Wishlist />,
-            },
+            // {
+            //   path: 'wishlist',
+            //   element: <Wishlist />,
+            // },
           ]
         },
         {

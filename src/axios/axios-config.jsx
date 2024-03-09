@@ -1,23 +1,22 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios from "axios";
+import Auth from "../auth/Auth";
 
-import Auth from "../Auth/Auth";
-
-const onRequest = (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+const onRequest = (config) => {
   // console.info(`[request] [${JSON.stringify(config)}]`);
   return config;
 }
 
-const onRequestError = (error: AxiosError): Promise<AxiosError> => {
+const onRequestError = (error) => {
   // console.error(`[request error] [${JSON.stringify(error)}]`);
   return Promise.reject(error);
 }
 
-const onResponse = (response: AxiosResponse): AxiosResponse => {
+const onResponse = (response) => {
   // console.info(`[response] [${JSON.stringify(response)}]`);
   return response.data;
 }
 
-const onResponseError = (error: AxiosError<any>): Promise<AxiosError> => {
+const onResponseError = (error) => {
   // console.log(`[response error] [${JSON.stringify(error?.response?.data?.message)}]`);
 
   // toast.error(error?.response?.data?.message || 'Something went wrong!')
@@ -36,7 +35,7 @@ const onResponseError = (error: AxiosError<any>): Promise<AxiosError> => {
   return Promise.reject(error.response);
 }
 
-export function setupInterceptorsTo(axiosInstance: AxiosInstance): AxiosInstance {
+export function setupInterceptorsTo(axiosInstance) {
   axiosInstance.interceptors.request.use(onRequest, onRequestError);
   axiosInstance.interceptors.response.use(onResponse, onResponseError);
   return axiosInstance;
