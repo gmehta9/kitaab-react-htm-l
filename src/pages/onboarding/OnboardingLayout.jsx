@@ -1,12 +1,10 @@
-import { Outlet } from "react-router-dom";
-import Loader from "../../components/Loader";
-
+import { Outlet, useOutletContext } from "react-router-dom";
 function OnboardingLayout() {
-
+    const { setIsContentLoading } = useOutletContext()
     return (
         <>
-            <Loader />
-            <Outlet />
+
+            <Outlet context={{ setIsContentLoading }} />
         </>
     )
 }

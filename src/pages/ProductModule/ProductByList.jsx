@@ -73,9 +73,9 @@ function ProductByList() {
                 <ul className="pl-0 list-unstyled">
                     {CategoriesList.map((cl, index) =>
                         <li key={index + 'cl'}>
-                            <label for={index + 'cl'} class="checkbox-item">{cl}
+                            <label for={index + 'cl'} className="checkbox-item">{cl}
                                 <input type="checkbox" id={index + 'cl'} name="categories" aria-checked="false" />
-                                <span class="checkbox mr-2"></span>
+                                <span className="checkbox mr-2"></span>
                             </label>
                         </li>
                     )}
@@ -90,9 +90,9 @@ function ProductByList() {
                 <ul className="pl-0 list-unstyled">
                     {CategoriesList.map((cl, index) =>
                         <li key={index + 'cll'}>
-                            <label for={index + 'cll'} class="checkbox-item">{cl}
+                            <label for={index + 'cll'} className="checkbox-item">{cl}
                                 <input type="checkbox" id={index + 'cll'} name="Author" aria-checked="false" />
-                                <span class="checkbox mr-2"></span>
+                                <span className="checkbox mr-2"></span>
                             </label>
                         </li>
                     )}

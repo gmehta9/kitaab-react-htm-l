@@ -4,21 +4,22 @@ import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 
-function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow }) {
+function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow, setIsContentLoading }) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
-        axiosInstance.post("sign-in-pin", data, {
+        setIsContentLoading(true)
+        axiosInstance.post("auth/pass-reset", data, {
             // headers: headers,
         }).then((res) => {
-            // setLoading(false);
             if (res) {
+                setIsContentLoading(false)
                 toast.success("Login Successfully!");
 
             }
         }).catch((error) => {
-            // setLoading(false);
+            setIsContentLoading(false)
         });
     }
     return (

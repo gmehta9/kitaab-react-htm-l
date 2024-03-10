@@ -1,9 +1,12 @@
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import { srcPriFixLocal } from "../helper/Helper";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { axiosInstance, headers } from "../axios/axios-config";
+import Auth from "../auth/Auth";
 
 const books = [
     {
@@ -43,10 +46,42 @@ const books = [
     }
 ]
 
-const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
-
 function HomePage() {
     const navigate = useNavigate()
+    const [categoriesList, setCategoriesList] = useState()
+    const { setIsContentLoading } = useOutletContext()
+    /**
+ * @method [getProductListHandler] use to get Product List 
+ * @param [event] onchange event of checkbox
+ */
+    const getCategoriesListHandler = useCallback(async (p) => {
+        setIsContentLoading(true)
+        const params = {
+            page: p,
+            size: 50,
+        };
+        let APIUrl = 'category'
+
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+                setCategoriesList(response?.data?.data)
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        getCategoriesListHandler()
+    }, [])
+
     return (
         <>
 
@@ -78,10 +113,18 @@ function HomePage() {
                 </div>
                 <div className="">
                     <div className="p-0 d-flex justify-content-center my-4">
-                        {CategoriesList.map((cl, index) =>
+                        <button type="button"
+
+                            className="btn mx-2 border-0 bg-transparent px-0 mx-3">All</button>
+                        {categoriesList && categoriesList.map((cl, index) =>
                             <button type="button"
-                                onClick={() => navigate('/product', { state: cl })}
-                                className="btn mx-2 border-0 bg-transparent px-0 mx-3" key={index + 'cl'}>{cl}</button>
+                                onClick={() => navigate('/product', {
+                                    state: { name: cl?.name, catID: cl?.id }
+                                })}
+                                className="btn mx-2 border-0 bg-transparent px-0 mx-3"
+                                key={index + 'cl'}>
+                                {cl?.name}
+                            </button>
                         )}
                     </div>
                 </div>

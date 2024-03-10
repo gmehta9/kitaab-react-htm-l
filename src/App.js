@@ -8,8 +8,9 @@ import HomePage from './pages/Home';
 import Login from './pages/onboarding/Login';
 import ForgotPassword from './pages/onboarding/ForgotPassword';
 import SignUp from './pages/onboarding/SignUp';
-// import MyAccountLayout from './pages/MyAccount/MyAccountLayout';
+
 import OrderHistory from './pages/myAccount/OrderHistory';
+import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';
 
 // import Wishlist from './pages/MyAccount/Wishlist';
 import ProfilePage from './pages/myAccount/ProfilePage';
@@ -34,18 +35,18 @@ function App() {
           path: '',
           element: <HomePage />
         },
-        {
-          path: 'login',
-          element: <Login />,
-        },
-        {
-          path: 'forgot-password',
-          element: <ForgotPassword />,
-        },
-        {
-          path: 'sign-up',
-          element: <SignUp />,
-        },
+        // {
+        //   path: 'login',
+        //   element: <Login />,
+        // },
+        // {
+        //   path: 'forgot-password',
+        //   element: <ForgotPassword />,
+        // },
+        // {
+        //   path: 'sign-up',
+        //   element: <SignUp />,
+        // },
         {
           path: 'product',
           element: <ProductModuleLayout />,
@@ -70,7 +71,7 @@ function App() {
         },
         {
           path: 'account',
-          // element: <MyAccountLayout />,
+          element: <MyAccountLayoutPage />,
           children: [
             {
               path: 'profile',
@@ -126,7 +127,17 @@ function App() {
   return (
     <React.StrictMode>
       <Suspense fallback={'Loading...'}>
-        <Toaster />
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            // Define default options
+
+            duration: 5000,
+            style: {
+              background: '#363636',
+              color: '#fff',
+            },
+          }} />
         <RouterProvider
           router={router}
         />

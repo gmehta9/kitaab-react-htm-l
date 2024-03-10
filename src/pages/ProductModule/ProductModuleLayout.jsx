@@ -1,11 +1,11 @@
 import { Button, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useOutletContext } from "react-router-dom";
 import Footer from "../../components/Footer";
 import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductModuleLayout() {
     const location = useLocation()
-
+    const { setIsContentLoading } = useOutletContext()
     console.log('location.pathname', location.pathname);
     return (
         <div className="inner-pages row border-top ">
@@ -44,7 +44,7 @@ function ProductModuleLayout() {
 
 
             <Container>
-                <Outlet />
+                <Outlet context={{ setIsContentLoading }} />
             </Container>
 
 

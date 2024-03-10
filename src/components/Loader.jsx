@@ -3,10 +3,10 @@ function Loader() {
 
     return (
         <div className="loader-container">
-            <div class="loader book">
-                <figure class="page"></figure>
-                <figure class="page"></figure>
-                <figure class="page"></figure>
+            <div className="loader book">
+                <figure className="page"></figure>
+                <figure className="page"></figure>
+                <figure className="page"></figure>
             </div>
             <span className='position-absolute loading-text'>Loading...</span>
         </div>

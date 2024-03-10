@@ -9,33 +9,26 @@ import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 
 
-function Login({ loginModalShow, setLoginModalShow }) {
-    const [signUpShowModal, setSignUpShowModal] = useState(false)
-    const [forgotShowModal, setForgotShowModal] = useState(false)
-    const [userType, setUserType] = useState('')
+function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsContentLoading }) {
+    const [signUpShowModal, setSignUpShowModal] = useState(false);
+    const [forgotShowModal, setForgotShowModal] = useState(false);
+
+    // const [userType, setUserType] = useState('')
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
-    const loginFormHandler = () => {
-        if (userType) {
-            Auth.login('userLoeged', userType)
-            setLoginModalShow(false)
-        }
-
-    }
     const formSubmitHandler = (data) => {
-        axiosInstance.post("sign-in-pin", data, {
-            // headers: headers,
-        }).then((res) => {
-            // setLoading(false);
+        setIsContentLoading(true)
+        axiosInstance.post("auth/sign-in", data).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");
-                Auth.login(res.data, true)
-                Auth.removePatientInfo()
-                // navigate("/gfe/select-treatment");
+                setIsContentLoading(false)
+                Auth.login({ user: res.user, token: res.token }, true)
+                setIsUserLoggedIn(true)
+                setLoginModalShow(false)
             }
         }).catch((error) => {
-            // setLoading(false);
+            setIsContentLoading(false)
         });
     }
 
@@ -150,12 +143,14 @@ function Login({ loginModalShow, setLoginModalShow }) {
 
             {/* Forgort Modal */}
             <ForgotPassword
+                setIsContentLoading={setIsContentLoading}
                 forgotShowModal={forgotShowModal}
                 setForgotShowModal={setForgotShowModal}
                 setLoginModalShow={setLoginModalShow} />
 
             {/* SignUP Modal */}
             <SignUp
+                setIsContentLoading={setIsContentLoading}
                 signUpShowModal={signUpShowModal}
                 setLoginModalShow={setLoginModalShow}
                 setSignUpShowModal={setSignUpShowModal} />

@@ -1,5 +1,6 @@
 import axios from "axios";
 import Auth from "../auth/Auth";
+import toast from "react-hot-toast";
 
 const onRequest = (config) => {
   // console.info(`[request] [${JSON.stringify(config)}]`);
@@ -20,7 +21,9 @@ const onResponseError = (error) => {
   // console.log(`[response error] [${JSON.stringify(error?.response?.data?.message)}]`);
 
   // toast.error(error?.response?.data?.message || 'Something went wrong!')
-
+  for (let key in error?.response?.data?.errors) {
+    toast.error(error?.response?.data?.errors[key][0])
+  }
   if (error?.response?.status === 401) {
 
     Auth.logout()
@@ -52,7 +55,7 @@ export const headers = {
 }
 
 export const axiosInstance = setupInterceptorsTo(axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
+  baseURL: 'https://tinytyni.com/KbAPI/API_URL/api/',
   timeout: 10000,
 }))
 

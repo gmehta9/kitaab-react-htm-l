@@ -5,15 +5,18 @@ import Loader from "../components/Loader";
 import { useState } from "react";
 
 function PagesLayout() {
-    const [isContentLoading, setisContentLoading] = useState(false)
+    const [isContentLoading, setIsContentLoading] = useState(false)
     return (
         <>
-            <Header />
+            <Header
+                isContentLoading={isContentLoading}
+                setIsContentLoading={setIsContentLoading}
+            />
             {isContentLoading &&
                 <Loader />
             }
             <Container fluid>
-                <Outlet context={{ setisContentLoading }} />
+                <Outlet context={{ isContentLoading, setIsContentLoading }} />
             </Container>
         </>
     )

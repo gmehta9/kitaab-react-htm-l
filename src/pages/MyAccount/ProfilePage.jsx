@@ -1,6 +1,9 @@
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 
 function ProfilePage() {
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
     return (
         <>
@@ -15,12 +18,15 @@ function ProfilePage() {
                             <Col lg={5}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bxs-user' ></i>
+                                        <i className='bx bxs-user' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
                                         className="border-left-0"
                                         autoComplete="false"
+                                        {...register('title', {
+                                            required: true
+                                        })}
                                         name="phoneEmailInput"
                                         placeholder="Enter your First Name"
                                     />
@@ -29,7 +35,7 @@ function ProfilePage() {
                             <Col lg={5}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bxs-user'></i>
+                                        <i className='bx bxs-user'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -48,7 +54,7 @@ function ProfilePage() {
                             <Col lg={5}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bx-envelope' ></i>
+                                        <i className='bx bx-envelope' ></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -67,7 +73,7 @@ function ProfilePage() {
                             <Col lg={5}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bx-mobile-alt'></i>
+                                        <i className='bx bx-mobile-alt'></i>
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="text"
@@ -86,8 +92,8 @@ function ProfilePage() {
                             <Col lg={4}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bx-lock' ></i>
-                                        {/* <i class='bx bx-lock-open' ></i> */}
+                                        <i className='bx bx-lock' ></i>
+                                        {/* <i className='bx bx-lock-open' ></i> */}
                                     </InputGroup.Text>
                                     <Form.Control
                                         type="password"
@@ -100,8 +106,8 @@ function ProfilePage() {
                             <Col lg={4}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bx-lock' ></i>
-                                        {/*<i class='bx bx-lock-open' ></i> */}
+                                        <i className='bx bx-lock' ></i>
+                                        {/*<i className='bx bx-lock-open' ></i> */}
 
                                     </InputGroup.Text>
                                     <Form.Control
@@ -116,8 +122,8 @@ function ProfilePage() {
                             <Col lg={4}>
                                 <InputGroup>
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i class='bx bx-lock' ></i>
-                                        {/* <i class='bx bx-lock-open' ></i> */}
+                                        <i className='bx bx-lock' ></i>
+                                        {/* <i className='bx bx-lock-open' ></i> */}
 
                                     </InputGroup.Text>
                                     <Form.Control

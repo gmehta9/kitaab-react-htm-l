@@ -5,19 +5,17 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 
-function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
+function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsContentLoading }) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
-        console.log(data);
-        axiosInstance.post("sign-in-pin", data, {
+        axiosInstance.post("auth/sign-up", data, {
             // headers: headers,
         }).then((res) => {
-
             if (res) {
                 toast.success("SignUp Successfully!");
-                setLoginModalShow()
+                setLoginModalShow(false)
             }
         }).catch((error) => {
 
@@ -85,7 +83,11 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                         autoComplete="false"
                                         name="email"
                                         {...register('email', {
-                                            required: 'Please enter your email.'
+                                            required: "Email is required",
+                                            pattern: {
+                                                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                                message: "Enter valid email",
+                                            }
                                         })}
                                         placeholder="Enter Your Email ID"
                                         autoFocus
@@ -98,21 +100,34 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                 </Form.Group>
                             </Col>
                             <Col lg="6">
-                                <Form.Group className="mb-4" controlId="phoneno">
+                                <Form.Group className="mb-4" controlId="phone_number">
                                     <Form.Label>Phone no</Form.Label>
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
-                                        name="phoneno"
-                                        {...register('phoneno', {
-                                            required: 'Please enter your phone no.'
+                                        name="phone_number"
+                                        {...register('phone_number', {
+                                            required: "Phone no is required.",
+                                            minLength: {
+                                                value: 10,
+                                                message: "The Phone no. must be 10 digits.",
+                                            },
+                                            maxLength: {
+                                                value: 10,
+                                                message: "The Phone no. must be 10 digits.",
+                                            },
+                                            pattern: {
+                                                // value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+                                                value: /^[0-9]{10}$/,
+                                                message: "The Phone no. must be 10 digits.",
+                                            },
                                         })}
                                         placeholder="Enter Your Phone"
                                         autoFocus
                                     />
-                                    {errors?.phoneno &&
+                                    {errors?.phone_number &&
                                         <span className="text-danger small position-absolute">
-                                            {errors?.phoneno?.message}
+                                            {errors?.phone_number?.message}
                                         </span>
                                     }
                                 </Form.Group>
@@ -152,21 +167,21 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal }) {
                                 </span>
                             }
                         </Form.Group>
-                        <Form.Group className="mb-4" controlId="pincode">
+                        <Form.Group className="mb-4" controlId="pin_code">
                             <Form.Label>Location Pin Code</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
-                                name="pincode"
-                                {...register('pincode', {
+                                name="pin_code"
+                                {...register('pin_code', {
                                     required: 'Please enter pincode.'
                                 })}
                                 placeholder="Enter Pin Code"
                                 autoFocus
                             />
-                            {errors?.pincode &&
+                            {errors?.pin_code &&
                                 <span className="text-danger small position-absolute">
-                                    {errors?.pincode?.message}
+                                    {errors?.pin_code?.message}
                                 </span>
                             }
                         </Form.Group>
