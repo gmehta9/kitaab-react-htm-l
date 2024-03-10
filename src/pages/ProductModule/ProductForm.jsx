@@ -13,6 +13,7 @@ function ProductForm() {
     const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
     const { setIsContentLoading } = useOutletContext()
     const [categoriesList, setCategoriesList] = useState()
+
     const getCategoriesListHandler = (async (p) => {
         setIsContentLoading(true)
         const params = {
@@ -65,9 +66,20 @@ function ProductForm() {
             return
         }
 
-        const image = await FileUploadhandler(data.file, 'product')
-        console.log(image);
-        axiosInstance.post("product", data).then((res) => {
+        const responseImg = await FileUploadhandler(data.file[0], 'product')
+        if (!responseImg) {
+            return
+        }
+
+        const body = { ...data, images: responseImg.image }
+        delete body['file'];
+
+        axiosInstance.post("product", body, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
             if (res) {
                 toast.success("Product added successfully!");
                 setIsContentLoading(false)
@@ -84,6 +96,8 @@ function ProductForm() {
         setYears(years)
         getCategoriesListHandler()
         setValue('category_id', '')
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -114,7 +128,9 @@ function ProductForm() {
 
                         <div className="form-group mb-3">
                             <label htmlFor="exampleInputEmail1">Category </label>
+
                             <select
+                                // name="category_id"
                                 {...register('category_id')}
                                 className="form-control">
                                 <option value="" disabled>Select Product</option>

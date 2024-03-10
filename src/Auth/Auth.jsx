@@ -22,7 +22,7 @@ class Auth {
     }
 
     token() {
-        console.log(this.storageType.getItem(this.localId));
+
         const user = JSON.parse((this.storageType.getItem(this.localId) || 'null'));
         return user?.token || null;
     }

@@ -5,7 +5,7 @@ import { srcPriFixLocal } from "../../helper/Helper";
 function ProductByID() {
     const location = useLocation()
 
-    console.log('location', location);
+
     return (
         <>
             <Row className="mt-5">

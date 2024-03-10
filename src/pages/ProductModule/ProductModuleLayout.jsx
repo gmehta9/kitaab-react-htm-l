@@ -5,8 +5,9 @@ import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductModuleLayout() {
     const location = useLocation()
+
     const { setIsContentLoading } = useOutletContext()
-    console.log('location.pathname', location.pathname);
+
     return (
         <div className="inner-pages row border-top ">
             {(location.pathname !== '/product/add' && location.pathname !== '/product/product-detail') &&
