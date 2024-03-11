@@ -135,7 +135,11 @@ function Header({ isContentLoading, setIsContentLoading }) {
                 </Container>
             </Navbar>
 
-            <Login setIsContentLoading={setIsContentLoading} loginModalShow={loginModalShow} setIsUserLoggedIn={setIsUserLoggedIn} setLoginModalShow={setLoginModalShow} />
+            <Login
+                setIsContentLoading={setIsContentLoading}
+                loginModalShow={loginModalShow}
+                setIsUserLoggedIn={setIsUserLoggedIn}
+                setLoginModalShow={setLoginModalShow} />
         </>
     )
 }

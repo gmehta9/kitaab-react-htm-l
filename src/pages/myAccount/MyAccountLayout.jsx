@@ -20,10 +20,9 @@ function MyAccountLayoutPage() {
                                 >
                                     Profile Information
                                 </li>
-                                <li
+                                {/* <li
                                     className={`${location.pathname === '/account/manage-address' ? 'text-primary' : ''} clickable`}
-                                    onClick={() => navigate('/account/manage-address')}
-                                >Manage Address</li>
+                                    onClick={() => navigate('/account/manage-address')}>Manage Address</li> */}
                             </ul>
                         </div>
                         <div className="account-sidebar-item">
