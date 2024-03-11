@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
+import cityState from '../../../public/cityState.json'
 
 function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsContentLoading }) {
 
@@ -168,7 +169,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             }
                         </Form.Group>
                         <Form.Group className="mb-4" controlId="pin_code">
-                            <Form.Label>Location Pin Code</Form.Label>
+                            <Form.Label>City</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
