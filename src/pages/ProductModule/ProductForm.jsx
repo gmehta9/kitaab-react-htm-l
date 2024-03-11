@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
@@ -9,10 +9,12 @@ import Auth from "../../auth/Auth";
 import { useOutletContext } from "react-router-dom";
 
 function ProductForm() {
-    const [years, setYears] = useState();
-    const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
     const { setIsContentLoading } = useOutletContext()
+
+    const [years, setYears] = useState();
     const [categoriesList, setCategoriesList] = useState()
+
+    const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const getCategoriesListHandler = (async (p) => {
         setIsContentLoading(true)

@@ -1,8 +1,10 @@
 import { Button, Col, Image, Row } from "react-bootstrap";
 import ProductItemUI from "../../components/ProductItemUI";
 import { srcPriFixLocal } from "../../helper/Helper";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../auth/Auth";
 
 const books = [
     {
@@ -48,9 +50,41 @@ const CategoriesList = ["All", "School", "Professional Courses", "Regular Course
 function ProductByList() {
 
     const navigate = useNavigate()
+    const { setIsContentLoading } = useOutletContext()
+
+    const [productList, setProductList] = useState()
+
+    const getProductListHandler = (async (p) => {
+        setIsContentLoading(true)
+        const params = {
+            page: p,
+            size: 50,
+        };
+        let APIUrl = 'category'
+
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+
+                console.log('response?.data?.data', response?.data?.data);
+
+                setProductList(response?.data?.data)
+                setIsContentLoading(false)
+
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
 
     useEffect(() => {
         window.scrollTo(0, 0)
+        getProductListHandler(1)
     }, [])
 
     return (

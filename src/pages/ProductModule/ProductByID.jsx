@@ -1,9 +1,43 @@
 import { Button, Col, Image, Row } from "react-bootstrap";
-import { useLocation } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
 import { srcPriFixLocal } from "../../helper/Helper";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../auth/Auth";
+import { useState } from "react";
 
 function ProductByID() {
+
     const location = useLocation()
+
+    const { setIsContentLoading } = useOutletContext()
+
+    const [productDetail, setProductDetail] = useState()
+
+    const getProductByIdHandler = (async (p) => {
+        setIsContentLoading(true)
+        const params = {
+            page: p,
+            size: 50,
+        };
+        let APIUrl = 'category'
+
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+                console.log('response?.data?.data', response);
+                setProductDetail(response?.data?.data)
+                setIsContentLoading(false)
+
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
 
 
     return (

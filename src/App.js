@@ -5,9 +5,10 @@ import { Toaster } from 'react-hot-toast';
 import PagesLayout from './pages/PagesLayout';
 
 import HomePage from './pages/Home';
-import Login from './pages/onboarding/Login';
-import ForgotPassword from './pages/onboarding/ForgotPassword';
-import SignUp from './pages/onboarding/SignUp';
+
+// import Login from './pages/onboarding/Login';
+// import ForgotPassword from './pages/onboarding/ForgotPassword';
+// import SignUp from './pages/onboarding/SignUp';
 
 import OrderHistory from './pages/myAccount/OrderHistory';
 import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';

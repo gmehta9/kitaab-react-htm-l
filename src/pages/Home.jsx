@@ -4,7 +4,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import { srcPriFixLocal } from "../helper/Helper";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
 
@@ -49,6 +49,7 @@ const books = [
 function HomePage() {
     const navigate = useNavigate()
     const [categoriesList, setCategoriesList] = useState()
+    const [selectCatID, setSelectCatID] = useState()
     const { setIsContentLoading } = useOutletContext()
     /**
  * @method [getProductListHandler] use to get Product List 
@@ -78,13 +79,36 @@ function HomePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const getProductByID = (async (p) => {
+        setIsContentLoading(true)
+        const params = {
+            page: p,
+            size: 5,
+        };
+        let APIUrl = 'product'
+
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+                setCategoriesList(response?.data?.data)
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
+
     useEffect(() => {
         getCategoriesListHandler()
     }, [])
 
     return (
         <>
-
             <Row className="banner-row justify-content-center align-items-center">
                 <Col lg={9} className="text-center mt-4">
                     <span className="h3 find-book-heading ">Find the books that you are looking for</span>
@@ -118,9 +142,14 @@ function HomePage() {
                             className="btn mx-2 border-0 bg-transparent px-0 mx-3">All</button>
                         {categoriesList && categoriesList.map((cl, index) =>
                             <button type="button"
-                                onClick={() => navigate('/product', {
-                                    state: { name: cl?.name, catID: cl?.id }
-                                })}
+                                onClick={() => {
+
+                                    setSelectCatID(cl?.id)
+                                    navigate('/product', {
+                                        state: { name: cl?.name, catID: cl?.id }
+                                    })
+
+                                }}
                                 className="btn mx-2 border-0 bg-transparent px-0 mx-3"
                                 key={index + 'cl'}>
                                 {cl?.name}
@@ -135,7 +164,13 @@ function HomePage() {
                     )}
                 </Row>
 
-                <Button className="ml-2 px-4 align-items-center d-flex mx-auto mt-4">
+                <Button
+                    onClick={() => navigate('/products', {
+                        state: {
+                            productId: 'items.id'
+                        }
+                    })}
+                    className="ml-2 px-4 align-items-center d-flex mx-auto mt-4">
                     View More
                 </Button>
             </Container>

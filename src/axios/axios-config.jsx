@@ -18,12 +18,10 @@ const onResponse = (response) => {
 }
 
 const onResponseError = (error) => {
-  // console.log(`[response error] [${JSON.stringify(error?.response?.data?.message)}]`);
+  console.log(error.response);
 
   // toast.error(error?.response?.data?.message || 'Something went wrong!')
-  for (let key in error?.response?.data?.errors) {
-    toast.error(error?.response?.data?.errors[key][0])
-  }
+  toast.error(error?.response?.data?.message)
   if (error?.response?.status === 401) {
 
     Auth.logout()

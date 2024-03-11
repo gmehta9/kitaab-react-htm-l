@@ -5,4 +5,10 @@
 
 body {
     font-family: 'regular-font';
+    min-height: 100%;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
 }
