@@ -4,9 +4,13 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
-import cityState from '../../../public/cityState.json'
+import { useEffect, useState } from "react";
+import Select from 'react-select'
+
 
 function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsContentLoading }) {
+    const [stateList, setStateList] = useState()
+    const [cityList, setCityList] = useState()
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
 
@@ -22,6 +26,21 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
 
         });
     }
+
+    useEffect(() => {
+        fetch('cityState.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            console.log(response)
+            return response.json();
+        }).then(function (myJson) {
+            setStateList(myJson)
+        })
+    }, [])
+
     return (
         <>
             <Modal backdrop="static" centered show={signUpShowModal} onHide={() => setSignUpShowModal(false)}>
@@ -168,24 +187,31 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                                 </span>
                             }
                         </Form.Group>
-                        <Form.Group className="mb-4" controlId="pin_code">
-                            <Form.Label>City</Form.Label>
-                            <Form.Control
-                                type="text"
-                                autoComplete="false"
-                                name="pin_code"
-                                {...register('pin_code', {
-                                    required: 'Please enter pincode.'
-                                })}
-                                placeholder="Enter Pin Code"
-                                autoFocus
-                            />
-                            {errors?.pin_code &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.pin_code?.message}
-                                </span>
-                            }
-                        </Form.Group>
+                        {/* {stateList} */}
+                        <Row>
+                            <Col lg="6">
+                                <Form.Group className="mb-4" controlId="state">
+                                    <Form.Label>State</Form.Label>
+                                    <Select options={stateList} onChange={(e) => setCityList(e.cities)} />
+                                    {errors?.state &&
+                                        <span className="text-danger small position-absolute">
+                                            {errors?.state?.message}
+                                        </span>
+                                    }
+                                </Form.Group>
+                            </Col>
+                            <Col lg="6">
+                                <Form.Group className="mb-4" controlId="city">
+                                    <Form.Label>City</Form.Label>
+                                    <Select options={cityList} />
+                                    {errors?.city &&
+                                        <span className="text-danger small position-absolute">
+                                            {errors?.city?.message}
+                                        </span>
+                                    }
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
                     </Modal.Body>
                     <Modal.Footer className="justify-content-center flex-column border-0 pt-0">

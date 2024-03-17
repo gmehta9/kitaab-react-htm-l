@@ -1,9 +1,26 @@
+import { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 function ProfilePage() {
 
+    const [stateList, setStateList] = useState();
+
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+
+    useEffect(() => {
+        fetch('cityState.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+
+            return response.json();
+        }).then(function (myJson) {
+            setStateList(myJson)
+        })
+    }, [])
 
     return (
         <>

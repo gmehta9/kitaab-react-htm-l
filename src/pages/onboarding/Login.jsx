@@ -19,7 +19,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
-        axiosInstance.post("auth/sign-in", data).then((res) => {
+        axiosInstance.post("auth/sign-in", { ...data, type: 'Buyer/Seller' }).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");
                 setIsContentLoading(false)
