@@ -17,7 +17,7 @@ function ProductModuleLayout() {
                         <Row className=" justify-content-center">
                             <InputGroup className="mb-0 bg-white p-2 rounded">
                                 <Form.Control
-                                    className="border-0 rounded"
+                                    className="border-0 bg-light rounded"
                                     placeholder="Search Books..."
                                     aria-label="Recipient's username"
                                     aria-describedby="basic-addon2"

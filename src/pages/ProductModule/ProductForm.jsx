@@ -6,15 +6,19 @@ import 'react-quill/dist/quill.snow.css';
 import { axiosInstance, headers } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import Auth from "../../auth/Auth";
-import { useOutletContext } from "react-router-dom";
+import { useLocation, useOutletContext } from "react-router-dom";
+import { MEDIA_URL } from "../../helper/Utils";
+import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
+    const location = useLocation();
 
+    const [imageView, setImageView] = useState()
     const [years, setYears] = useState();
     const [categoriesList, setCategoriesList] = useState()
 
-    const { register, handleSubmit, getValues, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, getValues, setValue, watch, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const getCategoriesListHandler = (async (p) => {
         setIsContentLoading(true)
@@ -91,6 +95,46 @@ function ProductForm() {
         });
     }
 
+    const getProductByIdHandler = (async (id) => {
+        setIsContentLoading(true)
+
+        let APIUrl = 'product/' + id
+
+        axiosInstance.get(`${APIUrl}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+                console.log(response);
+                setValue('title', response?.data?.title)
+                setValue('category_id', response?.data?.category_id)
+                setValue('sale_price', response?.data?.sale_price)
+                setValue('price', response?.data?.price)
+                setValue('auther', response?.data?.auther)
+                setValue('transact_type', response?.data?.transact_type)
+                setValue('year_of_publication', response?.data?.year_of_publication)
+                setValue('short_description', response?.data?.short_description)
+                setValue('description', response?.data?.description)
+                // \image
+                if (response?.data?.image) {
+                    setImageView(MEDIA_URL + 'product/' + response?.data?.image)
+                }
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    });
+
+    useEffect(() => {
+
+        getProductByIdHandler(location.state.pId)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     useEffect(() => {
         register('short_description', { required: 'Field is required.' });
         const currentYear = new Date().getFullYear();
@@ -101,6 +145,31 @@ function ProductForm() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        console.log(getValues('file'));
+        if (getValues('file')) {
+
+            const file = getValues('file')
+            if (file[0]?.size) {
+
+                if (file[0]?.size > 2000000) {
+                    toast.error('The file size should not be more than 2MB.')
+                    setValue('file', undefined)
+                    return
+                }
+
+                const selectedFile = getValues('file')
+                const reader = new FileReader();
+                reader.onload = () => {
+                    setImageView(reader.result);
+                };
+                reader.readAsDataURL(selectedFile[0]);
+            }
+
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watch('file'), getValues, setValue])
 
     return (
         <>
@@ -265,9 +334,17 @@ function ProductForm() {
                                 {...register('file')}
                                 type="file" className="d-none" id="imageUpload" />
                             <label htmlFor="imageUpload" className="product-upload-frame my-2 position-relative">
-                                <span className="placeholder bg-transparent d-block">
+
+                                {imageView ?
+                                    <img src={`${imageView}`} className="image-preview" alt="" />
+                                    :
+                                    <span className="placeholder bg-transparent">
+                                        <img src={`${srcPriFixLocal}upload-placeholder.png`} alt="" />
+                                    </span>
+                                }
+                                {/* <span className="placeholder bg-transparent d-block">
                                     <img src="./assets/images/upload-placeholder.png" alt="" />
-                                </span>
+                                </span> */}
                                 {/* <img src="./assets/images/book.webp" alt="" /> */}
 
                             </label>

@@ -4,7 +4,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import { srcPriFixLocal } from "../helper/Helper";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
 
@@ -184,14 +184,16 @@ function HomePage() {
                 }
                 <Row lg={"5"} md={"4"} sm={"2"} xs={"2"}>
 
-                    {productList && productList.map(items =>
-                        <ProductItemUI items={items} />
+                    {productList && productList.map((items, index) =>
+                        <React.Fragment key={index + 'prd'}>
+                            <ProductItemUI items={items} />
+                        </React.Fragment>
                     )}
 
                 </Row>
 
                 <Button
-                    onClick={() => navigate('/products', {
+                    onClick={() => navigate('/product', {
                         state: {
                             productId: selectCatID
                         }
