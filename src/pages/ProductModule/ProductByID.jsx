@@ -47,6 +47,7 @@ function ProductByID() {
 
                     <Image
                         className="w-100"
+                        // MEDIA_URL + 'product/' +
                         src={`${srcPriFixLocal}product-img/main-image.jpg`} />
 
                 </Col>

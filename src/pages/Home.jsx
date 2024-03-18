@@ -8,53 +8,54 @@ import { useCallback, useEffect, useState } from "react";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
 
-const books = [
-    {
-        id: 1,
-        title: 'Vintage Grazie',
-        author: 'Markrem Hoddel',
-        cpver_image: './assets/images/book-1.jpg',
-        price: '10'
-    },
-    {
-        id: 2,
-        title: 'Vintage Grazie',
-        author: 'Markrem Hoddel',
-        cpver_image: './assets/images/book-2.jpg',
-        price: '99'
-    },
-    {
-        id: 3,
-        title: 'Vintage Grazie',
-        author: 'Markrem Hoddel',
-        cpver_image: './assets/images/book-3.jpg',
-        price: '199'
-    },
-    {
-        id: 4,
-        title: 'Vintage Grazie',
-        author: 'Markrem Hoddel',
-        cpver_image: './assets/images/book-4.jpg',
-        price: '349'
-    },
-    {
-        id: 5,
-        title: 'Vintage Grazie',
-        author: 'Markrem Hoddel',
-        cpver_image: './assets/images/book-5.jpg',
-        price: '250'
-    }
-]
+// const books = [
+//     {
+//         id: 1,
+//         title: 'Vintage Grazie',
+//         author: 'Markrem Hoddel',
+//         cpver_image: './assets/images/book-1.jpg',
+//         price: '10'
+//     },
+//     {
+//         id: 2,
+//         title: 'Vintage Grazie',
+//         author: 'Markrem Hoddel',
+//         cpver_image: './assets/images/book-2.jpg',
+//         price: '99'
+//     },
+//     {
+//         id: 3,
+//         title: 'Vintage Grazie',
+//         author: 'Markrem Hoddel',
+//         cpver_image: './assets/images/book-3.jpg',
+//         price: '199'
+//     },
+//     {
+//         id: 4,
+//         title: 'Vintage Grazie',
+//         author: 'Markrem Hoddel',
+//         cpver_image: './assets/images/book-4.jpg',
+//         price: '349'
+//     },
+//     {
+//         id: 5,
+//         title: 'Vintage Grazie',
+//         author: 'Markrem Hoddel',
+//         cpver_image: './assets/images/book-5.jpg',
+//         price: '250'
+//     }
+// ]
 
 function HomePage() {
     const navigate = useNavigate()
     const [categoriesList, setCategoriesList] = useState()
+
+    const [productList, setProductList] = useState()
+
     const [selectCatID, setSelectCatID] = useState()
+
     const { setIsContentLoading } = useOutletContext()
-    /**
- * @method [getProductListHandler] use to get Product List 
- * @param [event] onchange event of checkbox
- */
+
     const getCategoriesListHandler = useCallback(async (p) => {
         setIsContentLoading(true)
         const params = {
@@ -79,13 +80,18 @@ function HomePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const getProductByID = (async (p) => {
+
+    const getProductByCat = async (p, catID) => {
         setIsContentLoading(true)
         const params = {
             page: p,
             size: 5,
         };
         let APIUrl = 'product'
+
+        if (catID) {
+            params['category[0]'] = catID
+        }
 
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
@@ -94,18 +100,24 @@ function HomePage() {
             },
         }).then((response) => {
             if (response) {
-                setCategoriesList(response?.data?.data)
+                setProductList(response?.data?.data)
                 setIsContentLoading(false)
             }
         }).catch((error) => {
             setIsContentLoading(false)
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    });
+    };
+
+
 
     useEffect(() => {
         getCategoriesListHandler()
     }, [])
+
+    useEffect(() => {
+        getProductByCat(1, selectCatID)
+    }, [selectCatID])
 
     return (
         <>
@@ -138,38 +150,53 @@ function HomePage() {
                 <div className="">
                     <div className="p-0 d-flex justify-content-center my-4">
                         <button type="button"
+                            onClick={() => {
+                                setSelectCatID(undefined)
+                            }}
+                            className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${!selectCatID ? ' text-primary border-bottom' : 'border-0'}`}>
+                            All
+                        </button>
 
-                            className="btn mx-2 border-0 bg-transparent px-0 mx-3">All</button>
                         {categoriesList && categoriesList.map((cl, index) =>
                             <button type="button"
                                 onClick={() => {
 
                                     setSelectCatID(cl?.id)
-                                    navigate('/product', {
-                                        state: { name: cl?.name, catID: cl?.id }
-                                    })
+                                    // navigate('/product', {
+                                    //     state: { name: cl?.name, catID: cl?.id }
+                                    // })
 
                                 }}
-                                className="btn mx-2 border-0 bg-transparent px-0 mx-3"
+                                className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${selectCatID === cl?.id ? ' text-primary border-bottom' : 'border-0'}`}
                                 key={index + 'cl'}>
                                 {cl?.name}
                             </button>
                         )}
+
                     </div>
                 </div>
-
+                {productList?.length === 0 &&
+                    <div
+                        style={{ height: '200px' }}
+                        className="text-center pt-5 h2 fw-bold">
+                        No product found!
+                    </div>
+                }
                 <Row lg={"5"} md={"4"} sm={"2"} xs={"2"}>
-                    {books.map(items =>
+
+                    {productList && productList.map(items =>
                         <ProductItemUI items={items} />
                     )}
+
                 </Row>
 
                 <Button
                     onClick={() => navigate('/products', {
                         state: {
-                            productId: 'items.id'
+                            productId: selectCatID
                         }
                     })}
+                    disabled={productList?.length === 0}
                     className="ml-2 px-4 align-items-center d-flex mx-auto mt-4">
                     View More
                 </Button>

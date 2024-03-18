@@ -60,7 +60,7 @@ function ProductByList() {
             page: p,
             size: 50,
         };
-        let APIUrl = 'category'
+        let APIUrl = 'product'
 
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
@@ -115,13 +115,13 @@ function ProductByList() {
                     )}
 
                 </ul>
-                <Button
+                {/* <Button
                     variant=""
                     className="d-flex justify-content-between w-100 pl-0"
                     type="button">Author <Image className="dropdown-icon align-self-center" src={`${srcPriFixLocal}dropdown-arrow.svg`} />
-                </Button>
+                </Button> */}
 
-                <ul className="pl-0 list-unstyled">
+                {/* <ul className="pl-0 list-unstyled">
                     {CategoriesList.map((cl, index) =>
                         <li key={index + 'cll'}>
                             <label for={index + 'cll'} className="checkbox-item">{cl}
@@ -130,7 +130,7 @@ function ProductByList() {
                             </label>
                         </li>
                     )}
-                </ul>
+                </ul> */}
             </Col>
             <Col lg={9} >
                 <div className="text-right">
@@ -138,7 +138,7 @@ function ProductByList() {
                 </div>
                 <Row md={"4"} sm={"2"} xs={"2"} >
 
-                    {books.map(items =>
+                    {productList.map(items =>
                         <ProductItemUI items={items} className="mb-4" />
                     )}
                 </Row>
