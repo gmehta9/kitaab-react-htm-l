@@ -7,6 +7,8 @@ import { srcPriFixLocal } from "../helper/Helper";
 import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
+import { MEDIA_URL, debounce, replaceLogo } from "../helper/Utils";
+import { AsyncTypeahead } from "react-bootstrap-typeahead";
 
 // const books = [
 //     {
@@ -51,6 +53,9 @@ function HomePage() {
     const [categoriesList, setCategoriesList] = useState()
 
     const [productList, setProductList] = useState()
+    const [searchText, setSearchText] = useState()
+    const [isSearchContentLoading, setIsSearchContentLoading] = useState(false)
+    const [searchedContentList, setSearchedContentList] = useState([])
 
     const [selectCatID, setSelectCatID] = useState()
 
@@ -58,17 +63,19 @@ function HomePage() {
 
     const getCategoriesListHandler = useCallback(async (p) => {
         setIsContentLoading(true)
+
         const params = {
             page: p,
             size: 50,
         };
+
         let APIUrl = 'category'
 
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
-            },
+            }
         }).then((response) => {
             if (response) {
                 setCategoriesList(response?.data?.data)
@@ -110,7 +117,44 @@ function HomePage() {
     };
 
 
+    const getProductListBySearchText = async (searchText) => {
+        setIsSearchContentLoading(true)
+        const params = {
+            page: 1,
+            size: 20,
+        };
+        let APIUrl = 'product'
 
+        if (searchText) {
+            params.searching = searchText
+        }
+
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            },
+        }).then((response) => {
+            if (response) {
+                console.log(response?.data?.data);
+                setSearchedContentList(response?.data?.data)
+                setIsSearchContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsSearchContentLoading(false)
+        });
+    };
+
+    const serachtext = debounce((event) => {
+        console.log(event);
+        setSearchText(event)
+    }, 500)
+
+    useEffect(() => {
+        if (searchText) {
+            getProductListBySearchText(searchText)
+        }
+    }, [searchText])
     useEffect(() => {
         getCategoriesListHandler()
     }, [])
@@ -125,11 +169,38 @@ function HomePage() {
                 <Col lg={9} className="text-center mt-4">
                     <span className="h3 find-book-heading ">Find the books that you are looking for</span>
                     <InputGroup className="mb-3 mt-3 bg-white p-2 rounded">
-                        <Form.Control
+                        {/* <Form.Control
                             className="border-0 rounded"
-                            placeholder="Search Books..."
+                            placeholder="Search Books....."
                             aria-label="Recipient's username"
                             aria-describedby="basic-addon2"
+                            onChange={serachtext}
+                        /> */}
+                        <AsyncTypeahead
+                            filterBy={() => true}
+                            id="async-example"
+                            isLoading={isSearchContentLoading}
+                            labelKey="title"
+                            className="border-0 p-0 form-control rounded"
+                            minLength={3}
+                            onSearch={serachtext}
+                            options={searchedContentList}
+                            placeholder="Search Books by Title, Author etc... Type at least three letter"
+                            renderMenuItemChildren={(option) => (
+                                <>
+                                    <img
+                                        onError={replaceLogo}
+                                        alt={option.title}
+                                        src={MEDIA_URL + 'product/' + option.image}
+                                        style={{
+                                            height: '24px',
+                                            marginRight: '10px',
+                                            width: '24px',
+                                        }}
+                                    />
+                                    <span>{option.title}</span>
+                                </>
+                            )}
                         />
                         <Button id="basic-addon2" className="ml-2 px-4 align-items-center d-flex">
                             <Image
@@ -160,12 +231,10 @@ function HomePage() {
                         {categoriesList && categoriesList.map((cl, index) =>
                             <button type="button"
                                 onClick={() => {
-
                                     setSelectCatID(cl?.id)
                                     // navigate('/product', {
                                     //     state: { name: cl?.name, catID: cl?.id }
                                     // })
-
                                 }}
                                 className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${selectCatID === cl?.id ? ' text-primary border-bottom' : 'border-0'}`}
                                 key={index + 'cl'}>
