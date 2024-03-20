@@ -4,23 +4,29 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Select from 'react-select'
 
 
 function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsContentLoading }) {
     const [stateList, setStateList] = useState()
     const [cityList, setCityList] = useState()
-
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const [city, setCity] = useState()
+    const [state, setState] = useState()
+    const selectInputRef = useRef()
+    const { register, handleSubmit, reset, resetField, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
+
+        console.log(data);
+
         axiosInstance.post("auth/sign-up", data, {
             // headers: headers,
         }).then((res) => {
             if (res) {
                 toast.success("SignUp Successfully!");
-                setLoginModalShow(false)
+                setSignUpShowModal(false)
+                setLoginModalShow(true)
             }
         }).catch((error) => {
 
@@ -34,12 +40,25 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                 'Accept': 'application/json'
             }
         }).then(function (response) {
-            console.log(response)
             return response.json();
         }).then(function (myJson) {
             setStateList(myJson)
         })
+        register('state', { required: 'Please select state.' })
+        register('city', { required: 'Please select city.' })
     }, [])
+
+
+    // useEffect(() => {
+    //     if (state?.value && city?.value) {
+    //         setCity(null)
+    //         // selectInputRef.current.clearValue()
+    //     }
+
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [state])
+
+
 
     return (
         <>
@@ -161,7 +180,11 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                                 name="password"
                                 // isValid={!errors?.password}
                                 {...register('password', {
-                                    required: 'Please enter password.'
+                                    required: 'Please enter password.',
+                                    minLength: {
+                                        value: 8,
+                                        message: 'Password length must be 8 characters.'
+                                    }
                                 })}
                                 type="password"
                             />
@@ -192,7 +215,17 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="state">
                                     <Form.Label>State</Form.Label>
-                                    <Select options={stateList} onChange={(e) => setCityList(e.cities)} />
+                                    <Select
+                                        options={stateList}
+                                        value={state}
+                                        onChange={(e) => {
+                                            setState(e)
+                                            setValue('state', e.value)
+                                            setCity(null)
+                                            resetField('city')
+                                            setCityList(e.cities)
+                                        }}
+                                    />
                                     {errors?.state &&
                                         <span className="text-danger small position-absolute">
                                             {errors?.state?.message}
@@ -203,7 +236,16 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="city">
                                     <Form.Label>City</Form.Label>
-                                    <Select options={cityList} />
+
+                                    <Select
+                                        options={cityList}
+                                        ref={selectInputRef}
+                                        value={city}
+                                        onChange={(e) => {
+                                            setCity(e)
+                                            setValue('city', e.value)
+                                        }}
+                                    />
                                     {errors?.city &&
                                         <span className="text-danger small position-absolute">
                                             {errors?.city?.message}
