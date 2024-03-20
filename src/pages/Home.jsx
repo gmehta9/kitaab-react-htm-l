@@ -185,7 +185,7 @@ function HomePage() {
                             minLength={3}
                             onSearch={serachtext}
                             options={searchedContentList}
-                            placeholder="Search Books by Title, Author etc... Type at least three letter"
+                            placeholder="Search Books by Title, Author"
                             renderMenuItemChildren={(option) => (
                                 <>
                                     <img
@@ -267,8 +267,9 @@ function HomePage() {
                             productId: selectCatID
                         }
                     })}
+                    variant="dark"
                     disabled={productList?.length === 0}
-                    className="ml-2 px-4 align-items-center d-flex mx-auto mt-4">
+                    className="ml-2 px-4 align-items-center d-flex mx-auto mt-5">
                     View More
                 </Button>
             </Container>

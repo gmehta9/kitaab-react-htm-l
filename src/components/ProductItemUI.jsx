@@ -12,18 +12,18 @@ function ProductItemUI({ items, className }) {
             <div className="book-card clickable position-relative" >
 
                 {/* Cart Button */}
-                <Button
+                {/* <Button
                     type="button"
                     className="product-icon left position-absolute d-flex">
                     <Image className="w-100 align-self-center" src={`${srcPriFixLocal}shopping-cart-icon.svg`} />
-                </Button>
+                </Button> */}
 
                 {/* Book Share Button */}
-                <Button
+                {/* <Button
                     type="button"
                     className="product-icon right position-absolute d-flex">
                     <Image className="w-100 align-self-center" src={`${srcPriFixLocal}share-product.svg`} />
-                </Button>
+                </Button> */}
                 <Image
                     onError={replaceLogo}
                     src={MEDIA_URL + 'product/' + items.image}
@@ -57,6 +57,13 @@ function ProductItemUI({ items, className }) {
                             `₹ ${items.price}/-`
                         }
 
+                    </div>
+                    <div className="action-btn">
+                        <Button
+                            type="button"
+                            className="mb-3">
+                            Add to Cart
+                        </Button>
                     </div>
                 </div>
             </div>
