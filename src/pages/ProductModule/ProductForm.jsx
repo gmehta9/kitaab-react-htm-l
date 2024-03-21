@@ -130,10 +130,11 @@ function ProductForm() {
     });
 
     useEffect(() => {
-
-        getProductByIdHandler(location?.state?.pId)
+        if (location?.state?.pId) {
+            getProductByIdHandler(location?.state?.pId)
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [location?.state?.pId])
 
     useEffect(() => {
         register('short_description', { required: 'Field is required.' });
