@@ -194,7 +194,7 @@ function HomePage() {
                                     <img
                                         onError={replaceLogo}
                                         alt={option.title}
-                                        src={MEDIA_URL + 'product/product-detail/' + option.image}
+                                        src={MEDIA_URL + 'product/' + option.image}
                                         style={{
                                             height: '24px',
                                             marginRight: '10px',

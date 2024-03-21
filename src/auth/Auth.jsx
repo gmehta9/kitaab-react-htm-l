@@ -18,7 +18,7 @@ class Auth {
 
     loggedInUser() {
         const loggedUser = this.storageType.getItem(this.localId)
-        return (JSON.parse(loggedUser || "null"));
+        return (JSON.parse(loggedUser || "null")?.user);
     }
 
     token() {

@@ -7,6 +7,14 @@ import { MEDIA_URL, replaceLogo } from "../helper/Utils";
 
 function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
+
+    const ClikedItem = (items_id) => {
+        navigate('/product/product-detail', {
+            state: {
+                productId: items_id
+            }
+        })
+    }
     return (
         <Col className={className}>
             <div className="book-card clickable position-relative" >
@@ -27,22 +35,13 @@ function ProductItemUI({ items, className, isEditAble }) {
                 <Image
                     onError={replaceLogo}
                     src={MEDIA_URL + 'product/' + items.image}
-                    onClick={() => navigate('/product/product-detail', {
-                        state: {
-                            productId: items.id
-                        }
-                    })}
+                    onClick={() => ClikedItem(items.id)}
                     className="thumbnail product-thumb rounded w-100" />
-                <div className="book-info text-center mt-2"
-                    onClick={() => navigate('/product/product-detail', {
-                        state: {
-                            productId: items.id
-                        }
-                    })}>
-                    <div className="author-name">
+                <div className="book-info text-center mt-2" >
+                    <div className="author-name" onClick={() => ClikedItem(items.id)} >
                         {items.auther}
                     </div>
-                    <div className="book-name">
+                    <div className="book-name" onClick={() => ClikedItem(items.id)}>
                         {items.title}
                     </div>
                     {items.sale_price &&
@@ -59,15 +58,24 @@ function ProductItemUI({ items, className, isEditAble }) {
 
                     </div>
 
-                    {!isEditAble &&
-                        <div className="action-btn">
-                            <Button
-                                type="button"
-                                className="mb-3">
-                                Add to Cart
-                            </Button>
-                        </div>
-                    }
+
+                    <div className="action-btn">
+                        <Button
+                            type="button"
+                            onClick={() => {
+                                if (isEditAble) {
+                                    navigate('/product/edit', {
+                                        state: {
+                                            pId: items.id
+                                        }
+                                    })
+                                }
+                            }}
+                            className="mb-3">
+                            {!isEditAble ? "Add to Cart" : 'Edit'}
+                        </Button>
+                    </div>
+
 
                 </div>
             </div>

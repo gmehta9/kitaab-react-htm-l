@@ -334,6 +334,11 @@ $secondry: #868686;
 
 }
 
+.disabled {
+    opacity: .5;
+    cursor: not-allowed !important;
+}
+
 .edit-class {
     .ql-editor {
         min-height: 150px;

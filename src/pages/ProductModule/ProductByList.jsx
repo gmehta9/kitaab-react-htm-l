@@ -60,8 +60,13 @@ function ProductByList() {
             if (response) {
 
                 console.log('response?.data?.data', response?.data?.data);
+                let useData = response?.data?.data
+                if (location?.state === 'Sell/Share' && response?.data?.data.length > 0) {
 
-                setProductList(response?.data?.data)
+                    useData = response?.data?.data.filter(pItem => pItem?.created_by_user.id === Auth.loggedInUser()?.id)
+                }
+
+                setProductList(useData)
                 setIsContentLoading(false)
 
             }
@@ -138,9 +143,15 @@ function ProductByList() {
 
                     <ul className="pl-0 list-unstyled">
                         {categoriesList && categoriesList.map((cl, index) =>
-                            <li key={index + 'cls'}>
-                                <label htmlFor={index + 'cl'} className="checkbox-item">{cl?.name}
-                                    <input type="checkbox" id={index + 'cl'} onChange={() => selectedCatHandler(cl?.id)} name="categories" aria-checked="false" />
+                            <li key={index + 'cls'} >
+                                <label
+                                    htmlFor={index + 'cl'}
+                                    className={`checkbox-item ${productList?.length === 0 && 'disabled'}`}
+                                >{cl?.name}
+                                    <input
+                                        disabled={productList?.length === 0}
+
+                                        type="checkbox" id={index + 'cl'} onChange={() => selectedCatHandler(cl?.id)} name="categories" aria-checked="false" />
                                     <span className="checkbox mr-2"></span>
                                 </label>
                             </li>
@@ -177,7 +188,7 @@ function ProductByList() {
                     {productList?.length === 0 &&
                         <Row>
                             <div
-                                style={{ height: '200px' }}
+                                style={{ height: '300px' }}
                                 className="text-center w-100 pt-5 h2 font-weight-bold">
                                 <Image width="250" src={`${srcPriFixLocal}no-product.png`} />
                             </div>
@@ -187,7 +198,7 @@ function ProductByList() {
 
                         {productList && productList.map((items, index) =>
                             <React.Fragment key={index + 'prd'}>
-                                <ProductItemUI items={items} className="mb-4" />
+                                <ProductItemUI items={items} isEditAble={isEditAble} className="mb-4" />
                             </React.Fragment>
                         )}
                     </Row>

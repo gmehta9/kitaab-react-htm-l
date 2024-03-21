@@ -112,7 +112,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                     <Dropdown.Toggle variant="" className="profile-avtar ml-4" drop={'end'}>
                                         <Image
                                             className="rounded-circle"
-                                            src="https://avatars.githubusercontent.com/u/872310?v=4"
+                                            src={`${srcPriFixLocal}default-avatar.jpg`}
                                         />
                                     </Dropdown.Toggle>
 

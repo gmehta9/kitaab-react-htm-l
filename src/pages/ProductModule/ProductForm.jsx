@@ -60,7 +60,7 @@ function ProductForm() {
             return res
             // upload_profile_image
         }).catch((error) => {
-
+            setIsContentLoading(false)
         });
     }
 
@@ -148,7 +148,7 @@ function ProductForm() {
     }, [])
 
     useEffect(() => {
-        console.log(getValues('file'));
+
         if (getValues('file')) {
 
             const file = getValues('file')
@@ -174,7 +174,7 @@ function ProductForm() {
 
     return (
         <>
-            <h2 className="mt-5 mb-4">Add Book</h2>
+            <h2 className="mt-5 mb-4">{location?.state?.pId ? 'Edit' : 'Add'} Book</h2>
             <form className="mb-4" onSubmit={handleSubmit(productFormHandler)}>
                 <Row>
                     <Col lg={8}>
@@ -385,7 +385,8 @@ function ProductForm() {
                     </Col>
 
                 </Row>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="submit" className="btn btn-primary">
+                    {location?.state?.pId ? 'Update' : 'Submit'} </button>
             </form>
         </>
     )
