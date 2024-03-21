@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { srcPriFixLocal } from "../helper/Helper";
 import { MEDIA_URL, replaceLogo } from "../helper/Utils";
 
-function ProductItemUI({ items, className }) {
+function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
     return (
         <Col className={className}>
@@ -58,13 +58,17 @@ function ProductItemUI({ items, className }) {
                         }
 
                     </div>
-                    <div className="action-btn">
-                        <Button
-                            type="button"
-                            className="mb-3">
-                            Add to Cart
-                        </Button>
-                    </div>
+
+                    {!isEditAble &&
+                        <div className="action-btn">
+                            <Button
+                                type="button"
+                                className="mb-3">
+                                Add to Cart
+                            </Button>
+                        </div>
+                    }
+
                 </div>
             </div>
         </Col>

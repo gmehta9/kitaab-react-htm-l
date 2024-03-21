@@ -19,7 +19,10 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
-        axiosInstance.post("auth/sign-in", { ...data, type: 'Buyer/Seller' }).then((res) => {
+        axiosInstance.post("auth/sign-in", {
+            ...data,
+            type: 'Buyer/Seller'
+        }).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");
                 setIsContentLoading(false)
@@ -78,13 +81,12 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                             </Col>
 
                         </Row> */}
-                        <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                        <Form.Group className="mb-4" controlId="emailOrphone">
                             <Form.Label>Email & Phone no</Form.Label>
                             <Form.Control
                                 type="text"
-                                autoComplete="false"
-                                name="phoneEmail"
-                                {...register('phoneEmail', {
+                                autoComplete="emailOrphone"
+                                {...register('emailOrphone', {
                                     required: 'Please enter your phone or email.'
                                 })}
                                 placeholder="Enter your phone or email."
@@ -96,7 +98,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                                 </span>
                             }
                         </Form.Group>
-                        <Form.Group className="mb-2" >
+                        <Form.Group className="mb-2" controlId="passwordemailOrphone">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 autoComplete="false"

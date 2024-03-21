@@ -131,7 +131,7 @@ function ProductForm() {
 
     useEffect(() => {
 
-        getProductByIdHandler(location.state.pId)
+        getProductByIdHandler(location?.state?.pId)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -173,7 +173,7 @@ function ProductForm() {
 
     return (
         <>
-            <h2 className="mt-5 mb-4">Product Add</h2>
+            <h2 className="mt-5 mb-4">Add Book</h2>
             <form className="mb-4" onSubmit={handleSubmit(productFormHandler)}>
                 <Row>
                     <Col lg={8}>

@@ -68,8 +68,16 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                 onClick={() => navigate('/')}
                                 className="mr-lg-5 mb-0 h4 align-self-lg-center">Home</Nav.Link >
                             <Nav.Link
-                                onClick={() => navigate('/product')}
-                                className="mr-lg-5 mb-0 h4 align-self-lg-center">Sell/Share</Nav.Link>
+                                onClick={() => {
+                                    if (!isUserLoggedIn) {
+                                        setLoginModalShow(true)
+                                    } else {
+                                        navigate('/product', {
+                                            state: 'Sell/Share'
+                                        })
+                                    }
+                                }}
+                                className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'Sell/Share' ? 'text-primary' : ''}`}>Sell/Share</Nav.Link>
                             <Nav.Link
                                 onClick={() => alert('In progress')}
                                 className="mr-lg-5 mb-0 h4 align-self-lg-center">Community</Nav.Link>

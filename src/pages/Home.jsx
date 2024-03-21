@@ -58,7 +58,6 @@ function HomePage() {
     const [searchedContentList, setSearchedContentList] = useState([])
 
     const [selectCatID, setSelectCatID] = useState()
-
     const { setIsContentLoading } = useOutletContext()
 
     const getCategoriesListHandler = useCallback(async (p) => {
@@ -187,11 +186,15 @@ function HomePage() {
                             options={searchedContentList}
                             placeholder="Search Books by Title, Author"
                             renderMenuItemChildren={(option) => (
-                                <>
+                                <span onClick={() => navigate('/product/product-detail', {
+                                    state: {
+                                        productId: option.id
+                                    }
+                                })}>
                                     <img
                                         onError={replaceLogo}
                                         alt={option.title}
-                                        src={MEDIA_URL + 'product/' + option.image}
+                                        src={MEDIA_URL + 'product/product-detail/' + option.image}
                                         style={{
                                             height: '24px',
                                             marginRight: '10px',
@@ -199,10 +202,17 @@ function HomePage() {
                                         }}
                                     />
                                     <span>{option.title}</span>
-                                </>
+                                </span>
                             )}
                         />
-                        <Button id="basic-addon2" className="ml-2 px-4 align-items-center d-flex">
+                        <Button id="basic-addon2"
+                            onClick={() => {
+                                if (!searchText || searchText === '') {
+                                    return
+                                }
+                                navigate('/product?st=' + searchText)
+                            }}
+                            className="ml-2 px-4 align-items-center d-flex">
                             <Image
                                 className="mr-2"
                                 src={`${srcPriFixLocal}search-icon-white.svg`}
