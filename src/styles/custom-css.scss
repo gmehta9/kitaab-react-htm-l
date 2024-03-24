@@ -339,6 +339,15 @@ $secondry: #868686;
     cursor: not-allowed !important;
 }
 
+.dropdown-icon {
+    transition: all .5s;
+}
+
+.rotate-drop {
+    transition: all .5s;
+    transform: rotate(180deg);
+}
+
 .edit-class {
     .ql-editor {
         min-height: 150px;

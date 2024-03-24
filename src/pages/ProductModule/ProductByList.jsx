@@ -1,11 +1,10 @@
-import { Button, Col, Image, Row } from "react-bootstrap";
+import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import ProductItemUI from "../../components/ProductItemUI";
 import { srcPriFixLocal } from "../../helper/Helper";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
-
 // const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
 
 
@@ -17,6 +16,7 @@ function ProductByList() {
     const { setIsContentLoading } = useOutletContext()
     const [categoriesList, setCategoriesList] = useState()
     const [isEditAble, setIsEditAble] = useState(false)
+    const [catListShow, setCatListShow] = useState(true)
     const [selectedCat, setSelectedCat] = useState([])
 
     const [productList, setProductList] = useState()
@@ -127,37 +127,46 @@ function ProductByList() {
             <Row className="mt-4">
 
                 <Col lg={3}>
-                    {/* <Button
-                    variant=""
-                    className="d-flex justify-content-between w-100"
-                    type="button">Filters <Image className="dropdown-icon" src={`${srcPriFixLocal}dropdown-arrow.svg`} />
-                    </Button>
-                <ul>
-                <li></li>
-            </ul> */}
+
+                    <Form.Group className="mb-4" controlId="name">
+                        <Form.Label>Search by City</Form.Label>
+                        <Form.Control
+                            type="text"
+                            autoComplete="false"
+                            name="CityName"
+                            placeholder="Enter City Name"
+                            autoFocus
+                        />
+
+
+                    </Form.Group>
+
                     <Button
                         variant=""
+                        onClick={() => setCatListShow(!catListShow)}
                         className="d-flex justify-content-between w-100 pl-0 "
-                        type="button">Categories <Image className="dropdown-icon align-self-center" src={`${srcPriFixLocal}dropdown-arrow.svg`} />
+                        type="button">Categories
+                        <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${srcPriFixLocal}dropdown-arrow.svg`} />
                     </Button>
+                    {catListShow &&
+                        <ul className="pl-0 list-unstyled">
+                            {categoriesList && categoriesList.map((cl, index) =>
+                                <li key={index + 'cls'} >
+                                    <label
+                                        htmlFor={index + 'cl'}
+                                        className={`checkbox-item ${productList?.length === 0 && 'disabled'}`}
+                                    >{cl?.name}
+                                        <input
+                                            disabled={productList?.length === 0}
 
-                    <ul className="pl-0 list-unstyled">
-                        {categoriesList && categoriesList.map((cl, index) =>
-                            <li key={index + 'cls'} >
-                                <label
-                                    htmlFor={index + 'cl'}
-                                    className={`checkbox-item ${productList?.length === 0 && 'disabled'}`}
-                                >{cl?.name}
-                                    <input
-                                        disabled={productList?.length === 0}
+                                            type="checkbox" id={index + 'cl'} onChange={() => selectedCatHandler(cl?.id)} name="categories" aria-checked="false" />
+                                        <span className="checkbox mr-2"></span>
+                                    </label>
+                                </li>
+                            )}
 
-                                        type="checkbox" id={index + 'cl'} onChange={() => selectedCatHandler(cl?.id)} name="categories" aria-checked="false" />
-                                    <span className="checkbox mr-2"></span>
-                                </label>
-                            </li>
-                        )}
-
-                    </ul>
+                        </ul>
+                    }
                     {/* <Button
                     variant=""
                     className="d-flex justify-content-between w-100 pl-0"

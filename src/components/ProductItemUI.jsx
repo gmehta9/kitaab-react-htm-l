@@ -77,7 +77,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                                         }
                                     })
                                 } else {
-                                    setCartData(['1'])
+                                    setCartData([items])
 
                                 }
                             }}

@@ -49,6 +49,33 @@ function CartPage() {
                                         </tr>
                                     }
 
+                                    {cartData?.map((catData, index) =>
+                                        <tr key={index + 'catdata'}>
+                                            <td>{index + 1}</td>
+                                            <td>{catData?.title}</td>
+                                            <td>
+                                                <input
+                                                    style={{ width: '70px' }}
+                                                    type="number"
+                                                    max={catData?.transact_type === 'sell' && 1}
+                                                    min="0"
+                                                    value={catData.qty || 1}
+                                                    name="qty"
+                                                />
+                                            </td>
+                                            <td>
+                                                {catData?.transact_type === 'sell' ?
+                                                    catData?.sale_price || catData?.price
+                                                    : 'Sharing for 60 days'
+                                                }
+
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    )
+
+                                    }
+
                                 </tbody>
                             </Table>
                         </Col>
