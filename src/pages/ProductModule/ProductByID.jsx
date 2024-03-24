@@ -1,11 +1,11 @@
-import { Button, Card, Col, Image, Row } from "react-bootstrap";
-import { useLocation, useOutletContext } from "react-router-dom";
-import { srcPriFixLocal } from "../../helper/Helper";
+import { useContext, useEffect, useState } from "react";
+import { Button, Col, Image, Row } from "react-bootstrap";
+import { useLocation } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
-import { useContext, useEffect, useState } from "react";
 import { MEDIA_URL, replaceLogo } from "../../helper/Utils";
 import MainContext from "../../context/Mcontext.context";
 

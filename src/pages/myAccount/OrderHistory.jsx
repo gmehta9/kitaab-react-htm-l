@@ -10,7 +10,7 @@ function OrderHistory() {
 
         console.log(location.pathname === '/account/order-history');
 
-    }, [])
+    }, [location.pathname])
 
     return (
         <>
@@ -28,7 +28,9 @@ function OrderHistory() {
                 <tbody>
 
                     <tr>
-                        <td colSpan={4} className="text-center">No order received.</td>
+                        <td colSpan={4} className="text-center">
+                            No {location.pathname === '/account/order-history' ? 'order' : 'sell'} history.
+                        </td>
                     </tr>
 
                 </tbody>

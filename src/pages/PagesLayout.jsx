@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import { Container } from "react-bootstrap";
 import Loader from "../components/Loader";
-import { useState, useContext } from "react";
+import { useState } from "react";
 
 function PagesLayout() {
-    const [isContentLoading, setIsContentLoading] = useState(false)
 
+    const [isContentLoading, setIsContentLoading] = useState(false)
 
     return (
         <>

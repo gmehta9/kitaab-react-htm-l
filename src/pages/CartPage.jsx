@@ -21,12 +21,15 @@ function CartPage() {
 
             <div className="inner-pages row border-top ">
                 <Container className="my-5">
+
                     <Row>
+
                         <Col lg={12}>
                             <div className="h2 font-weight-bold">
                                 Cart
                             </div>
                         </Col>
+
                         <Col lg={12}>
                             <Table striped bordered >
 
@@ -40,7 +43,7 @@ function CartPage() {
                                 </thead>
 
                                 <tbody>
-                                    {!cartData &&
+                                    {cartData?.length === 0 &&
                                         <tr>
                                             <td colSpan={4} className="text-center">Cart is Empty</td>
                                         </tr>
@@ -49,10 +52,18 @@ function CartPage() {
                                 </tbody>
                             </Table>
                         </Col>
-                        <Col lg={12} className="text-right">
-                            <Button disabled={!cartData} className="ml-auto" variant="dark">Proceed</Button>
+
+                        <Col lg={12} className="text-right mt-4">
+
+                            <Button
+                                disabled={cartData?.length === 0}
+                                className="ml-auto"
+                                variant="dark">Proceed</Button>
+
                         </Col>
+
                     </Row>
+
                 </Container>
 
                 <Footer />
