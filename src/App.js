@@ -20,6 +20,7 @@ import ManageAddress from './pages/myAccount/ManageAddress';
 import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
 import MyCoupons from './pages/myAccount/MyCoupons';
 import ProductForm from './pages/ProductModule/ProductForm';
+import CartPage from './pages/CartPage';
 
 function App() {
 
@@ -40,10 +41,10 @@ function App() {
         //   path: 'forgot-password',
         //   element: <ForgotPassword />,
         // },
-        // {
-        //   path: 'sign-up',
-        //   element: <SignUp />,
-        // },
+        {
+          path: 'cart',
+          element: <CartPage />,
+        },
         {
           path: 'product',
           element: <ProductModuleLayout />,
@@ -94,6 +95,10 @@ function App() {
               path: 'order-history',
               element: <OrderHistory />,
             },
+            {
+              path: 'sell-history',
+              element: <OrderHistory />,
+            },
             // {
             //   path: 'wishlist',
             //   element: <Wishlist />,
@@ -124,6 +129,7 @@ function App() {
   return (
     <React.StrictMode>
       <Suspense fallback={'Loading...'}>
+
         <Toaster
           position="top-center"
           toastOptions={{
@@ -135,9 +141,11 @@ function App() {
               color: '#fff',
             },
           }} />
+        {/* <MainProvider> */}
         <RouterProvider
           router={router}
         />
+        {/* </MainProvider> */}
       </Suspense>
     </React.StrictMode>
   );

@@ -1,13 +1,15 @@
 
 
+import { useContext } from "react";
 import { Button, Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { srcPriFixLocal } from "../helper/Helper";
+
 import { MEDIA_URL, replaceLogo } from "../helper/Utils";
+import MainContext from "../context/Mcontext.context";
 
 function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
-
+    const { setCartData } = useContext(MainContext)
     const ClikedItem = (items_id) => {
         navigate('/product/product-detail', {
             state: {
@@ -44,20 +46,25 @@ function ProductItemUI({ items, className, isEditAble }) {
                     <div className="book-name" onClick={() => ClikedItem(items.id)}>
                         {items.title}
                     </div>
-                    {items.sale_price &&
-                        <div className="book-price">
-                            ₹ {items.sale_price}/-
-                        </div>
-                    }
                     <div className="book-price">
-                        {items.sale_price ?
-                            <del>₹ {items.price}/-</del>
+                        {items?.transact_type === 'sell' ?
+                            <>
+                                {items.sale_price && ` ₹ ${items.sale_price}/-`}
+
+                                <div className="book-price">
+
+                                    {items.sale_price ?
+                                        <del className="text-dark">₹ {items.price}/-</del>
+                                        :
+                                        `₹ ${items.price}/-`
+                                    }
+
+                                </div>
+                            </>
                             :
-                            `₹ ${items.price}/-`
+                            <div className="mb-4" >Sharing for 60 days</div>
                         }
-
                     </div>
-
 
                     <div className="action-btn">
                         <Button
@@ -69,6 +76,9 @@ function ProductItemUI({ items, className, isEditAble }) {
                                             pId: items.id
                                         }
                                     })
+                                } else {
+                                    setCartData(['1'])
+
                                 }
                             }}
                             className="mb-3">

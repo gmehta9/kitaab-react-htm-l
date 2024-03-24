@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import Auth from "../../auth/Auth";
 
 function ProfilePage() {
 
     const [stateList, setStateList] = useState();
-
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const userLogin = Auth.loggedInUser()
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     useEffect(() => {
         fetch('cityState.json', {
@@ -20,6 +21,17 @@ function ProfilePage() {
         }).then(function (myJson) {
             setStateList(myJson)
         })
+    }, [])
+
+    useEffect(() => {
+        if (userLogin) {
+            console.log(userLogin);
+            setValue('name', userLogin?.name)
+            setValue('phone_number', userLogin?.phone_number)
+            setValue('email', userLogin?.email)
+            setValue('city', userLogin?.city)
+            setValue('state', userLogin?.state)
+        }
     }, [])
 
     return (
@@ -49,19 +61,7 @@ function ProfilePage() {
                                     />
                                 </InputGroup>
                             </Col>
-                            <Col lg={5}>
-                                <InputGroup>
-                                    <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i className='bx bxs-user'></i>
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        autoComplete="false"
-                                        name="phoneEmailInput"
-                                        placeholder="Enter your Last Name"
-                                    />
-                                </InputGroup>
-                            </Col>
+
                         </Row>
 
                         <Row className="border-bottom pb-4 mb-4">
@@ -80,6 +80,9 @@ function ProfilePage() {
                                                 autoComplete="false"
                                                 name="phoneInput"
                                                 disabled={true}
+                                                {...register('phone_number', {
+                                                    required: true
+                                                })}
                                                 placeholder="Enter your phone"
                                             />
                                         </InputGroup>
@@ -181,57 +184,7 @@ function ProfilePage() {
                             </Col>
                         </Row>
 
-                        <Row className="border-bottom pb-4 mb-4">
-                            <Col lg={12} className="font-weight-bolder mb-3">
-                                Password
-                            </Col>
-                            <Col lg={4}>
-                                <InputGroup>
-                                    <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i className='bx bx-lock' ></i>
-                                        {/* <i className='bx bx-lock-open' ></i> */}
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="password"
-                                        autoComplete="false"
-                                        name="currentPassword"
-                                        placeholder="Current Password"
-                                    />
-                                </InputGroup>
-                            </Col>
-                            <Col lg={4}>
-                                <InputGroup>
-                                    <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i className='bx bx-lock' ></i>
-                                        {/*<i className='bx bx-lock-open' ></i> */}
 
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="password"
-                                        autoComplete="false"
-                                        name="newPassword"
-                                        placeholder="New Password"
-                                        autoFocus
-                                    />
-                                </InputGroup>
-                            </Col>
-                            <Col lg={4}>
-                                <InputGroup>
-                                    <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
-                                        <i className='bx bx-lock' ></i>
-                                        {/* <i className='bx bx-lock-open' ></i> */}
-
-                                    </InputGroup.Text>
-                                    <Form.Control
-                                        type="password"
-                                        autoComplete="false"
-                                        name="confirmPassword"
-                                        placeholder="Confirm Password"
-                                        autoFocus
-                                    />
-                                </InputGroup>
-                            </Col>
-                        </Row>
                         <Row className="pb-4 mb-4">
                             <Col>
                                 <Button type="submit">Submit</Button>

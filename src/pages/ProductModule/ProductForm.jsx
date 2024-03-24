@@ -6,13 +6,14 @@ import 'react-quill/dist/quill.snow.css';
 import { axiosInstance, headers } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import Auth from "../../auth/Auth";
-import { useLocation, useOutletContext } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { MEDIA_URL } from "../../helper/Utils";
 import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [imageView, setImageView] = useState()
     const [years, setYears] = useState();
@@ -71,16 +72,25 @@ function ProductForm() {
             toast.error('Need login to add product.')
             return
         }
-
-        const responseImg = await FileUploadhandler(data.file[0], 'product')
-        if (!responseImg) {
-            return
+        let body = data
+        let api = "product"
+        if (data.file[0]) {
+            const responseImg = await FileUploadhandler(data.file[0], 'product')
+            if (!responseImg) {
+                return
+            }
+            body = { ...data, image: responseImg.image }
         }
 
-        const body = { ...data, images: responseImg.image }
         delete body['file'];
 
-        axiosInstance.post("product", body, {
+        let method = 'post'
+        if (location?.state?.pId) {
+            method = 'put'
+            api = api + '/' + location?.state?.pId
+        }
+
+        axiosInstance[method](api, body, {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
@@ -89,6 +99,7 @@ function ProductForm() {
             if (res) {
                 toast.success("Product added successfully!");
                 setIsContentLoading(false)
+                navigate(-1)
             }
         }).catch((error) => {
             setIsContentLoading(false)
@@ -110,8 +121,8 @@ function ProductForm() {
                 console.log(response);
                 setValue('title', response?.data?.title)
                 setValue('category_id', response?.data?.category_id)
-                setValue('sale_price', response?.data?.sale_price)
-                setValue('price', response?.data?.price)
+                setValue('sale_price', removeDecimal(response?.data?.sale_price))
+                setValue('price', removeDecimal(response?.data?.price))
                 setValue('auther', response?.data?.auther)
                 setValue('transact_type', response?.data?.transact_type)
                 setValue('year_of_publication', response?.data?.year_of_publication)
@@ -128,7 +139,12 @@ function ProductForm() {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     });
-
+    function removeDecimal(num) {
+        if (num) {
+            return num.toString().replace(/\.00$/, "");
+        }
+        return num
+    }
     useEffect(() => {
         if (location?.state?.pId) {
             getProductByIdHandler(location?.state?.pId)
@@ -143,7 +159,9 @@ function ProductForm() {
         setYears(years)
         getCategoriesListHandler()
         setValue('category_id', '')
-
+        if (!Auth.isUserAuthenticated()) {
+            navigate('/')
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -181,7 +199,7 @@ function ProductForm() {
 
                         <div className="form-group mb-3">
                             <label
-                                htmlFor="productTitle">Product Title <span className="text-danger small">*</span></label>
+                                htmlFor="productTitle">Product Title <sup className="text-danger small">*</sup></label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -217,7 +235,7 @@ function ProductForm() {
 
                             <Col lg={6} className="mb-2">
                                 <div className="form-group mb-3">
-                                    <label htmlFor="priceInput">Price<span className="text-danger small">*</span></label>
+                                    <label htmlFor="priceInput">Price<sup className="text-danger small">*</sup></label>
                                     <input
                                         {...register('price', {
                                             required: 'Field is required.',
@@ -247,7 +265,12 @@ function ProductForm() {
                                             pattern: {
                                                 value: /^(0|[1-9][0-9]*)$/,
                                                 message: ''
-                                            }
+                                            },
+                                            validate: (val) => {
+                                                if (+watch("price") <= +val) {
+                                                    return "Sale price should not be lower then price.";
+                                                }
+                                            },
                                         })}
                                         min={0}
                                         type="number"
@@ -264,7 +287,7 @@ function ProductForm() {
 
                             <Col lg={12} className="mb-2">
                                 <div className="form-group mb-3">
-                                    <label htmlFor="auther">Author <span className="text-danger small">*</span></label>
+                                    <label htmlFor="auther">Author <sup className="text-danger small">*</sup></label>
                                     <input
                                         {...register('auther', {
                                             required: 'Field is required.'
@@ -302,13 +325,14 @@ function ProductForm() {
                             </Col>
                             <Col lg={6} className="mb-2">
                                 <div className="form-group mb-3">
-                                    <label htmlFor="year_of_publication">Year of Publication <span className="text-danger small">*</span></label>
+                                    <label htmlFor="year_of_publication">Year of Publication <sup className="text-danger small">*</sup></label>
                                     <select
                                         {...register('year_of_publication', {
                                             required: 'Field is required.'
                                         })}
                                         className="form-control"
                                         id="year_of_publication">
+                                        <option value="">Select Year of Publication</option>
                                         {years?.map((y, index) =>
                                             <option value={y} key={index + 'y'}>{y}</option>
                                         )}
@@ -353,7 +377,7 @@ function ProductForm() {
                     </Col>
                     <Col lg={12} className="mb-2">
                         <div className="form-group mb-3">
-                            <label htmlFor="short_description">Short Description<span className="text-danger small">*</span></label>
+                            <label htmlFor="short_description">Short Description<sup className="text-danger small">*</sup></label>
                             <ReactQuill
                                 className="edit-class"
                                 theme="snow"

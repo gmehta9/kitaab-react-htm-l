@@ -39,8 +39,6 @@ function ProductByList() {
             page: p,
             size: 50,
         };
-
-
         let APIUrl = 'product'
         if (search) {
             params.searching = search
@@ -108,7 +106,9 @@ function ProductByList() {
     }, [])
 
     useEffect(() => {
-        getProductListHandler(1, searchParams.get('st'))
+        if (selectedCat || searchParams.get('st')) {
+            getProductListHandler(1, searchParams.get('st'))
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedCat])
@@ -183,7 +183,9 @@ function ProductByList() {
                                 <span className="text-white bg-dark rounded-circle cross-icon ml-1 link" onClick={() => navigate('/product')}>×</span>
                             </>}
                         </span>
-                        <Button className="mb-3" onClick={() => navigate('add')} type="button">Add Product</Button>
+                        {Auth.isUserAuthenticated() &&
+                            <Button className="mb-3" onClick={() => navigate('add')} type="button">Add Product</Button>
+                        }
                     </div>
                     {productList?.length === 0 &&
                         <Row>

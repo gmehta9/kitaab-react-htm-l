@@ -7,7 +7,7 @@ function Input({ props, errors, label, required }, ref) {
             <Form.Label>
                 {label}
                 {required &
-                    <span className="text-danger small">*</span>}
+                    <sup className="text-danger small">*</sup>}
             </Form.Label>
             <Form.Control
                 ref={ref}

@@ -1,10 +1,36 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../../components/Footer";
+import { useEffect } from "react";
+import Auth from "../../auth/Auth";
 
 function MyAccountLayoutPage() {
     const navigate = useNavigate();
     const location = useLocation()
+
+    const getPageTitle = (pageSulg) => {
+        let ps = ''
+        switch (pageSulg) {
+            case '/account/order-history':
+                ps = 'Order History'
+                break;
+            case '/account/sell-history':
+                ps = 'Sell History'
+                break;
+            case '/account/profile':
+                ps = 'Profile'
+                break;
+            default:
+                break;
+        }
+
+        return ps
+    }
+    useEffect(() => {
+        if (!Auth.isUserAuthenticated()) {
+            navigate('/')
+        }
+    }, [])
     return (
         <div className="inner-pages row border-top ">
             <Container className="my-5">
@@ -38,13 +64,14 @@ function MyAccountLayoutPage() {
                                 <li
                                     className={`${location.pathname === '/account/order-history' ? 'text-primary' : ''} clickable`}
                                     onClick={() => navigate('/account/order-history')}>Order History</li>
-                                {/* <li
-                                    className={`${location.pathname === '/account/wishlist' ? 'text-primary' : ''} clickable`}
-                                    onClick={() => navigate('/account/wishlist')} >My Wishlist</li> */}
+                                <li
+                                    className={`${location.pathname === '/account/sell-history' ? 'text-primary' : ''} clickable`}
+                                    onClick={() => navigate('/account/sell-history')} >Sell History</li>
                             </ul>
                         </div>
                     </Col>
                     <Col lg={9}>
+                        <h5 className="font-weight-bold">{getPageTitle(location?.pathname)}</h5>
                         <Outlet />
                     </Col>
                 </Row>

@@ -94,7 +94,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             </Col>
                         </Row> */}
                         <Form.Group className="mb-4" controlId="name">
-                            <Form.Label>Name</Form.Label>
+                            <Form.Label>Name<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="false"
@@ -116,7 +116,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                         <Row>
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="emailid">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label>Email<sup className="text-danger small">*</sup></Form.Label>
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
@@ -140,7 +140,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             </Col>
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="phone_number">
-                                    <Form.Label>Phone no</Form.Label>
+                                    <Form.Label>Phone no<sup className="text-danger small">*</sup></Form.Label>
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
@@ -174,7 +174,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                         </Row>
 
                         <Form.Group className="mb-4" controlId="password">
-                            <Form.Label>Password</Form.Label>
+                            <Form.Label>Password<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 autoComplete="false"
                                 name="password"
@@ -195,7 +195,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             }
                         </Form.Group>
                         <Form.Group className="mb-4" controlId="organization">
-                            <Form.Label>Organization</Form.Label>
+                            <Form.Label>Organization<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 autoComplete="false"
                                 name="organization"
@@ -214,7 +214,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                         <Row>
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="state">
-                                    <Form.Label>State</Form.Label>
+                                    <Form.Label>State<sup className="text-danger small">*</sup></Form.Label>
                                     <Select
                                         options={stateList}
                                         value={state}
@@ -235,7 +235,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             </Col>
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="city">
-                                    <Form.Label>City</Form.Label>
+                                    <Form.Label>City<sup className="text-danger small">*</sup></Form.Label>
 
                                     <Select
                                         options={cityList}
