@@ -98,7 +98,14 @@ function ProductByID() {
                                         :
                                         'Sharing for 60 days'
                                     }
+                                </div>
 
+                                <div className="">
+                                    <span className="font-weight-bold">Year of Publication:</span> {productDetail?.year_of_publication}
+                                </div>
+
+                                <div className="">
+                                    <span className="font-weight-bold">Author:</span> {productDetail?.auther}
                                 </div>
 
 
