@@ -11,6 +11,7 @@ function CartPage() {
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
 
+    console.log(cartData);
     return (
         <>
             <Header
@@ -59,8 +60,9 @@ function CartPage() {
                                                     type="number"
                                                     max={catData?.transact_type === 'sell' && 1}
                                                     min="0"
-                                                    value={catData.qty || 1}
+                                                    value={catData.quantity || 1}
                                                     name="qty"
+                                                    onChange={() => console.log('sss')}
                                                 />
                                             </td>
                                             <td>
@@ -70,7 +72,11 @@ function CartPage() {
                                                 }
 
                                             </td>
-                                            <td></td>
+                                            <td>
+                                                <button className="btn p-0 border-0 bg-transparent">
+                                                    <img src="./assets/images/delete_icon.svg" alt="" srcset="" />
+                                                </button>
+                                            </td>
                                         </tr>
                                     )
 

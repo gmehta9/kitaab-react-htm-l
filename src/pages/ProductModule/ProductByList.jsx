@@ -101,11 +101,15 @@ function ProductByList() {
     useEffect(() => {
         window.scrollTo(0, 0)
         getProductListHandler(1)
-        getCategoriesListHandler(1)
+        if (location?.state !== 'Sell/Share') {
+            getCategoriesListHandler(1)
+        }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
+
         if (selectedCat || searchParams.get('st')) {
             getProductListHandler(1, searchParams.get('st'))
         }
@@ -122,58 +126,64 @@ function ProductByList() {
     return (
         <>
             <div className="h2 mt-4 font-weight-bold">
-                Books
+                {location?.state === 'Sell/Share' ? 'Sell/Share list' : 'Books list'}
             </div>
             <Row className="mt-4">
+                {location?.state !== 'Sell/Share' &&
+                    <>
+                        <Col lg={3}>
 
-                <Col lg={3}>
+                            <Form.Group className="mb-4" controlId="name">
+                                <Form.Label>Search by City</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    autoComplete="false"
+                                    name="CityName"
+                                    placeholder="Enter City Name"
+                                    autoFocus
+                                />
 
-                    <Form.Group className="mb-4" controlId="name">
-                        <Form.Label>Search by City</Form.Label>
-                        <Form.Control
-                            type="text"
-                            autoComplete="false"
-                            name="CityName"
-                            placeholder="Enter City Name"
-                            autoFocus
-                        />
+                            </Form.Group>
 
+                            <Button
+                                variant=""
+                                onClick={() => setCatListShow(!catListShow)}
+                                className="d-flex justify-content-between w-100 pl-0 "
+                                type="button">Categories
+                                <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${srcPriFixLocal}dropdown-arrow.svg`} />
+                            </Button>
 
-                    </Form.Group>
+                            {catListShow &&
+                                <ul className="pl-0 list-unstyled">
+                                    {categoriesList && categoriesList.map((cl, index) =>
+                                        <li key={index + 'cls'} >
+                                            <label
+                                                htmlFor={index + 'cl'}
+                                                className={`checkbox-item ${productList?.length === 0 && (selectedCat?.length > 0 ? false : true) && 'disabled'}`}>
+                                                {cl?.name}
+                                                <input
+                                                    disabled={productList?.length === 0 && (selectedCat?.length > 0 ? false : true)}
+                                                    type="checkbox"
+                                                    id={index + 'cl'}
+                                                    onChange={() => selectedCatHandler(cl?.id)}
+                                                    name="categories"
+                                                    aria-checked="false"
+                                                />
+                                                <span className="checkbox mr-2"></span>
+                                            </label>
+                                        </li>
+                                    )}
 
-                    <Button
-                        variant=""
-                        onClick={() => setCatListShow(!catListShow)}
-                        className="d-flex justify-content-between w-100 pl-0 "
-                        type="button">Categories
-                        <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${srcPriFixLocal}dropdown-arrow.svg`} />
-                    </Button>
-                    {catListShow &&
-                        <ul className="pl-0 list-unstyled">
-                            {categoriesList && categoriesList.map((cl, index) =>
-                                <li key={index + 'cls'} >
-                                    <label
-                                        htmlFor={index + 'cl'}
-                                        className={`checkbox-item ${productList?.length === 0 && 'disabled'}`}
-                                    >{cl?.name}
-                                        <input
-                                            disabled={productList?.length === 0}
+                                </ul>
 
-                                            type="checkbox" id={index + 'cl'} onChange={() => selectedCatHandler(cl?.id)} name="categories" aria-checked="false" />
-                                        <span className="checkbox mr-2"></span>
-                                    </label>
-                                </li>
-                            )}
-
-                        </ul>
-                    }
-                    {/* <Button
+                            }
+                            {/* <Button
                     variant=""
                     className="d-flex justify-content-between w-100 pl-0"
                     type="button">Author <Image className="dropdown-icon align-self-center" src={`${srcPriFixLocal}dropdown-arrow.svg`} />
                 </Button> */}
 
-                    {/* <ul className="pl-0 list-unstyled">
+                            {/* <ul className="pl-0 list-unstyled">
                     {CategoriesList.map((cl, index) =>
                         <li key={index + 'cll'}>
                         <label for={index + 'cll'} className="checkbox-item">{cl}
@@ -183,17 +193,25 @@ function ProductByList() {
                         </li>
                         )}
                     </ul> */}
-                </Col>
-                <Col lg={9} >
+                        </Col>
+                    </>
+                }
+                <Col lg={location?.state === 'Sell/Share' ? 12 : 9} >
                     <div className="d-flex justify-content-between">
                         <span className="">
                             {searchParams.get('st') && <>Search filter:
-                                <span className="font-weight-bold ml-1">{searchParams.get('st')}</span>
-                                <span className="text-white bg-dark rounded-circle cross-icon ml-1 link" onClick={() => navigate('/product')}>×</span>
+                                <span
+                                    className="font-weight-bold ml-1">{searchParams.get('st')}</span>
+                                <span
+                                    className="text-white bg-dark rounded-circle cross-icon ml-1 link"
+                                    onClick={() => navigate('/product')}>×</span>
                             </>}
                         </span>
                         {Auth.isUserAuthenticated() &&
-                            <Button className="mb-3" onClick={() => navigate('add')} type="button">Add Product</Button>
+                            <Button
+                                className="mb-3"
+                                onClick={() => navigate('add')}
+                                type="button">Add Product</Button>
                         }
                     </div>
                     {productList?.length === 0 &&

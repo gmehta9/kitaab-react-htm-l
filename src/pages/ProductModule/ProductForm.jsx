@@ -192,7 +192,13 @@ function ProductForm() {
 
     return (
         <>
-            <h2 className="mt-5 mb-4">{location?.state?.pId ? 'Edit' : 'Add'} Book</h2>
+            <h2 className="mt-5 mb-4">
+                <span
+                    onClick={() => navigate(-1)}
+                    className="mr-2 btn p-0">
+                    <i class='bx bx-arrow-back '></i>
+                </span>
+                {location?.state?.pId ? 'Edit' : 'Add'} Book</h2>
             <form className="mb-4" onSubmit={handleSubmit(productFormHandler)}>
                 <Row>
                     <Col lg={8}>
@@ -364,7 +370,7 @@ function ProductForm() {
                                     <img src={`${imageView}`} className="image-preview" alt="" />
                                     :
                                     <span className="placeholder bg-transparent">
-                                        <img src={`${srcPriFixLocal}upload-placeholder.png`} alt="" />
+                                        <img src={`${srcPriFixLocal}upload-placeholder.png`} className="opacity-50" alt="" />
                                     </span>
                                 }
                                 {/* <span className="placeholder bg-transparent d-block">

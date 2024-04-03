@@ -9,7 +9,7 @@ import MainContext from "../context/Mcontext.context";
 
 function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
-    const { setCartData } = useContext(MainContext)
+    const { setCartData, cartData } = useContext(MainContext)
     const ClikedItem = (items_id) => {
         navigate('/product/product-detail', {
             state: {
@@ -17,6 +17,29 @@ function ProductItemUI({ items, className, isEditAble }) {
             }
         })
     }
+    const updateQuantity = (id, newQuantity) => {
+        setCartData(prevCart => prevCart.map(item =>
+            item.id === id ? { ...item, quantity: newQuantity } : item
+        ));
+    };
+
+    const cartItemHandler = (items) => {
+        console.log('items,', items);
+        const existingItem = cartData.find(item => item.id === items.id);
+        console.log('existingItem', existingItem);
+
+        if (!cartData && cartData.length === 0) {
+            setCartData([{ ...items, quantity: 1 }]);
+            return
+        }
+        if (existingItem) {
+            updateQuantity(existingItem.id, existingItem.quantity + 1);
+        } else {
+            setCartData([...cartData, { ...items, quantity: 1 }]);
+        }
+
+    }
+
     return (
         <Col className={className}>
             <div className="book-card clickable position-relative" >
@@ -77,8 +100,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                                         }
                                     })
                                 } else {
-                                    setCartData([items])
-
+                                    cartItemHandler(items)
                                 }
                             }}
                             className="mb-3">
