@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { MEDIA_URL, replaceLogo } from "../helper/Utils";
 import MainContext from "../context/Mcontext.context";
+import AddToCartButton from "./AddtoCart";
 
 function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
@@ -90,7 +91,8 @@ function ProductItemUI({ items, className, isEditAble }) {
                     </div>
 
                     <div className="action-btn">
-                        <Button
+                        <AddToCartButton isEditAble={isEditAble} productDetail={items} />
+                        {/* <Button
                             type="button"
                             onClick={() => {
                                 if (isEditAble) {
@@ -105,7 +107,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                             }}
                             className="mb-3">
                             {!isEditAble ? "Add to Cart" : 'Edit'}
-                        </Button>
+                        </Button> */}
                     </div>
 
 

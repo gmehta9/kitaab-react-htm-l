@@ -7,6 +7,7 @@ const MainContext = createContext(null);
 export const MainProvider = ({ children }) => {
 
     const [cartData, setCartData] = useState([]);
+    const [cartBtnClick, setCartBtnClick] = useState(0);
 
     const cartApiHandlder = (method) => {
 
@@ -34,12 +35,18 @@ export const MainProvider = ({ children }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+
+    }, [cartBtnClick])
+
 
     return (
         <MainContext.Provider
             value={{
                 cartData,
-                setCartData
+                setCartData,
+                cartBtnClick,
+                setCartBtnClick
             }}>
             {children}
         </MainContext.Provider>

@@ -8,6 +8,7 @@ import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { MEDIA_URL, replaceLogo } from "../../helper/Utils";
 import MainContext from "../../context/Mcontext.context";
+import AddToCartButton from "../../components/AddtoCart";
 
 function ProductByID() {
 
@@ -15,6 +16,8 @@ function ProductByID() {
 
     const [productDetail, setProductDetail] = useState()
     const [contentLoading, setContentLoading] = useState()
+
+    const [isEditAble, setIsEditAble] = useState(false)
 
     const { setCartData } = useContext(MainContext)
 
@@ -42,8 +45,18 @@ function ProductByID() {
     });
 
     useEffect(() => {
+        if (productDetail?.created_by_user.id === Auth.loggedInUser()?.id) {
+            setIsEditAble(true)
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [Auth.loggedInUser()?.id])
+
+    useEffect(() => {
         getProductByIdHandler()
     }, [location?.state?.productId])
+
+
     return (
         <>
             <div className="h2 mt-4 font-weight-bold">
@@ -110,6 +123,7 @@ function ProductByID() {
 
 
                                 <div className="product-cart-btn my-4">
+                                    <AddToCartButton isEditAble={isEditAble} productDetail={productDetail} />
                                     <Button
                                         onClick={() => setCartData([11])}
                                         type="button"

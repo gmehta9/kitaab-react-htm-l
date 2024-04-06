@@ -4,6 +4,8 @@ import Header from "../components/Header";
 import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import MainContext from "../context/Mcontext.context";
+import { axiosInstance, headers } from "../axios/axios-config";
+import Auth from "../auth/Auth";
 
 
 function CartPage() {
@@ -11,6 +13,22 @@ function CartPage() {
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
 
+    const cartDelete = (method) => {
+
+        cartData.map(item => ({ id: item.id, qty: item.qty }));
+
+        axiosInstance[method]('cart', {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
+            if (res) {
+                console.log(res);
+            }
+        }).catch((error) => {
+        });
+    }
     console.log(cartData);
     return (
         <>
