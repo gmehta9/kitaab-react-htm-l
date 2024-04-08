@@ -29,7 +29,9 @@ function CartPage() {
         }).catch((error) => {
         });
     }
-    console.log(cartData);
+
+
+
     return (
         <>
             <Header

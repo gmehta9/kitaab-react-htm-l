@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { axiosInstance, headers } from '../axios/axios-config';
 import Auth from '../auth/Auth';
 import { debounce } from '../helper/Utils';
@@ -8,13 +8,14 @@ const MainContext = createContext(null);
 export const MainProvider = ({ children }) => {
 
     const [cartData, setCartData] = useState([]);
+    const [copyCartData, setCopyCartData] = useState([]);
     const [cartBtnClick, setCartBtnClick] = useState(0);
 
-    const cartApiHandlder = (method) => {
+    const getCartApiHandlder = () => {
 
         cartData.map(item => ({ id: item.id, qty: item.qty }));
 
-        axiosInstance[method]('cart', {
+        axiosInstance['get']('cart', {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
@@ -22,6 +23,25 @@ export const MainProvider = ({ children }) => {
         }).then((res) => {
             if (res) {
                 console.log(res);
+                setCopyCartData()
+            }
+        }).catch((error) => {
+        });
+    }
+
+    const cartApiHandlder = () => {
+
+        cartData.map(item => ({ id: item.id, qty: item.qty }));
+
+        axiosInstance['post']('cart', cartData, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
+            if (res) {
+                console.log(res);
+                setCopyCartData()
             }
         }).catch((error) => {
         });
@@ -30,7 +50,7 @@ export const MainProvider = ({ children }) => {
     useEffect(() => {
 
         if (Auth.isUserAuthenticated()) {
-            cartApiHandlder('get')
+            getCartApiHandlder()
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,10 +59,10 @@ export const MainProvider = ({ children }) => {
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
             debounce((event) => {
-
                 cartApiHandlder()
             }, 2000)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartBtnClick])
 
 
@@ -52,7 +72,9 @@ export const MainProvider = ({ children }) => {
                 cartData,
                 setCartData,
                 cartBtnClick,
-                setCartBtnClick
+                setCartBtnClick,
+                copyCartData,
+                setCopyCartData
             }}>
             {children}
         </MainContext.Provider>
