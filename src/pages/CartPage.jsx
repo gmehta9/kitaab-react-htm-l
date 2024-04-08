@@ -13,7 +13,7 @@ function CartPage() {
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
 
-    const cartDelete = (method) => {
+    const cartDeleteHandle = (method) => {
 
         cartData.map(item => ({ id: item.id, qty: item.qty }));
 

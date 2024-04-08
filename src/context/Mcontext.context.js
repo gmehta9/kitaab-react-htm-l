@@ -31,9 +31,9 @@ export const MainProvider = ({ children }) => {
 
     const cartApiHandlder = () => {
 
-        cartData.map(item => ({ id: item.id, qty: item.qty }));
-
-        axiosInstance['post']('cart', cartData, {
+        const cd = cartData.map(item => ({ id: item.id, quantity: item.quantity }));
+        console.log(cd);
+        axiosInstance.post('cart', cd, {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
@@ -55,12 +55,12 @@ export const MainProvider = ({ children }) => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
+    const dd = debounce((event) => {
+        cartApiHandlder()
+    }, 2000)
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
-            debounce((event) => {
-                cartApiHandlder()
-            }, 2000)
+            // dd()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartBtnClick])

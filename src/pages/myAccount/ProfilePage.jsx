@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import Auth from "../../auth/Auth";
+import { axiosInstance, headers } from "../../axios/axios-config";
 
 function ProfilePage() {
 
@@ -9,6 +10,20 @@ function ProfilePage() {
     const userLogin = Auth.loggedInUser()
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
+    const profileUpdateHandler = (data) => {
+        console.log(data);
+        axiosInstance['post']('profileupdate', data, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
+            if (res) {
+                console.log(res);
+            }
+        }).catch((error) => {
+        });
+    }
     useEffect(() => {
         fetch('cityState.json', {
             headers: {
@@ -36,7 +51,7 @@ function ProfilePage() {
 
     return (
         <>
-            <Form autoComplete="false">
+            <Form autoComplete="false" onSubmit={handleSubmit(profileUpdateHandler)}>
 
                 <Row>
                     <Col lg={12} className="pl-5">
