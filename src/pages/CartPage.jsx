@@ -6,31 +6,29 @@ import Footer from "../components/Footer";
 import MainContext from "../context/Mcontext.context";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
+import ManageAddress from "./myAccount/ManageAddress";
 
 
 function CartPage() {
-
+    const [addressModalShow, setAddressModalShow] = useState(false)
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
 
-    const cartDeleteHandle = (method) => {
+    const cartDeleteHandle = (id, index) => {
 
-        cartData.map(item => ({ id: item.id, qty: item.qty }));
-
-        axiosInstance[method]('cart', {
+        axiosInstance['delete']('cart/' + id, {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
             }
         }).then((res) => {
             if (res) {
-                console.log(res);
+                const cd = cartData
+                setCartData(cd)
             }
         }).catch((error) => {
         });
     }
-
-
 
     return (
         <>
@@ -93,15 +91,12 @@ function CartPage() {
 
                                             </td>
                                             <td>
-                                                <button className="btn p-0 border-0 bg-transparent">
+                                                <button onClick={() => cartDeleteHandle(catData)} className="btn p-0 border-0 bg-transparent">
                                                     <img src="./assets/images/delete_icon.svg" alt="" srcset="" />
                                                 </button>
                                             </td>
                                         </tr>
-                                    )
-
-                                    }
-
+                                    )}
                                 </tbody>
                             </Table>
                         </Col>
@@ -111,6 +106,7 @@ function CartPage() {
                             <Button
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
+                                onClick={() => setAddressModalShow(true)}
                                 variant="dark">Proceed</Button>
 
                         </Col>
@@ -121,6 +117,8 @@ function CartPage() {
 
                 <Footer />
             </div>
+
+            <ManageAddress addressModalShow={addressModalShow} setAddressModalShow={setAddressModalShow} />
         </>
     )
 }

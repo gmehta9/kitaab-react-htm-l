@@ -22,7 +22,6 @@ class Auth {
     }
 
     token() {
-
         const user = JSON.parse((this.storageType.getItem(this.localId) || 'null'));
         return user?.token || null;
     }

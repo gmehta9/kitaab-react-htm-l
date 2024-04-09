@@ -60,7 +60,7 @@ export const MainProvider = ({ children }) => {
     }, 2000)
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
-            // dd()
+            dd()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartBtnClick])

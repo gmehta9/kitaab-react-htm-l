@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Auth from "../../auth/Auth";
@@ -7,7 +7,7 @@ import { axiosInstance, headers } from "../../axios/axios-config";
 function OrderHistory() {
 
     const location = useLocation()
-
+    // const [activeLink, setActiveLink] = useState()
     const getOrderHistoryHandlder = () => {
         axiosInstance['get']('cart', {
             headers: {
@@ -25,12 +25,25 @@ function OrderHistory() {
 
     useEffect(() => {
         if (location.pathname === '/account/order-history') {
-            getOrderHistoryHandlder()
+            // getOrderHistoryHandlder()
         }
     }, [location.pathname])
 
     return (
         <>
+            {/* <div className="d-flex align-items-center justify-content-end mb-3">
+                filter by:
+
+                <button
+                    className={`btn border m-2 ${activeLink === 'buy' ? 'btn-primary' : ''}`}
+                    onClick={() => setActiveLink('buy')}>Buy Order</button>
+
+                <button
+                    className={`btn border m-2 ${activeLink === 'sell' ? 'btn-primary' : ''}`}
+                    onClick={() => setActiveLink('sell')}>Sell Order</button>
+
+            </div> */}
+
             <Table striped bordered >
                 <thead>
                     <tr>

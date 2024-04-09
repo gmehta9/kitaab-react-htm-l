@@ -12,7 +12,31 @@ function ProfilePage() {
 
     const profileUpdateHandler = (data) => {
         console.log(data);
-        axiosInstance['post']('profileupdate', data, {
+        axiosInstance['post']('auth/profile', data, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
+            if (res) {
+                console.log(res);
+                const t = Auth.token()
+                const u = Auth.loggedInUser()
+
+                Auth.login({
+                    user: {
+                        ...u,
+                        is_address: true
+                    },
+                    token: t
+                })
+            }
+        }).catch((error) => {
+        });
+    }
+
+    const getProfileUpdateHandler = () => {
+        axiosInstance['get']('auth/profile', {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
@@ -24,6 +48,7 @@ function ProfilePage() {
         }).catch((error) => {
         });
     }
+
     useEffect(() => {
         fetch('cityState.json', {
             headers: {
@@ -36,6 +61,7 @@ function ProfilePage() {
         }).then(function (myJson) {
             setStateList(myJson)
         })
+        // getProfileUpdateHandler()
     }, [])
 
     useEffect(() => {

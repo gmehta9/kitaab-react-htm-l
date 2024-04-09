@@ -1,29 +1,67 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../auth/Auth";
 
-function ManageAddress() {
-    const [modalShow, setModalShow] = useState(false)
+function ManageAddress({ setAddressModalShow, addressModalShow }) {
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const userLogin = Auth.loggedInUser()
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const handleClose = () => {
-        setModalShow(false)
+        setAddressModalShow(false)
     }
 
     const addressSubmitHandler = (data) => {
+        axiosInstance['post']('auth/profile', data, {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
+            if (res) {
+                if (data.address) {
+                    const t = Auth.token()
+                    const u = Auth.loggedInUser()
 
+                    Auth.login({
+                        user: {
+                            ...u,
+                            is_address: true
+                        },
+                        token: t
+                    })
+                }
+                console.log(res);
+            }
+        }).catch((error) => {
+        });
     }
+    useEffect(() => {
+        if (userLogin) {
+            console.log(userLogin);
+            setValue('name', userLogin?.name)
+            setValue('phone_number', userLogin?.phone_number)
+            setValue('email', userLogin?.email)
+            setValue('city', userLogin?.city)
+            setValue('state', userLogin?.state)
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
         <>
-            <div className="d-flex justify-content-between">
-                <h3>Manage Address</h3>
-                <Button onClick={() => setModalShow(true)} variant="info">Add Address</Button>
-            </div>
+            {/* <div className="d-flex justify-content-between"> */}
+            {/* <h3>Manage Address</h3> */}
+            {/* <Button onClick={() => setModalShow(true)} variant="info">Add Address</Button> */}
+            {/* </div> */}
 
-            <Modal size="lg" show={modalShow} onHide={handleClose}>
-                <Modal.Header closeButton>
+            <Modal size="lg" show={addressModalShow} onHide={handleClose}>
+                <Modal.Header>
                     <Modal.Title>Add Address</Modal.Title>
+                    <button type="button" onClick={handleClose} className="closed btn">X</button>
                 </Modal.Header>
                 <Modal.Body>
                     <Form autoComplete="false" onSubmit={handleSubmit(addressSubmitHandler)}>

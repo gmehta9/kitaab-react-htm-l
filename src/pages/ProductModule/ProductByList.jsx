@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
+import { debounce } from "../../helper/Utils";
 // const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
 
 
@@ -18,6 +19,7 @@ function ProductByList() {
     const [isEditAble, setIsEditAble] = useState(false)
     const [catListShow, setCatListShow] = useState(true)
     const [selectedCat, setSelectedCat] = useState([])
+    const [searchByAuthorText, setSearchByAuthorText] = useState()
 
     const [productList, setProductList] = useState()
 
@@ -33,7 +35,7 @@ function ProductByList() {
         }
     }
 
-    const getProductListHandler = async (p, search) => {
+    const getProductListHandler = async (p, search, author) => {
         setIsContentLoading(true)
         const params = {
             page: p,
@@ -42,6 +44,9 @@ function ProductByList() {
         let APIUrl = 'product'
         if (search) {
             params.searching = search
+        }
+        if (author) {
+            params['author[0]'] = author
         }
         if (selectedCat.length > 0) {
             selectedCat.forEach((elm, index) => {
@@ -98,6 +103,11 @@ function ProductByList() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const serachtext = debounce((event) => {
+        console.log(event);
+        setSearchByAuthorText(event)
+    }, 500)
+
     useEffect(() => {
         window.scrollTo(0, 0)
         getProductListHandler(1)
@@ -111,11 +121,11 @@ function ProductByList() {
     useEffect(() => {
 
         if (selectedCat || searchParams.get('st')) {
-            getProductListHandler(1, searchParams.get('st'))
+            getProductListHandler(1, searchParams.get('st'), searchByAuthorText)
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCat])
+    }, [selectedCat, searchByAuthorText])
 
     useEffect(() => {
         if (location?.state === 'Sell/Share') {
@@ -132,19 +142,39 @@ function ProductByList() {
                 {location?.state !== 'Sell/Share' &&
                     <>
                         <Col lg={3}>
-
-                            <Form.Group className="mb-4" controlId="name">
-                                <Form.Label>Search by City</Form.Label>
+                            <Form.Group className="mb-2" controlId="name">
+                                <Form.Label>Search by State & City</Form.Label>
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
                                     name="CityName"
-                                    placeholder="Enter City Name"
+                                    className="small"
+                                    placeholder="State Name"
+                                    autoFocus
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-4" controlId="name">
+                                <Form.Control
+                                    type="text"
+                                    autoComplete="false"
+                                    name="CityName"
+                                    placeholder="City Name"
                                     autoFocus
                                 />
 
                             </Form.Group>
-
+                            <Form.Group className="mb-2" controlId="name">
+                                <Form.Label>Author Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    autoComplete="false"
+                                    name="CityName"
+                                    className="small"
+                                    onChange={(event) => serachtext(event.target.value)}
+                                    placeholder="Author Name"
+                                    autoFocus
+                                />
+                            </Form.Group>
                             <Button
                                 variant=""
                                 onClick={() => setCatListShow(!catListShow)}
