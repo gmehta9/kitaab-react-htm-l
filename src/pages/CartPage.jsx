@@ -14,16 +14,16 @@ function CartPage() {
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
 
-    const cartDeleteHandle = (id, index) => {
-
-        axiosInstance['delete']('cart/' + id, {
+    const cartDeleteHandle = (id, ii) => {
+        console.log(id);
+        axiosInstance['delete']('cart/' + id.product_id || id, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             }
         }).then((res) => {
             if (res) {
-                const cd = cartData
+                const cd = cartData.filter((item) => (item.product_id || item.id) !== (id.product_id || id))
                 setCartData(cd)
             }
         }).catch((error) => {
@@ -71,7 +71,7 @@ function CartPage() {
                                     {cartData?.map((catData, index) =>
                                         <tr key={index + 'catdata'}>
                                             <td>{index + 1}</td>
-                                            <td>{catData?.title}</td>
+                                            <td>{catData?.title || catData?.product?.title}</td>
                                             <td>
                                                 <input
                                                     style={{ width: '70px' }}
@@ -84,8 +84,8 @@ function CartPage() {
                                                 />
                                             </td>
                                             <td>
-                                                {catData?.transact_type === 'sell' ?
-                                                    catData?.sale_price || catData?.price
+                                                {(catData?.transact_type || catData?.product?.transact_type) === 'sell' ?
+                                                    (catData?.sale_price || catData?.product?.sale_price) || (catData?.price || catData?.product?.price)
                                                     : 'Sharing for 60 days'
                                                 }
 

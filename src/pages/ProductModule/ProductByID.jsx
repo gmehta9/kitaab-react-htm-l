@@ -29,7 +29,7 @@ function ProductByID() {
         axiosInstance.get(`${APIUrl}`, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             },
         }).then((response) => {
             if (response) {

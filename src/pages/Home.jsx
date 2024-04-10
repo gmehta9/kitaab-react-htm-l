@@ -73,7 +73,7 @@ function HomePage() {
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             }
         }).then((response) => {
             if (response) {
@@ -102,7 +102,7 @@ function HomePage() {
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             },
         }).then((response) => {
             if (response) {
@@ -155,7 +155,7 @@ function HomePage() {
         }
     }, [searchText])
     useEffect(() => {
-        getCategoriesListHandler()
+        getCategoriesListHandler(1)
     }, [])
 
     useEffect(() => {

@@ -23,7 +23,8 @@ export const MainProvider = ({ children }) => {
         }).then((res) => {
             if (res) {
                 console.log(res);
-                setCopyCartData()
+                setCartData(res.data)
+                setCopyCartData(res.data)
             }
         }).catch((error) => {
         });
@@ -31,8 +32,8 @@ export const MainProvider = ({ children }) => {
 
     const cartApiHandlder = () => {
 
-        const cd = cartData.map(item => ({ id: item.id, quantity: item.quantity }));
-        console.log(cd);
+        const cd = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+
         axiosInstance.post('cart', cd, {
             headers: {
                 ...headers,

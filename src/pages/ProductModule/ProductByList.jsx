@@ -63,6 +63,7 @@ function ProductByList() {
             if (response) {
 
                 console.log('response?.data?.data', response?.data?.data);
+
                 let useData = response?.data?.data
                 if (location?.state === 'Sell/Share' && response?.data?.data.length > 0) {
 
@@ -90,7 +91,7 @@ function ProductByList() {
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             },
         }).then((response) => {
             if (response) {
@@ -110,7 +111,7 @@ function ProductByList() {
 
     useEffect(() => {
         window.scrollTo(0, 0)
-        getProductListHandler(1)
+        // getProductListHandler(1)
         if (location?.state !== 'Sell/Share') {
             getCategoriesListHandler(1)
         }

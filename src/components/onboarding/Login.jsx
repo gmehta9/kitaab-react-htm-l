@@ -103,7 +103,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                             <Form.Control
                                 autoComplete="false"
                                 {...register('password', {
-                                    required: 'Please enter your password.'
+                                    required: 'Please enter your password.',
                                 })}
                                 name="password"
                                 placeholder="Enter your password."

@@ -21,7 +21,9 @@ const onResponseError = (error) => {
   console.log(error.response);
 
   // toast.error(error?.response?.data?.message || 'Something went wrong!')
-  toast.error(error?.response?.data?.message)
+  toast.error(error?.response?.data?.message || 'Something went wrong!', {
+    duration: 2000
+  })
   if (error?.response?.status === 401) {
 
     Auth.logout()
