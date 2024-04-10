@@ -26,8 +26,11 @@ function CartPage() {
                 const cd = cartData.filter((item) => (item.product_id || item.id) !== (id.product_id || id))
                 setCartData(cd)
             }
-        }).catch((error) => {
-        });
+        }).catch((error) => { })
+    }
+
+    const cartQtyHandler = (index) => {
+
     }
 
     return (
@@ -80,7 +83,7 @@ function CartPage() {
                                                     min="0"
                                                     value={catData.quantity || 1}
                                                     name="qty"
-                                                    onChange={() => console.log('sss')}
+                                                    onChange={(targetValue) => cartQtyHandler(index)}
                                                 />
                                             </td>
                                             <td>
