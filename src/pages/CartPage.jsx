@@ -15,7 +15,6 @@ function CartPage() {
     const { cartData, setCartData } = useContext(MainContext)
 
     const cartDeleteHandle = (id, index) => {
-
         axiosInstance['delete']('cart/' + id, {
             headers: {
                 ...headers,
@@ -26,8 +25,11 @@ function CartPage() {
                 const cd = cartData
                 setCartData(cd)
             }
-        }).catch((error) => {
-        });
+        }).catch((error) => { })
+    }
+
+    const cartQtyHandler = (index) => {
+
     }
 
     return (
@@ -80,7 +82,7 @@ function CartPage() {
                                                     min="0"
                                                     value={catData.quantity || 1}
                                                     name="qty"
-                                                    onChange={() => console.log('sss')}
+                                                    onChange={(targetValue) => cartQtyHandler(index)}
                                                 />
                                             </td>
                                             <td>
