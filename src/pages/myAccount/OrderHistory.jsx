@@ -7,26 +7,45 @@ import { axiosInstance, headers } from "../../axios/axios-config";
 function OrderHistory() {
 
     const location = useLocation()
-    // const [activeLink, setActiveLink] = useState()
+    const useLoggedIN = Auth.loggedInUser()
+
+    const [orderList, setOrderList] = useState()
+    const [pagination, setPagination] = useState()
+
     const getOrderHistoryHandlder = () => {
-        axiosInstance['get']('cart', {
+
+        const params = {
+            user_id: useLoggedIN?.id,
+            page: 1,
+            size: 30
+        }
+        axiosInstance['get']('order?' + new URLSearchParams(params), {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
             }
         }).then((res) => {
             if (res) {
-                console.log(res);
+
+                const { data } = res.data
+                setOrderList(data)
+                setPagination({
+                    total: res.total,
+                    per_page: res.per_page,
+                    current_page: res.current_page
+                })
             }
         }).catch((error) => {
 
         });
     }
-
+    console.log(orderList);
     useEffect(() => {
+
         if (location.pathname === '/account/order-history') {
-            // getOrderHistoryHandlder()
+            getOrderHistoryHandlder()
         }
+
     }, [location.pathname])
 
     return (
@@ -49,17 +68,33 @@ function OrderHistory() {
                     <tr>
                         <th>#</th>
                         <th>Order ID</th>
+                        <th>Order Title</th>
                         <th>Order Quantity</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr>
-                        <td colSpan={4} className="text-center">
-                            No {location.pathname === '/account/order-history' ? 'order' : 'sell'} history.
-                        </td>
-                    </tr>
+
+                    {orderList?.length === 0 &&
+                        <tr>
+                            <td colSpan={4} className="text-center">
+                                No {location.pathname === '/account/order-history' ? 'order' : 'sell'} history.
+                            </td>
+                        </tr>
+                    }
+
+                    {orderList && orderList.map((ord, index) =>
+                        <tr key={index}>
+                            <td>{index + 1}</td>
+                            <td>order-{ord.id}</td>
+                            <td>{ord.title}</td>
+                            <td>{ord.quantity}</td>
+                            <td></td>
+                        </tr>
+                    )}
+
+
                 </tbody>
             </Table>
         </>

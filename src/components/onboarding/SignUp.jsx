@@ -17,7 +17,7 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
     const { register, handleSubmit, reset, resetField, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
-
+        setIsContentLoading(true)
         console.log(data);
 
         axiosInstance.post("auth/sign-up", data, {
@@ -27,9 +27,10 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                 toast.success("SignUp Successfully!");
                 setSignUpShowModal(false)
                 setLoginModalShow(true)
+                setIsContentLoading(false)
             }
         }).catch((error) => {
-
+            setIsContentLoading(false)
         });
     }
 

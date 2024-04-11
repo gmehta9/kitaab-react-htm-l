@@ -36,14 +36,22 @@ function ProfilePage() {
     }
 
     const getProfileUpdateHandler = () => {
-        axiosInstance['get']('auth/profile', {
+        axiosInstance.get(`auth/profile`, {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             }
-        }).then((res) => {
-            if (res) {
-                console.log(res);
+        }).then((response) => {
+            if (response) {
+                // console.log(response);
+                const user = response?.data
+                setValue('name', user?.name)
+                setValue('phone_number', user?.phone_number)
+                setValue('email', user?.email)
+                setValue('city', user?.city)
+                setValue('state', user?.state)
+                setValue('address', user?.address)
+                setValue('pin_code', user?.pin_code)
             }
         }).catch((error) => {
         });
@@ -61,7 +69,7 @@ function ProfilePage() {
         }).then(function (myJson) {
             setStateList(myJson)
         })
-        // getProfileUpdateHandler()
+        getProfileUpdateHandler()
     }, [])
 
     useEffect(() => {

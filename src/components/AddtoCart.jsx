@@ -1,9 +1,7 @@
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-import { srcPriFixLocal } from "../helper/Helper";
-import { useContext, useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
-import Auth from "../auth/Auth";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props

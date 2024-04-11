@@ -21,6 +21,7 @@ import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
 import MyCoupons from './pages/myAccount/MyCoupons';
 import ProductForm from './pages/ProductModule/ProductForm';
 import CartPage from './pages/CartPage';
+import OrderSuccess from './pages/OrderSuccess';
 
 function App() {
 
@@ -45,6 +46,11 @@ function App() {
           path: 'cart',
           element: <CartPage />,
         },
+        {
+          path: 'order-success',
+          element: <OrderSuccess />,
+        },
+
         {
           path: 'product',
           element: <ProductModuleLayout />,

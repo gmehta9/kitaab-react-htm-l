@@ -1,7 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import Header from "../components/Header";
-
-import { useContext, useState } from "react";
+import toast from "react-hot-toast";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import MainContext from "../context/Mcontext.context";
 import { axiosInstance, headers } from "../axios/axios-config";
@@ -10,10 +11,11 @@ import ManageAddress from "./myAccount/ManageAddress";
 
 
 function CartPage() {
+    const navigate = useNavigate()
     const [addressModalShow, setAddressModalShow] = useState(false)
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
-
+    const useLoggedIN = Auth.loggedInUser()
     const cartDeleteHandle = (id, ii) => {
         console.log(id);
         axiosInstance['delete']('cart/' + id.product_id || id, {
@@ -33,8 +35,31 @@ function CartPage() {
 
     }
     const orderPlacesHandler = (index) => {
-
+        if (useLoggedIN.is_address === "0") {
+            setAddressModalShow(true)
+            return
+        }
+        const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+        axiosInstance['post']('order', order, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((res) => {
+            if (res) {
+                toast.success("Order Placed successfully, Please check your email", {
+                    duration: 5000
+                });
+                navigate('/account/order-history')
+                setCartData([])
+            }
+        }).catch((error) => { })
     }
+
+    useEffect(() => {
+        console.log(useLoggedIN.is_address);
+
+    }, [])
     return (
         <>
             <Header
@@ -81,7 +106,7 @@ function CartPage() {
                                                 <input
                                                     style={{ width: '70px' }}
                                                     type="number"
-                                                    max={catData?.transact_type === 'sell' && 1}
+                                                    max={catData?.transact_type === 'sell' ? 10 : undefined}
                                                     min="0"
                                                     value={catData.quantity || 1}
                                                     name="qty"
@@ -97,7 +122,7 @@ function CartPage() {
                                             </td>
                                             <td>
                                                 <button onClick={() => cartDeleteHandle(catData)} className="btn p-0 border-0 bg-transparent">
-                                                    <img src="./assets/images/delete_icon.svg" alt="" srcset="" />
+                                                    <img src="./assets/images/delete_icon.svg" alt="" />
                                                 </button>
                                             </td>
                                         </tr>
@@ -111,7 +136,7 @@ function CartPage() {
                             <Button
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
-                                onClick={() => setAddressModalShow(true)}
+                                onClick={orderPlacesHandler}
                                 variant="dark">Proceed</Button>
 
                         </Col>
@@ -123,7 +148,9 @@ function CartPage() {
                 <Footer />
             </div>
 
-            <ManageAddress addressModalShow={addressModalShow} setAddressModalShow={setAddressModalShow} />
+            <ManageAddress
+                addressModalShow={addressModalShow}
+                setAddressModalShow={setAddressModalShow} />
         </>
     )
 }

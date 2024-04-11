@@ -13,9 +13,6 @@ export const MainProvider = ({ children }) => {
     const [cartBtnClick, setCartBtnClick] = useState(0);
 
     const getCartApiHandlder = () => {
-
-        cartData.map(item => ({ id: item.id, qty: item.qty }));
-
         axiosInstance['get']('cart', {
             headers: {
                 ...headers,

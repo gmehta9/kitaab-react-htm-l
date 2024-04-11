@@ -3,6 +3,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
+import toast from "react-hot-toast";
 
 function ManageAddress({ setAddressModalShow, addressModalShow }) {
 
@@ -11,6 +12,27 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
 
     const handleClose = () => {
         setAddressModalShow(false)
+    }
+
+    const ProfileAddressHandler = () => {
+        axiosInstance.get(`auth/profile`, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((response) => {
+            if (response) {
+                // console.log(response);
+                const user = response?.data
+                setValue('name', user?.name)
+                setValue('phone_number', user?.phone_number)
+                setValue('email', user?.email)
+                setValue('city', user?.city)
+                setValue('state', user?.state)
+                setValue('address', user?.address)
+            }
+        }).catch((error) => {
+        });
     }
 
     const addressSubmitHandler = (data) => {
@@ -32,22 +54,25 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                         },
                         token: t
                     })
+                    toast.success("Address updated successfully!");
                 }
-                console.log(res);
             }
         }).catch((error) => {
         });
     }
     useEffect(() => {
-        if (userLogin) {
-            console.log(userLogin);
-            setValue('name', userLogin?.name)
-            setValue('phone_number', userLogin?.phone_number)
-            setValue('email', userLogin?.email)
-            setValue('city', userLogin?.city)
-            setValue('state', userLogin?.state)
-        }
+        // if (userLogin) {
+        //     console.log(userLogin);
+        //     setValue('name', userLogin?.name)
+        //     setValue('phone_number', userLogin?.phone_number)
+        //     setValue('email', userLogin?.email)
+        //     setValue('city', userLogin?.city)
+        //     setValue('state', userLogin?.state)
+        // }
+        ProfileAddressHandler()
 
+        register('phone_number')
+        register('email')
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -66,7 +91,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                 <Modal.Body>
                     <Form autoComplete="false" onSubmit={handleSubmit(addressSubmitHandler)}>
                         <Modal.Body className="border-0 px-5">
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -78,13 +103,13 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                     placeholder="Enter your phone or email."
                                     autoFocus
                                 />
-                                {errors?.phoneEmail &&
+                                {errors?.name &&
                                     <span className="text-danger small position-absolute">
-                                        {errors?.phoneEmail?.message}
+                                        {errors?.name?.message}
                                     </span>
                                 }
-                            </Form.Group>
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                            </Form.Group> */}
+                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Email ID</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -100,24 +125,24 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                         {errors?.email?.message}
                                     </span>
                                 }
-                            </Form.Group>
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                            </Form.Group> */}
+                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Phone</Form.Label>
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
-                                    {...register('phone_no', {
+                                    {...register('phone_number', {
                                         required: 'Please enter your phone or email.'
                                     })}
                                     placeholder="Enter your phone."
                                     autoFocus
                                 />
-                                {errors?.phone_no &&
+                                {errors?.phone_number &&
                                     <span className="text-danger small position-absolute">
-                                        {errors?.phone_no?.message}
+                                        {errors?.phone_number?.message}
                                     </span>
                                 }
-                            </Form.Group>
+                            </Form.Group> */}
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control
@@ -129,9 +154,9 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                     placeholder="Enter your address."
                                     autoFocus
                                 />
-                                {errors?.phoneEmail &&
+                                {errors?.address &&
                                     <span className="text-danger small position-absolute">
-                                        {errors?.phoneEmail?.message}
+                                        {errors?.address?.message}
                                     </span>
                                 }
                             </Form.Group>
@@ -176,8 +201,18 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                     type="text"
                                     autoComplete="false"
                                     name="pin_code"
+                                    pattern="[0-9]*"
+                                    inputMode="numeric"
                                     {...register('pin_code', {
-                                        required: 'Please enter your pin code.'
+                                        required: 'Please enter your pin code.',
+                                        maxLength: {
+                                            value: 6,
+                                            message: 'Enter a valid pin code'
+                                        },
+                                        pattern: {
+                                            value: /^\d+$/,
+                                            message: 'Invalid pin code.'
+                                        }
                                     })}
                                     placeholder="Enter your pin code."
                                     autoFocus
