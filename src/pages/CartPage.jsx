@@ -32,7 +32,9 @@ function CartPage() {
     const cartQtyHandler = (index) => {
 
     }
+    const orderPlacesHandler = (index) => {
 
+    }
     return (
         <>
             <Header

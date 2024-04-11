@@ -1,7 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { axiosInstance, headers } from '../axios/axios-config';
 import Auth from '../auth/Auth';
-import { debounce } from '../helper/Utils';
+// import { debounce } from '../helper/Utils';
+import { debounce } from 'lodash'
 
 const MainContext = createContext(null);
 
@@ -62,6 +63,9 @@ export const MainProvider = ({ children }) => {
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
             dd()
+            return () => {
+                dd.cancel();
+            };
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartBtnClick])
