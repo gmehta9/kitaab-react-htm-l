@@ -22,6 +22,7 @@ import MyCoupons from './pages/myAccount/MyCoupons';
 import ProductForm from './pages/ProductModule/ProductForm';
 import CartPage from './pages/CartPage';
 import OrderSuccess from './pages/OrderSuccess';
+import Wishlist from './pages/myAccount/Wishlist';
 
 function App() {
 
@@ -105,10 +106,10 @@ function App() {
               path: 'sell-history',
               element: <OrderHistory />,
             },
-            // {
-            //   path: 'wishlist',
-            //   element: <Wishlist />,
-            // },
+            {
+              path: 'wishlist',
+              element: <Wishlist />,
+            },
           ]
         },
         {

@@ -124,9 +124,6 @@ function ChangePassword({ changePasswordShow, setChangePasswordShow }) {
                     </Modal.Footer>
                 </Form>
             </Modal>
-
-
-
         </>
     )
 }

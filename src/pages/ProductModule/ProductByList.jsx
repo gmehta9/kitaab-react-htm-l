@@ -143,7 +143,7 @@ function ProductByList() {
                 {location?.state !== 'Sell/Share' &&
                     <>
                         <Col lg={3}>
-                            <Form.Group className="mb-2" controlId="name">
+                            {/* <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Search by State & City</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -162,8 +162,8 @@ function ProductByList() {
                                     placeholder="City Name"
                                     autoFocus
                                 />
+                            </Form.Group> */}
 
-                            </Form.Group>
                             <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Author Name</Form.Label>
                                 <Form.Control
@@ -173,7 +173,7 @@ function ProductByList() {
                                     className="small"
                                     onChange={(event) => serachtext(event.target.value)}
                                     placeholder="Author Name"
-                                    autoFocus
+                                // autoFocus="false"
                                 />
                             </Form.Group>
                             <Button

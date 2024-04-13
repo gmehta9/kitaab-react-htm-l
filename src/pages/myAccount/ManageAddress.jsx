@@ -69,7 +69,9 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
         //     setValue('city', userLogin?.city)
         //     setValue('state', userLogin?.state)
         // }
-        ProfileAddressHandler()
+        if (userLogin) {
+            ProfileAddressHandler()
+        }
 
         register('phone_number')
         register('email')

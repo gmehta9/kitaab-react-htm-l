@@ -124,12 +124,12 @@ function ProductByID() {
 
                                 <div className="product-cart-btn my-4">
                                     <AddToCartButton isEditAble={isEditAble} productDetail={productDetail} />
-                                    <Button
+                                    {/* <Button
                                         onClick={() => setCartData([11])}
                                         type="button"
                                         className="px-4">
                                         Add to Cart
-                                    </Button>
+                                    </Button> */}
                                 </div>
                             </div>
 

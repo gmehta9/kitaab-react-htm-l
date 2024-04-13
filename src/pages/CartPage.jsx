@@ -15,27 +15,43 @@ function CartPage() {
     const [addressModalShow, setAddressModalShow] = useState(false)
     const [isContentLoading, setIsContentLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
-    const useLoggedIN = Auth.loggedInUser()
-    const cartDeleteHandle = (id, ii) => {
-        console.log(id);
-        axiosInstance['delete']('cart/' + id.product_id || id, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((res) => {
-            if (res) {
-                const cd = cartData.filter((item) => (item.product_id || item.id) !== (id.product_id || id))
-                setCartData(cd)
-            }
-        }).catch((error) => { })
+    const useLoggedIN = Auth.loggedInUser();
+
+    const cartDeleteHandle = (obj, ii) => {
+
+        if (Auth.isUserAuthenticated()) {
+            axiosInstance['delete']('cart/' + obj?.product_id || obj.id, {
+                headers: {
+                    ...headers,
+                    ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+                }
+            }).then((res) => {
+                if (res) {
+                    const cd = cartData.filter((item) => (item.product_id || item.id) !== (obj.product_id || obj.id))
+                    setCartData(cd)
+                }
+            }).catch((error) => { })
+        } else {
+
+            const cd = cartData.filter((item) => (item?.product_id || item?.id) !== (obj?.product_id || obj.id))
+            setCartData(cd)
+        }
     }
 
-    const cartQtyHandler = (index) => {
+    const cartQtyHandler = (event, object) => {
+        const { value } = event.target
+        const updateCart = cartData.map((cdItem) => {
+            if ((cdItem?.product_id || cdItem?.id) === (object?.product_id || object.id) && +value !== 0) {
+                cdItem.quantity = value
+            }
+            return cdItem
+        })
 
+        setCartData(updateCart)
     }
+
     const orderPlacesHandler = (index) => {
-        if (useLoggedIN.is_address === "0") {
+        if (useLoggedIN?.is_address === "0") {
             setAddressModalShow(true)
             return
         }
@@ -56,10 +72,6 @@ function CartPage() {
         }).catch((error) => { })
     }
 
-    useEffect(() => {
-        console.log(useLoggedIN.is_address);
-
-    }, [])
     return (
         <>
             <Header
@@ -107,10 +119,10 @@ function CartPage() {
                                                     style={{ width: '70px' }}
                                                     type="number"
                                                     max={catData?.transact_type === 'sell' ? 10 : undefined}
-                                                    min="0"
+                                                    min="1"
                                                     value={catData.quantity || 1}
                                                     name="qty"
-                                                    onChange={(targetValue) => cartQtyHandler(index)}
+                                                    onChange={(targetValue) => cartQtyHandler(targetValue, catData)}
                                                 />
                                             </td>
                                             <td>
@@ -121,7 +133,9 @@ function CartPage() {
 
                                             </td>
                                             <td>
-                                                <button onClick={() => cartDeleteHandle(catData)} className="btn p-0 border-0 bg-transparent">
+                                                <button
+                                                    onClick={() => cartDeleteHandle(catData)}
+                                                    className="btn p-0 border-0 bg-transparent">
                                                     <img src="./assets/images/delete_icon.svg" alt="" />
                                                 </button>
                                             </td>

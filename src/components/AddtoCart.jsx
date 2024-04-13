@@ -2,9 +2,11 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
+import Auth from "../auth/Auth";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props
+    const loggedUser = Auth.isUserAuthenticated()
 
     const navigate = useNavigate()
     const { setCartData, cartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)

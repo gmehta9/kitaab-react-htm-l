@@ -161,6 +161,9 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                         <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
                                             <i className='bx bx-chat'></i> Chat
                                         </Dropdown.Item>
+                                        <Dropdown.Item href="#/account/wishlist" className="border-bottom py-2 pl-3">
+                                            <i className='bx bx-heart'></i> Wish List
+                                        </Dropdown.Item>
                                         {isUserLoggedIn &&
                                             <>
                                                 <Dropdown.Item href="#/product/add" className="border-bottom py-2 pl-3">

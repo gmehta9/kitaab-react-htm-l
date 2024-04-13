@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import Auth from "../../auth/Auth";
 import { axiosInstance, headers } from "../../axios/axios-config";
 
 function ProfilePage() {
-
+    const { setIsContentLoading } = useOutletContext()
     const [stateList, setStateList] = useState();
     const userLogin = Auth.loggedInUser()
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const profileUpdateHandler = (data) => {
-        console.log(data);
+
+        setIsContentLoading(true)
         axiosInstance['post']('auth/profile', data, {
             headers: {
                 ...headers,
@@ -19,7 +21,7 @@ function ProfilePage() {
             }
         }).then((res) => {
             if (res) {
-                console.log(res);
+                setIsContentLoading(false)
                 const t = Auth.token()
                 const u = Auth.loggedInUser()
 
@@ -32,10 +34,12 @@ function ProfilePage() {
                 })
             }
         }).catch((error) => {
+            setIsContentLoading(false)
         });
     }
 
     const getProfileUpdateHandler = () => {
+        setIsContentLoading(true)
         axiosInstance.get(`auth/profile`, {
             headers: {
                 ...headers,
@@ -53,7 +57,9 @@ function ProfilePage() {
                 setValue('address', user?.address)
                 setValue('pin_code', user?.pin_code)
             }
+            setIsContentLoading(false)
         }).catch((error) => {
+            setIsContentLoading(false)
         });
     }
 
