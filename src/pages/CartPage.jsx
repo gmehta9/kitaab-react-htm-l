@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import Header from "../components/Header";
 import toast from "react-hot-toast";
@@ -13,8 +13,9 @@ import ManageAddress from "./myAccount/ManageAddress";
 function CartPage() {
     const navigate = useNavigate()
     const [addressModalShow, setAddressModalShow] = useState(false)
-    const [isContentLoading, setIsContentLoading] = useState(false)
+    const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
     const { cartData, setCartData } = useContext(MainContext)
+    const { isContentLoading, setIsContentLoading } = useOutletContext()
     const useLoggedIN = Auth.loggedInUser();
 
     const cartDeleteHandle = (obj, ii) => {
@@ -55,6 +56,7 @@ function CartPage() {
             setAddressModalShow(true)
             return
         }
+        setIsContentLoading(true)
         const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
         axiosInstance['post']('order', order, {
             headers: {
@@ -66,17 +68,20 @@ function CartPage() {
                 toast.success("Order Placed successfully, Please check your email", {
                     duration: 5000
                 });
+                setIsContentLoading(false)
                 navigate('/account/order-history')
                 setCartData([])
             }
-        }).catch((error) => { })
+        }).catch((error) => {
+            setIsContentLoading(false)
+        })
     }
 
     return (
         <>
             <Header
-                isContentLoading={isContentLoading}
-                setIsContentLoading={setIsContentLoading}
+                isContentLoading={isInnerPageLoading}
+                setIsContentLoading={setIsInnerPageLoading}
             />
 
 
