@@ -4,7 +4,7 @@ import { PaginationControl } from "react-bootstrap-pagination-control";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
-import { srcPriFixLocal } from "../../helper/Helper";
+import { formatDateTime, srcPriFixLocal } from "../../helper/Helper";
 import { useOutletContext } from "react-router-dom";
 
 function Wishlist() {
@@ -142,6 +142,7 @@ function Wishlist() {
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Request Date</th>
                         <th>Book Title</th>
                         <th>Author</th>
                         <th>Publication Year</th>
@@ -152,7 +153,7 @@ function Wishlist() {
                 <tbody>
                     {isContentLoading &&
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={6} className="text-center">
                                 <Spinner
                                     className="mx-auto"
                                     animation="border"
@@ -163,7 +164,7 @@ function Wishlist() {
                     }
                     {(!isContentLoading && wishlist?.length === 0) &&
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={6} className="text-center">
                                 No record Found!
                             </td>
                         </tr>
@@ -172,9 +173,10 @@ function Wishlist() {
                     {wishlist && wishlist.map((wl, index) =>
                         <tr key={index + 'w'}>
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
-                            <td>{wl.title}</td>
-                            <td>{wl.author}</td>
-                            <td>{wl.publication_year}</td>
+                            <td>{formatDateTime(new Date(wl?.created_at), 'DD/MM/YYYY')}</td>
+                            <td>{wl?.title}</td>
+                            <td>{wl?.author}</td>
+                            <td>{wl?.publication_year}</td>
                             <td>
                                 <div className="d-flex align-items-center">
                                     <span
