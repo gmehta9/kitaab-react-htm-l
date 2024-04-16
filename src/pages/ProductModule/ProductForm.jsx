@@ -12,6 +12,7 @@ import { srcPriFixLocal } from "../../helper/Helper";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
+    const loggedUser = Auth.loggedInUser()
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -162,6 +163,9 @@ function ProductForm() {
         if (!Auth.isUserAuthenticated()) {
             navigate('/')
         }
+        setValue('city', loggedUser?.city)
+        setValue('state', loggedUser?.state)
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

@@ -17,8 +17,6 @@ import ProductByID from './pages/ProductModule/ProductByID';
 import ChatLayout from './pages/chat/ChatLayout';
 import Chat from './pages/chat/Chat';
 import ManageAddress from './pages/myAccount/ManageAddress';
-import MyReviewsRatings from './pages/myAccount/MyReviewsRatings';
-import MyCoupons from './pages/myAccount/MyCoupons';
 import ProductForm from './pages/ProductModule/ProductForm';
 import CartPage from './pages/CartPage';
 import OrderSuccess from './pages/OrderSuccess';
@@ -89,14 +87,6 @@ function App() {
             {
               path: 'manage-address',
               element: <ManageAddress />,
-            },
-            {
-              path: 'my-coupons',
-              element: <MyCoupons />,
-            },
-            {
-              path: 'my-reviews-ratings',
-              element: <MyReviewsRatings />,
             },
             {
               path: 'order-history',

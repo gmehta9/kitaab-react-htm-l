@@ -13,17 +13,18 @@ function OrderHistory() {
     const useLoggedIN = Auth.loggedInUser()
 
     const [orderList, setOrderList] = useState()
+    const [sellerList, setSellerList] = useState()
     const [contentLoading, setContentLoading] = useState(true)
     const [pagination, setPagination] = useState()
 
-    const getOrderHistoryHandlder = () => {
+    const getOrderHistoryHandlder = (apiSlug) => {
         setContentLoading(true)
         const params = {
             user_id: useLoggedIN?.id,
             page: 1,
             size: 15
         }
-        axiosInstance['get']('order?' + new URLSearchParams(params), {
+        axiosInstance['get'](apiSlug + '?' + new URLSearchParams(params), {
             headers: {
                 ...headers,
                 Authorization: `Bearer ${Auth.token()}`,
@@ -32,7 +33,12 @@ function OrderHistory() {
             if (res) {
 
                 const { data } = res.data
-                setOrderList(data)
+                // console.log(data);
+                if (apiSlug === 'order-history') {
+                    setOrderList(data)
+                } else if (apiSlug === 'sell-history') {
+                    setSellerList(data)
+                }
 
                 setPagination({
                     total: res.data.total,
@@ -50,13 +56,13 @@ function OrderHistory() {
 
         if (location.pathname === '/account/order-history') {
             setOrderList([])
-            getOrderHistoryHandlder()
-        } else {
-            setOrderList([])
-            setPagination(undefined)
-            setContentLoading(false)
+            getOrderHistoryHandlder('order-history')
+        } else if (location.pathname === '/account/sell-history') {
+            setSellerList([])
+            getOrderHistoryHandlder('sell-history')
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname])
 
     return (
@@ -96,9 +102,9 @@ function OrderHistory() {
                                     variant="secondary" />
                             </td>
                         </tr>
-
                     }
-                    {(!contentLoading && orderList?.length === 0) &&
+
+                    {(!contentLoading && ((location.pathname === '/account/order-history' ? orderList : sellerList)?.length === 0)) &&
                         <tr>
                             <td colSpan={5} className="text-center">
                                 No {location.pathname === '/account/order-history' ? 'order' : 'sell'} history.

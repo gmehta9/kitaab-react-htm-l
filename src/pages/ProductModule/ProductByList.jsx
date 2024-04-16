@@ -13,13 +13,15 @@ function ProductByList() {
 
     const navigate = useNavigate()
     const location = useLocation()
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
     const { setIsContentLoading } = useOutletContext()
     const [categoriesList, setCategoriesList] = useState()
     const [isEditAble, setIsEditAble] = useState(false)
     const [catListShow, setCatListShow] = useState(true)
     const [selectedCat, setSelectedCat] = useState([])
     const [searchByAuthorText, setSearchByAuthorText] = useState()
+    const [searchByState, setSearchByState] = useState()
+    const [searchByCity, setSearchByCity] = useState()
 
     const [productList, setProductList] = useState()
 
@@ -35,7 +37,7 @@ function ProductByList() {
         }
     }
 
-    const getProductListHandler = async (p, search, author) => {
+    const getProductListHandler = async (p, search, author, searchByState, searchByCity) => {
         setIsContentLoading(true)
         const params = {
             page: p,
@@ -47,6 +49,12 @@ function ProductByList() {
         }
         if (author) {
             params['author[0]'] = author
+        }
+        if (searchByState) {
+            params['state'] = searchByState
+        }
+        if (searchByCity) {
+            params['city'] = searchByCity
         }
         if (selectedCat.length > 0) {
             selectedCat.forEach((elm, index) => {
@@ -104,9 +112,17 @@ function ProductByList() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const serachtext = debounce((event) => {
-        console.log(event);
-        setSearchByAuthorText(event)
+    const serachtext = debounce((event, type) => {
+        console.log(event, type);
+        if (type === 'state') {
+            setSearchByState(event)
+        }
+        if (type === 'city') {
+            setSearchByCity(event)
+        }
+        if (type === 'author') {
+            setSearchByAuthorText(event)
+        }
     }, 500)
 
     useEffect(() => {
@@ -122,11 +138,11 @@ function ProductByList() {
     useEffect(() => {
 
         if (selectedCat || searchParams.get('st')) {
-            getProductListHandler(1, searchParams.get('st'), searchByAuthorText)
+            getProductListHandler(1, searchParams.get('st'), searchByAuthorText, searchByState, searchByCity)
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCat, searchByAuthorText])
+    }, [selectedCat, searchByAuthorText, searchByState, searchByCity])
 
     useEffect(() => {
         if (location?.state === 'Sell/Share') {
@@ -143,15 +159,15 @@ function ProductByList() {
                 {location?.state !== 'Sell/Share' &&
                     <>
                         <Col lg={3}>
-                            {/* <Form.Group className="mb-2" controlId="name">
+                            <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Search by State & City</Form.Label>
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
                                     name="CityName"
                                     className="small"
+                                    onChange={(event) => serachtext(event.target.value, 'state')}
                                     placeholder="State Name"
-                                    autoFocus
                                 />
                             </Form.Group>
                             <Form.Group className="mb-4" controlId="name">
@@ -159,10 +175,10 @@ function ProductByList() {
                                     type="text"
                                     autoComplete="false"
                                     name="CityName"
+                                    onChange={(event) => serachtext(event.target.value, 'city')}
                                     placeholder="City Name"
-                                    autoFocus
                                 />
-                            </Form.Group> */}
+                            </Form.Group>
 
                             <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Author Name</Form.Label>
@@ -171,7 +187,7 @@ function ProductByList() {
                                     autoComplete="false"
                                     name="CityName"
                                     className="small"
-                                    onChange={(event) => serachtext(event.target.value)}
+                                    onChange={(event) => serachtext(event.target.value, 'author')}
                                     placeholder="Author Name"
                                 // autoFocus="false"
                                 />

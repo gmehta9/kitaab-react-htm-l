@@ -1,5 +1,4 @@
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
@@ -156,10 +155,12 @@ function HomePage() {
     }, [searchText])
     useEffect(() => {
         getCategoriesListHandler(1)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         getProductByCat(1, selectCatID)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectCatID])
 
     return (

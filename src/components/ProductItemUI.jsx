@@ -1,16 +1,16 @@
 
 
-import { useContext } from "react";
-import { Button, Col, Image } from "react-bootstrap";
+// import { useContext } from "react";
+import { Col, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { MEDIA_URL, replaceLogo } from "../helper/Utils";
-import MainContext from "../context/Mcontext.context";
+// import MainContext from "../context/Mcontext.context";
 import AddToCartButton from "./AddtoCart";
 
 function ProductItemUI({ items, className, isEditAble }) {
     const navigate = useNavigate()
-    const { setCartData, cartData } = useContext(MainContext)
+    // const { setCartData, cartData } = useContext(MainContext)
     const ClikedItem = (items_id) => {
         navigate('/product/product-detail', {
             state: {
@@ -18,28 +18,28 @@ function ProductItemUI({ items, className, isEditAble }) {
             }
         })
     }
-    const updateQuantity = (id, newQuantity) => {
-        setCartData(prevCart => prevCart.map(item =>
-            item.id === id ? { ...item, quantity: newQuantity } : item
-        ));
-    };
+    // const updateQuantity = (id, newQuantity) => {
+    //     setCartData(prevCart => prevCart.map(item =>
+    //         item.id === id ? { ...item, quantity: newQuantity } : item
+    //     ));
+    // };
 
-    const cartItemHandler = (items) => {
-        console.log('items,', items);
-        const existingItem = cartData.find(item => item.id === items.id);
-        console.log('existingItem', existingItem);
+    // const cartItemHandler = (items) => {
+    //     console.log('items,', items);
+    //     const existingItem = cartData.find(item => item.id === items.id);
+    //     console.log('existingItem', existingItem);
 
-        if (!cartData && cartData.length === 0) {
-            setCartData([{ ...items, quantity: 1 }]);
-            return
-        }
-        if (existingItem) {
-            updateQuantity(existingItem.id, existingItem.quantity + 1);
-        } else {
-            setCartData([...cartData, { ...items, quantity: 1 }]);
-        }
+    //     if (!cartData && cartData.length === 0) {
+    //         setCartData([{ ...items, quantity: 1 }]);
+    //         return
+    //     }
+    //     if (existingItem) {
+    //         updateQuantity(existingItem.id, existingItem.quantity + 1);
+    //     } else {
+    //         setCartData([...cartData, { ...items, quantity: 1 }]);
+    //     }
 
-    }
+    // }
 
     return (
         <Col className={className}>

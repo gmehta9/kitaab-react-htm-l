@@ -99,7 +99,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                     <span className="h4">My List</span>
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu drop={'start'} className="p-0">
+                                <Dropdown.Menu className="p-0 dropdown-menu-right">
                                     <Dropdown.Item
                                         onClick={() => {
                                             if (!isUserLoggedIn) {
@@ -154,7 +154,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                         />
                                     </Dropdown.Toggle>
 
-                                    <Dropdown.Menu drop={'start'} className="p-0">
+                                    <Dropdown.Menu align="start" className="p-0 dropdown-menu-right">
                                         <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
                                             <i className='bx bxs-user-account'></i> Account
                                         </Dropdown.Item>

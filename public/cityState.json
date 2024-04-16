@@ -1,7 +1,7 @@
 [
     {
         "label": "Andhra Pradesh (AP)",
-        "value": "andhra pradesh (ap)",
+        "value": "andhra pradesh",
         "cities": [
             {
                 "value": "adilabad",
@@ -99,7 +99,7 @@
     },
     {
         "label": "Arunachal Pradesh (AR)",
-        "value": "arunachal pradesh (ar)",
+        "value": "arunachal pradesh",
         "cities": [
             {
                 "value": "anjaw",
@@ -165,7 +165,7 @@
     },
     {
         "label": "Assam (AS)",
-        "value": "assam (as)",
+        "value": "assam",
         "cities": [
             {
                 "value": "baksa",
@@ -279,7 +279,7 @@
     },
     {
         "label": "Bihar (BR)",
-        "value": "bihar (br)",
+        "value": "bihar",
         "cities": [
             {
                 "value": "araria",
@@ -441,7 +441,7 @@
     },
     {
         "label": "Chhattisgarh (CG)",
-        "value": "chhattisgarh (cg)",
+        "value": "chhattisgarh",
         "cities": [
             {
                 "value": "bastar",
@@ -519,7 +519,7 @@
     },
     {
         "label": "Dadra and Nagar Haveli (DN)",
-        "value": "dadra and nagar haveli (dn)",
+        "value": "dadra and nagar haveli",
         "cities": [
             {
                 "value": "dadra and nagar haveli",
@@ -543,7 +543,7 @@
     },
     {
         "label": "Delhi (DL)",
-        "value": "delhi (dl)",
+        "value": "delhi",
         "cities": [
             {
                 "value": "central delhi",
@@ -585,7 +585,7 @@
     },
     {
         "label": "Goa (GA)",
-        "value": "goa (ga)",
+        "value": "goa",
         "cities": [
             {
                 "value": "north goa",
@@ -599,7 +599,7 @@
     },
     {
         "label": "Gujarat (GJ)",
-        "value": "gujarat (gj)",
+        "value": "gujarat",
         "cities": [
             {
                 "value": "ahmedabad",
@@ -709,7 +709,7 @@
     },
     {
         "label": "Haryana (HR)",
-        "value": "haryana (hr)",
+        "value": "haryana",
         "cities": [
             {
                 "value": "ambala",
@@ -799,7 +799,7 @@
     },
     {
         "label": "Himachal Pradesh (HP)",
-        "value": "himachal pradesh (hp)",
+        "value": "himachal pradesh",
         "cities": [
             {
                 "value": "bilaspur",
@@ -853,7 +853,7 @@
     },
     {
         "label": "Jammu and Kashmir (JK)",
-        "value": "jammu and kashmir (jk)",
+        "value": "jammu and kashmir",
         "cities": [
             {
                 "value": "anantnag",
@@ -947,7 +947,7 @@
     },
     {
         "label": "Jharkhand (JH)",
-        "value": "jharkhand (jh)",
+        "value": "jharkhand",
         "cities": [
             {
                 "value": "bokaro",
@@ -1049,7 +1049,7 @@
     },
     {
         "label": "Karnataka (KA)",
-        "value": "karnataka (ka)",
+        "value": "karnataka",
         "cities": [
             {
                 "value": "bagalkot",
@@ -1175,7 +1175,7 @@
     },
     {
         "label": "Kerala (KL)",
-        "value": "kerala (kl)",
+        "value": "kerala",
         "cities": [
             {
                 "value": "alappuzha",
@@ -1237,7 +1237,7 @@
     },
     {
         "label": "Madhya Pradesh (MP)",
-        "value": "madhya pradesh (mp)",
+        "value": "madhya pradesh",
         "cities": [
             {
                 "value": "alirajpur",
@@ -1337,11 +1337,11 @@
             },
             {
                 "value": "khandwa (east nimar)",
-                "label": "Khandwa (East Nimar)"
+                "label": "Khandwa"
             },
             {
                 "value": "khargone (west nimar)",
-                "label": "Khargone (West Nimar)"
+                "label": "Khargone"
             },
             {
                 "value": "mandla",
@@ -1443,7 +1443,7 @@
     },
     {
         "label": "Maharashtra (MH)",
-        "value": "maharashtra (mh)",
+        "value": "maharashtra",
         "cities": [
             {
                 "value": "ahmednagar",
@@ -1589,7 +1589,7 @@
     },
     {
         "label": "Manipur (MN)",
-        "value": "manipur (mn)",
+        "value": "manipur",
         "cities": [
             {
                 "value": "bishnupur",
@@ -1631,7 +1631,7 @@
     },
     {
         "label": "Meghalaya (ML)",
-        "value": "meghalaya (ml)",
+        "value": "meghalaya",
         "cities": [
             {
                 "value": "east garo hills",
@@ -1665,7 +1665,7 @@
     },
     {
         "label": "Mizoram (MZ)",
-        "value": "mizoram (mz)",
+        "value": "mizoram",
         "cities": [
             {
                 "value": "aizawl",
@@ -1703,7 +1703,7 @@
     },
     {
         "label": "Nagaland (NL)",
-        "value": "nagaland (nl)",
+        "value": "nagaland",
         "cities": [
             {
                 "value": "dimapur",
@@ -1741,7 +1741,7 @@
     },
     {
         "label": "Orissa (OR)",
-        "value": "orissa (or)",
+        "value": "orissa",
         "cities": [
             {
                 "value": "angul",
@@ -1857,7 +1857,7 @@
             },
             {
                 "value": "subarnapur (sonepur)",
-                "label": "Subarnapur (Sonepur)"
+                "label": "Subarnapur"
             },
             {
                 "value": "sundergarh",
@@ -1867,7 +1867,7 @@
     },
     {
         "label": "Pondicherry (Puducherry) (PY)",
-        "value": "pondicherry (puducherry) (py)",
+        "value": "pondicherry (puducherry)",
         "cities": [
             {
                 "value": "karaikal",
@@ -1889,7 +1889,7 @@
     },
     {
         "label": "Punjab (PB)",
-        "value": "punjab (pb)",
+        "value": "punjab",
         "cities": [
             {
                 "value": "amritsar",
@@ -1983,7 +1983,7 @@
     },
     {
         "label": "Rajasthan (RJ)",
-        "value": "rajasthan (rj)",
+        "value": "rajasthan",
         "cities": [
             {
                 "value": "ajmer",
@@ -2121,7 +2121,7 @@
     },
     {
         "label": "Sikkim (SK)",
-        "value": "sikkim (sk)",
+        "value": "sikkim",
         "cities": [
             {
                 "value": "east sikkim",
@@ -2143,7 +2143,7 @@
     },
     {
         "label": "Tamil Nadu (TN)",
-        "value": "tamil nadu (tn)",
+        "value": "tamil nadu",
         "cities": [
             {
                 "value": "ariyalur",
@@ -2273,7 +2273,7 @@
     },
     {
         "label": "Tripura (TR)",
-        "value": "tripura (tr)",
+        "value": "tripura",
         "cities": [
             {
                 "value": "dhalai",
@@ -2299,7 +2299,7 @@
     },
     {
         "label": "Uttar Pradesh (UP)",
-        "value": "uttar pradesh (up)",
+        "value": "uttar pradesh",
         "cities": [
             {
                 "value": "agra",
@@ -2601,7 +2601,7 @@
     },
     {
         "label": "Uttarakhand (UK)",
-        "value": "uttarakhand (uk)",
+        "value": "uttarakhand",
         "cities": [
             {
                 "value": "almora",
@@ -2659,7 +2659,7 @@
     },
     {
         "label": "West Bengal (WB)",
-        "value": "west bengal (wb)",
+        "value": "west bengal",
         "cities": [
             {
                 "value": "birbhum",

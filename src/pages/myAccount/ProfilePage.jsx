@@ -58,7 +58,7 @@ function ProfilePage() {
                 setValue('pin_code', user?.pin_code)
             }
             setIsContentLoading(false)
-        }).catch((error) => {
+        }).catch(() => {
             setIsContentLoading(false)
         });
     }
@@ -76,18 +76,19 @@ function ProfilePage() {
             setStateList(myJson)
         })
         getProfileUpdateHandler()
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         if (userLogin) {
-            console.log(userLogin);
             setValue('name', userLogin?.name)
             setValue('phone_number', userLogin?.phone_number)
             setValue('email', userLogin?.email)
             setValue('city', userLogin?.city)
             setValue('state', userLogin?.state)
         }
-    }, [])
+    }, [setValue, userLogin])
 
     return (
         <>
@@ -220,6 +221,7 @@ function ProfilePage() {
                                         placeholder="Enter your state"
                                     />
                                 </InputGroup>
+
                             </Col>
                             <Col lg={4} className="mb-3">
                                 <InputGroup>

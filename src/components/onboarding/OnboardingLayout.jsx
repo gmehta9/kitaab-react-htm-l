@@ -3,7 +3,6 @@ function OnboardingLayout() {
     const { setIsContentLoading } = useOutletContext()
     return (
         <>
-
             <Outlet context={{ setIsContentLoading }} />
         </>
     )

@@ -22,6 +22,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow
             setIsContentLoading(false)
         });
     }
+
     return (
         <>
             <Modal backdrop="static" centered show={forgotShowModal} onHide={() => setForgotShowModal(false)}>

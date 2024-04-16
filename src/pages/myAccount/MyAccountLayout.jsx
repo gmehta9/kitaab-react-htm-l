@@ -32,6 +32,8 @@ function MyAccountLayoutPage() {
         if (!Auth.isUserAuthenticated()) {
             navigate('/')
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <div className="inner-pages row border-top ">

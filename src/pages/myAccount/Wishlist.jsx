@@ -1,35 +1,130 @@
 import { useEffect, useState } from "react";
-import { Table, Button, Form, Modal } from "react-bootstrap";
+import { Table, Button, Form, Modal, Image, Spinner } from "react-bootstrap";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { useForm } from "react-hook-form";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../auth/Auth";
+import { srcPriFixLocal } from "../../helper/Helper";
+import { useOutletContext } from "react-router-dom";
 
 function Wishlist() {
     const [years, setYears] = useState();
-    const [wishlist, setWishlist] = useState()
-    const [modalShowWL, setModalShowWL] = useState(undefined)
-    const [isContentLoading, setIsContentLoading] = useState(false)
-    const [pagination, setPagination] = useState()
+    const [wishlist, setWishlist] = useState();
+    const [modalShowWL, setModalShowWL] = useState(undefined);
+    const [editObj, setEditObj] = useState(undefined);
+    const { isContentLoading, setIsContentLoading } = useOutletContext();
+    const [pagination, setPagination] = useState();
 
+    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
-    const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ mode: 'onChange' })
-
-    const submitWishListHandler = (data) => {
-        setPagination({
-            total: 50,
-            per_page: 15,
-            current_page: 1
-        })
+    const getWishListHandler = (p) => {
+        const params = {
+            page: p,
+            size: 50,
+        };
+        setIsContentLoading(true)
+        axiosInstance.get(`${'wishlist'}?${new URLSearchParams(params)}`, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((response) => {
+            if (response) {
+                setWishlist(response.data.data)
+                setPagination({
+                    total: response.data.total,
+                    per_page: response.data.per_page,
+                    current_page: response.data.current_page
+                })
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
     }
 
-    // useEffect(() => {
-    //     if (modalShowWL === 'edit') {
-    //     }
-    // }, [modalShowWL])
+    const wishListSubmitHandler = (data) => {
+        setIsContentLoading(true)
+        let method = 'post'
+        let apisulg = `wishlist`
+
+        if (modalShowWL === 'edit') {
+            method = 'put'
+            apisulg = apisulg + '/' + editObj.id
+        }
+
+        axiosInstance[method](apisulg, data, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((response) => {
+            if (response) {
+
+                if (modalShowWL === 'edit') {
+                    const wlUpdate = wishlist.map(wlItem => {
+                        if (wlItem.id === editObj.id) {
+                            wlItem.title = data.title
+                            wlItem.author = data.author
+                            wlItem.publication_year = data.publication_year
+                        }
+                        return wlItem
+                    })
+                    setWishlist(wlUpdate)
+                } else {
+                    getWishListHandler(pagination.current_page)
+                }
+                setModalShowWL(undefined)
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+    }
+
+    const deletitemHandler = (wl) => {
+        setIsContentLoading(true)
+        axiosInstance.delete(`wishlist/` + wl.id, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((response) => {
+            if (response) {
+                const wlUpdate = wishlist.filter(wlItem => wlItem.id !== wl.id)
+                setWishlist(wlUpdate)
+                setIsContentLoading(false)
+            }
+        }).catch((error) => {
+            setIsContentLoading(false)
+        });
+    }
+
+    const onHideModal = () => {
+        setIsContentLoading(false)
+        setEditObj(undefined)
+        setModalShowWL(undefined)
+        reset()
+
+    }
+
+
+    useEffect(() => {
+        if (modalShowWL === 'edit') {
+            setValue('title', editObj.title)
+            setValue('author', editObj.author)
+            setValue('publication_year', editObj.publication_year)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [modalShowWL])
 
     useEffect(() => {
         const currentYear = new Date().getFullYear();
         const years = Array.from({ length: 45 }, (_, index) => (currentYear - index).toString());
         setYears(years)
+        getWishListHandler(1)
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
         <>
@@ -49,28 +144,54 @@ function Wishlist() {
                         <th>#</th>
                         <th>Book Title</th>
                         <th>Author</th>
-                        <th>Publication Date</th>
+                        <th>Publication Year</th>
                         <th>Action</th>
                     </tr>
                 </thead>
 
                 <tbody>
-
-                    {wishlist?.length === 0 &&
+                    {isContentLoading &&
                         <tr>
-                            <td colSpan={4} className="text-center">
+                            <td colSpan={5} className="text-center">
+                                <Spinner
+                                    className="mx-auto"
+                                    animation="border"
+                                    variant="secondary" />
+                            </td>
+                        </tr>
+
+                    }
+                    {(!isContentLoading && wishlist?.length === 0) &&
+                        <tr>
+                            <td colSpan={5} className="text-center">
                                 No record Found!
                             </td>
                         </tr>
                     }
 
-                    {wishlist && wishlist.map((ord, index) =>
-                        <tr key={index}>
-                            <td>{index + (pagination.current_page - 1) * pagination.per_page + 1}</td>
-                            <td>order-{ord.id}</td>
-                            <td>{ord.title}</td>
-                            <td>{ord.quantity}</td>
-                            <td></td>
+                    {wishlist && wishlist.map((wl, index) =>
+                        <tr key={index + 'w'}>
+                            <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
+                            <td>{wl.title}</td>
+                            <td>{wl.author}</td>
+                            <td>{wl.publication_year}</td>
+                            <td>
+                                <div className="d-flex align-items-center">
+                                    <span
+                                        className="hand m-2 h5 lh-normal"
+                                        onClick={() => {
+                                            setEditObj(wl)
+                                            setModalShowWL('edit')
+                                        }}>
+                                        <i className='bx bx-edit-alt' size="30px"></i>
+                                    </span>
+                                    <span onClick={() => deletitemHandler(wl)}>
+                                        <Image
+                                            src={`${srcPriFixLocal}delete_icon.svg`}
+                                        />
+                                    </span>
+                                </div>
+                            </td>
                         </tr>
                     )}
 
@@ -93,33 +214,32 @@ function Wishlist() {
 
             <Modal backdrop="static" centered show={modalShowWL ? true : false} >
                 <Modal.Header className="position-relative justify-content-center border-0">
-                    <Modal.Title className="font-weight-bold">Create Wish List</Modal.Title>
+                    <Modal.Title className="font-weight-bold">
+                        {modalShowWL === 'edit' ? 'Edit' : 'Create'} Wish List
+                    </Modal.Title>
                     <button
-                        onClick={() => {
-                            reset()
-                            setIsContentLoading(false)
-                            setModalShowWL(undefined)
-                        }}
+                        type="button"
+                        onClick={onHideModal}
                         className="bg-transparent border-0 position-absolute close-btn">
                         ✖
                     </button>
                 </Modal.Header>
-                <Form autoComplete="false" onSubmit={handleSubmit(submitWishListHandler)}>
+                <Form autoComplete="false" onSubmit={handleSubmit(wishListSubmitHandler)}>
                     <Modal.Body className="border-0 px-5">
                         <Form.Group className="mb-4" controlId="old_password">
                             <Form.Label>Book Title<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 autoComplete="false"
-                                {...register('book_title', {
+                                {...register('title', {
                                     required: 'Please enter book title.',
 
                                 })}
                                 placeholder="Enter your book title."
                                 type="text"
                             />
-                            {errors?.book_title &&
+                            {errors?.title &&
                                 <span className="text-danger small position-absolute">
-                                    {errors?.book_title?.message}
+                                    {errors?.title?.message}
                                 </span>
                             }
                         </Form.Group>
@@ -127,16 +247,16 @@ function Wishlist() {
                             <Form.Label>Book Author<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 autoComplete="false"
-                                {...register('book_author', {
+                                {...register('author', {
                                     required: 'Please enter book Author.',
 
                                 })}
                                 placeholder="Enter book author."
                                 type="text"
                             />
-                            {errors?.book_author &&
+                            {errors?.author &&
                                 <span className="text-danger small position-absolute">
-                                    {errors?.book_author?.message}
+                                    {errors?.author?.message}
                                 </span>
                             }
                         </Form.Group>
@@ -155,7 +275,7 @@ function Wishlist() {
                             <Form.Select
                                 className="form-control"
                                 aria-label="Default select example"
-                                {...register('publication_date', {
+                                {...register('publication_year', {
                                     required: 'Please enter publication date.',
 
                                 })}>
@@ -166,9 +286,9 @@ function Wishlist() {
 
                             </Form.Select>
 
-                            {errors?.publication_date &&
+                            {errors?.publication_year &&
                                 <span className="text-danger small position-absolute">
-                                    {errors?.publication_date?.message}
+                                    {errors?.publication_year?.message}
                                 </span>
                             }
                         </Form.Group>
@@ -184,7 +304,7 @@ function Wishlist() {
                             type="submit"
                             disabled={isContentLoading}
                         >
-                            {isContentLoading ? 'Please wait...' : 'Submit'}
+                            {isContentLoading ? 'Please wait...' : `${modalShowWL === 'edit' ? 'Update' : 'Submit'}`}
                         </Button>
 
                     </Modal.Footer>

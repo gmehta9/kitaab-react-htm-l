@@ -2,11 +2,10 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
-import Auth from "../auth/Auth";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props
-    const loggedUser = Auth.isUserAuthenticated()
+    // const loggedUser = Auth.isUserAuthenticated()
 
     const navigate = useNavigate()
     const { setCartData, cartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
@@ -17,9 +16,8 @@ function AddToCartButton(props) {
     };
 
     const cartItemHandler = (items) => {
-        console.log('items,', items);
+
         const existingItem = cartData.find(item => item.id === items.id);
-        console.log('existingItem', existingItem);
 
         if (!cartData && cartData.length === 0) {
             setCartData([{ ...items, quantity: 1 }]);
@@ -32,7 +30,6 @@ function AddToCartButton(props) {
         }
 
     }
-
 
     return (
         <Button

@@ -47,6 +47,8 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
         })
         register('state', { required: 'Please select state.' })
         register('city', { required: 'Please select city.' })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 

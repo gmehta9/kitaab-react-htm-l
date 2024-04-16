@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 import Header from "../components/Header";
 import toast from "react-hot-toast";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Footer from "../components/Footer";
 import MainContext from "../context/Mcontext.context";
 import { axiosInstance, headers } from "../axios/axios-config";

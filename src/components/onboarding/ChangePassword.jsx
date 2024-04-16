@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Auth from "../../auth/Auth";
 import { axiosInstance } from "../../axios/axios-config";
@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 
 
 function ChangePassword({ changePasswordShow, setChangePasswordShow }) {
-
 
     const [isContentLoading, setIsContentLoading] = useState('')
 
@@ -27,9 +26,9 @@ function ChangePassword({ changePasswordShow, setChangePasswordShow }) {
         });
     }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-    }, [reset])
+    // }, [reset])
     return (
         <>
             <Modal backdrop="static" centered show={changePasswordShow} >

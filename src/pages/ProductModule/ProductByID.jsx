@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Col, Image, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Col, Image, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -7,7 +7,6 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { MEDIA_URL, replaceLogo } from "../../helper/Utils";
-import MainContext from "../../context/Mcontext.context";
 import AddToCartButton from "../../components/AddtoCart";
 
 function ProductByID() {
@@ -18,8 +17,6 @@ function ProductByID() {
     const [contentLoading, setContentLoading] = useState()
 
     const [isEditAble, setIsEditAble] = useState(false)
-
-    const { setCartData } = useContext(MainContext)
 
     const getProductByIdHandler = (async (p) => {
         setContentLoading(true)
@@ -54,6 +51,7 @@ function ProductByID() {
 
     useEffect(() => {
         getProductByIdHandler()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.state?.productId])
 
 
