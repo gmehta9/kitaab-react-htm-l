@@ -79,17 +79,11 @@ function CartPage() {
 
     return (
         <>
-            <Header
-                isContentLoading={isInnerPageLoading}
-                setIsContentLoading={setIsInnerPageLoading}
-            />
-
-
+            <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} />
             <div className="inner-pages row border-top ">
                 <Container className="my-5">
 
                     <Row>
-
                         <Col lg={12}>
                             <div className="h2 font-weight-bold">
                                 Cart
@@ -151,25 +145,21 @@ function CartPage() {
                         </Col>
 
                         <Col lg={12} className="text-right mt-4">
-
                             <Button
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
                                 onClick={orderPlacesHandler}
                                 variant="dark">Proceed</Button>
-
                         </Col>
-
                     </Row>
-
                 </Container>
-
                 <Footer />
             </div>
 
             <ManageAddress
                 addressModalShow={addressModalShow}
                 setAddressModalShow={setAddressModalShow} />
+
         </>
     )
 }
