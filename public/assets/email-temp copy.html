@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .logotype {
+      background: #2b6b00;
+      color: #fff;
+      width: 75px;
+      height: 75px;
+      line-height: 75px;
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .column-title {
+      background: #eee;
+      text-transform: uppercase;
+      padding: 15px 5px 15px 15px;
+      font-size: 11px
+    }
+
+    .column-detail {
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+    }
+
+    .column-header {
+      background: #eee;
+      text-transform: uppercase;
+      padding: 15px;
+      font-size: 11px;
+      border-right: 1px solid #eee;
+    }
+
+    .row {
+      padding: 7px 14px;
+      border-left: 1px solid #eee;
+      border-right: 1px solid #eee;
+    }
+
+    .alert {
+      background: #ffd9e8;
+      padding: 20px;
+      margin: 20px 0;
+      line-height: 22px;
+      color: #333
+    }
+
+    .socialmedia {
+      background: #eee;
+      padding: 20px;
+      display: inline-block
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <table width="100%">
+      <tr>
+        <td width="75px">
+          <div class="logotype">KB</div>
+        </td>
+        <td width="100%"
+          style="background: #fee977;border-left:15px solid #fff; padding-left:30px;font-size:26px;font-weight:bold;letter-spacing:-1px;">
+          Order Confirmation</td>
+      </tr>
+    </table>
+    <h3>Your contact details</h3>
+    <table width="100%" style="border-collapse: collapse;">
+      <tr>
+        <td class="column-title" style="background-color: #4b4824; color: #fff;">Name</td>
+        <td class="column-detail" style="padding: 5px;">John Doe</td>
+      </tr>
+      <tr>
+        <td width="120px" class="column-title" style="background-color: #4b4824; color: #fff;">Email </td>
+        <td class="column-detail" style="padding: 5px;">firstname@company.com</td>
+      </tr>
+      <tr>
+        <td class="column-title" style="background-color: #4b4824; color: #fff;">Phone</td>
+        <td class="column-detail" style="padding: 5px;">0046 76 12 34 56</td>
+      </tr>
+      <tr>
+        <td class="column-title" style="background-color: #4b4824; color: #fff;">Address</td>
+        <td class="column-detail" style="padding: 5px;">Address , city, state, pincode</td>
+        </td>
+    </table>
+    <h3>Your Seller details</h3>
+    <table width="100%" style="border-collapse: collapse;">
+      <tr>
+        <td class="column-title" style="background-color: #24494b; color: #fff;">Name </td>
+        <td class="column-detail" style="padding: 5px;">John Doe </td>
+      </tr>
+      <tr>
+        <td width="120px" class="column-title" style="background-color: #24494b; color: #fff;">Email </td>
+        <td class="column-detail" style="padding: 5px;">firstname@company.com </td>
+      </tr>
+      <tr>
+        <td class="column-title" style="background-color: #24494b; color: #fff;">Phone </td>
+        <td class="column-detail" style="padding: 5px;">0046 76 12 34 56</td>
+      </tr>
+      <tr>
+        <td class="column-title" style="background-color: #24494b; color: #fff;">Address </td>
+        <td class="column-detail" style="padding: 5px;">Address , city, state, pincode </td>
+      </tr>
+    </table>
+    <h3>Your Orders</h3>
+
+    <table width="100%" style="border-collapse: collapse;border-bottom:1px solid #eee;">
+      <tr>
+        <td width="20%" class="column-header">Order ID</td>
+        <td width="40%" class="column-header">Book Name</td>
+        <td width="10%" class="column-header">Quantity</td>
+        <td width="30%" class="column-header">Price</td>
+      </tr>
+      <tr>
+        <td class="row">64000L</td>
+        <td class="row">Softstyle Lady Fit</td>
+        <td class="row">2</td>
+
+        <!-- If transect type sell -->
+        <td class="row">100.00</td>
+      </tr>
+      <tr>
+        <td class="row">64000L</td>
+        <td class="row">Softstyle Lady Fit</td>
+        <td class="row">2</td>
+
+        <!-- If transect type Share -->
+        <td class="row">Share For 30 Days</td>
+      </tr>
+
+    </table>
+    <!-- <div class="alert">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+      labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+      ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+      nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+      est laborum. </div> -->
+    <!-- <div class="socialmedia">Follow us online <small>[FB] [INSTA]</small></div> -->
+  </div><!-- container -->
+
+</body>
+
+</html>
