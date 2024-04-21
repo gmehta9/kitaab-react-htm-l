@@ -115,7 +115,7 @@ function OrderHistory() {
                     {orderList && orderList.map((ord, index) =>
                         <tr key={index}>
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
-                            <td>order-{ord.id}</td>
+                            <td>{ord.unique_id || ord.id}</td>
                             <td>{ord.title}</td>
                             <td>{ord.quantity}</td>
                             <td>
