@@ -23,7 +23,12 @@ function Header({ isContentLoading, setIsContentLoading }) {
 
     const logoutHandler = () => {
         Auth.logout()
-        axiosInstance.get("auth/sign-out", { headers: headers }).then((res) => {
+        axiosInstance.get("auth/sign-out", {
+            headers: {
+                ...headers,
+                Authorization: `Bearer ${Auth.token()}`,
+            }
+        }).then((res) => {
             if (res) {
                 navigate('/')
                 toast.success('Logout successfully.')

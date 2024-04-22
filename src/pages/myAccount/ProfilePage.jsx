@@ -52,8 +52,8 @@ function ProfilePage() {
                 setValue('name', user?.name)
                 setValue('phone_number', user?.phone_number)
                 setValue('email', user?.email)
-                setValue('city', user?.city)
-                setValue('state', user?.state)
+                setValue('city', user?.city.toLowerCase())
+                setValue('state', user?.state.toLowerCase())
                 setValue('address', user?.address)
                 setValue('pin_code', user?.pin_code)
             }
@@ -80,15 +80,15 @@ function ProfilePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        if (userLogin) {
-            setValue('name', userLogin?.name)
-            setValue('phone_number', userLogin?.phone_number)
-            setValue('email', userLogin?.email)
-            setValue('city', userLogin?.city)
-            setValue('state', userLogin?.state)
-        }
-    }, [setValue, userLogin])
+    // useEffect(() => {
+    //     if (userLogin) {
+    //         setValue('name', userLogin?.name)
+    //         setValue('phone_number', userLogin?.phone_number)
+    //         setValue('email', userLogin?.email)
+    //         setValue('city', userLogin?.city)
+    //         setValue('state', userLogin?.state)
+    //     }
+    // }, [setValue, userLogin])
 
     return (
         <>

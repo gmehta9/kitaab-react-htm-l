@@ -6,11 +6,17 @@ import Spinner from 'react-bootstrap/Spinner';
 import Auth from "../../auth/Auth";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import { PaginationControl } from "react-bootstrap-pagination-control";
+import SellBuyOrderDetail from "./SellBuyOrderDetail";
 
 function OrderHistory() {
 
     const location = useLocation()
     const useLoggedIN = Auth.loggedInUser()
+
+    const [modalShow, setModalShow] = useState(false)
+    const [modalType, setModalType] = useState(undefined)
+    const [modalData, setModalData] = useState(undefined)
+
 
     const [orderList, setOrderList] = useState()
     const [sellerList, setSellerList] = useState()
@@ -19,6 +25,8 @@ function OrderHistory() {
 
     const getOrderHistoryHandlder = (apiSlug) => {
         setContentLoading(true)
+        setOrderList([])
+        setSellerList([])
         const params = {
             user_id: useLoggedIN?.id,
             page: 1,
@@ -53,14 +61,15 @@ function OrderHistory() {
     }
 
     useEffect(() => {
-
-        if (location.pathname === '/account/order-history') {
-            setOrderList([])
-            getOrderHistoryHandlder('order-history')
-        } else if (location.pathname === '/account/sell-history') {
-            setSellerList([])
-            getOrderHistoryHandlder('sell-history')
+        if (!modalShow) {
+            setModalType(undefined)
+            setModalData(undefined)
         }
+    }, [modalShow])
+
+    useEffect(() => {
+
+        getOrderHistoryHandlder(location.pathname === '/account/order-history' ? 'order-history' : 'sell-history')
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.pathname])
@@ -115,11 +124,21 @@ function OrderHistory() {
                     {orderList && orderList.map((ord, index) =>
                         <tr key={index}>
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
-                            <td>{ord.unique_id || ord.id}</td>
+                            <td>{ord.unique_id || ('ord-' + ord.id)}</td>
                             <td>{ord.title}</td>
                             <td>{ord.quantity}</td>
                             <td>
-                                <Button stype="button" variant="info" size="sm" className="pb-0"> View Detail</Button>
+                                <Button onClick={() => {
+                                    setModalShow(true)
+                                    setModalType(location.pathname === '/account/order-history' ? 'order' : 'sell')
+                                    setModalData(ord)
+                                }}
+                                    type="button"
+                                    variant="info"
+                                    size="sm"
+                                    className="pb-0">
+                                    View Detail
+                                </Button>
                             </td>
                         </tr>
                     )}
@@ -127,7 +146,7 @@ function OrderHistory() {
 
                 </tbody>
             </Table>
-            {pagination?.total > 15 &&
+            {(!contentLoading && pagination?.total > 15) &&
                 <PaginationControl
                     page={pagination?.current_page}
                     // between={4}
@@ -139,6 +158,11 @@ function OrderHistory() {
                 // ellipsis={1}
                 />
             }
+            <SellBuyOrderDetail
+                type={modalType}
+                data={modalData}
+                modalShow={modalShow}
+                setModalShow={setModalShow} />
         </>
     )
 }
