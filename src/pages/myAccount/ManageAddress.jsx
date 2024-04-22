@@ -54,6 +54,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                         },
                         token: t
                     })
+                    handleClose()
                     toast.success("Address updated successfully!");
                 }
             }
