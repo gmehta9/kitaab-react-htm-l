@@ -6,7 +6,6 @@ import PagesLayout from './pages/PagesLayout';
 
 import HomePage from './pages/Home';
 
-import OrderHistory from './pages/myAccount/OrderHistory';
 import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';
 
 // import Wishlist from './pages/MyAccount/Wishlist';
@@ -21,6 +20,7 @@ import ProductForm from './pages/ProductModule/ProductForm';
 import CartPage from './pages/CartPage';
 import OrderSuccess from './pages/OrderSuccess';
 import Wishlist from './pages/myAccount/Wishlist';
+import SellBuyModuleMainLayout from './pages/myAccount/sellBuyModule/SellBuyModuleMainLayout';
 
 function App() {
 
@@ -81,20 +81,16 @@ function App() {
               element: <ProfilePage />,
             },
             {
-              path: 'order-history',
-              element: <OrderHistory />,
-            },
-            {
               path: 'manage-address',
               element: <ManageAddress />,
             },
             {
               path: 'order-history',
-              element: <OrderHistory />,
+              element: <SellBuyModuleMainLayout />,
             },
             {
               path: 'sell-history',
-              element: <OrderHistory />,
+              element: <SellBuyModuleMainLayout />,
             },
             {
               path: 'wishlist',

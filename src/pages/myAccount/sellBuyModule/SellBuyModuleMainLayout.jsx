@@ -3,12 +3,14 @@ import { Table, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Spinner from 'react-bootstrap/Spinner';
 
-import Auth from "../../auth/Auth";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../../auth/Auth";
+import { axiosInstance, headers } from "../../../axios/axios-config";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import SellBuyOrderDetail from "./SellBuyOrderDetail";
+import SellOrdersList from "./SellOrdersList";
+import BuyOrdersList from "./BuyOrdersList";
 
-function OrderHistory() {
+function SellBuyModuleMainLayout() {
 
     const location = useLocation()
     const useLoggedIN = Auth.loggedInUser()
@@ -89,7 +91,7 @@ function OrderHistory() {
 
             </div> */}
 
-            <Table striped bordered >
+            {/* <Table striped bordered >
                 <thead>
                     <tr>
                         <th>#</th>
@@ -145,7 +147,28 @@ function OrderHistory() {
 
 
                 </tbody>
-            </Table>
+            </Table> */}
+
+            {location.pathname === '/account/order-history' ?
+                <SellOrdersList
+                    sellerList={sellerList}
+                    contentLoading={contentLoading}
+                    pagination={pagination}
+                    setModalShow={setModalShow}
+                    setModalType={setModalType}
+                    setModalData={setModalData}
+                />
+                :
+                <BuyOrdersList
+                    sellerList={orderList}
+                    contentLoading={contentLoading}
+                    pagination={pagination}
+                    setModalShow={setModalShow}
+                    setModalType={setModalType}
+                    setModalData={setModalData}
+                />
+            }
+
             {(!contentLoading && pagination?.total > 15) &&
                 <PaginationControl
                     page={pagination?.current_page}
@@ -167,4 +190,4 @@ function OrderHistory() {
     )
 }
 
-export default OrderHistory;
+export default SellBuyModuleMainLayout;
