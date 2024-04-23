@@ -89,7 +89,7 @@ function ProductByID() {
                         <Col xl={8} md={8}>
 
                             <div className="product">
-                                <div className="product-heading">{productDetail?.title}</div>
+                                <div className="product-heading text-capitalize">{productDetail?.title}</div>
                                 <div className="product-short-detail" dangerouslySetInnerHTML={{ __html: productDetail?.short_description }}></div>
                                 <div className="product-short-rating">
 
@@ -116,7 +116,10 @@ function ProductByID() {
                                 </div>
 
                                 <div className="">
-                                    <span className="font-weight-bold">Author:</span> {productDetail?.auther}
+                                    <span className="font-weight-bold">Author:</span> <span className="text-capitalize">{productDetail?.auther}</span>
+                                </div>
+                                <div className="">
+                                    <span className="font-weight-bold">Author City:</span> <span className="text-capitalize">{productDetail?.city}</span>
                                 </div>
 
 

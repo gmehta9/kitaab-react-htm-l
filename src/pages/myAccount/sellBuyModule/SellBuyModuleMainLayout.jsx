@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Table, Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import Spinner from 'react-bootstrap/Spinner';
 
 import Auth from "../../../auth/Auth";
 import { axiosInstance, headers } from "../../../axios/axios-config";
@@ -43,7 +41,7 @@ function SellBuyModuleMainLayout() {
             if (res) {
 
                 const { data } = res.data
-                // console.log(data);
+                console.log(apiSlug);
                 if (apiSlug === 'order-history') {
                     setOrderList(data)
                 } else if (apiSlug === 'sell-history') {
@@ -150,8 +148,9 @@ function SellBuyModuleMainLayout() {
             </Table> */}
 
             {location.pathname === '/account/order-history' ?
-                <SellOrdersList
-                    sellerList={sellerList}
+
+                <BuyOrdersList
+                    orderList={orderList}
                     contentLoading={contentLoading}
                     pagination={pagination}
                     setModalShow={setModalShow}
@@ -159,8 +158,8 @@ function SellBuyModuleMainLayout() {
                     setModalData={setModalData}
                 />
                 :
-                <BuyOrdersList
-                    sellerList={orderList}
+                <SellOrdersList
+                    sellerList={sellerList}
                     contentLoading={contentLoading}
                     pagination={pagination}
                     setModalShow={setModalShow}

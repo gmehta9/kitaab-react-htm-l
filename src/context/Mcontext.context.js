@@ -30,7 +30,7 @@ export const MainProvider = ({ children }) => {
 
     const cartApiHandlder = () => {
 
-        const cd = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+        const cd = cartData.map(item => ({ product_id: (item.product_id || item.id), quantity: +item.quantity }));
 
         axiosInstance.post('cart', cd, {
             headers: {
@@ -39,34 +39,34 @@ export const MainProvider = ({ children }) => {
             }
         }).then((res) => {
             if (res) {
-                console.log(res);
-                setCopyCartData()
+                setCopyCartData(cartData)
             }
         }).catch((error) => {
         });
     }
 
     useEffect(() => {
-
         if (Auth.isUserAuthenticated()) {
             getCartApiHandlder()
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-    const dd = debounce((event) => {
+
+    const cartUpdateHandler = debounce((event) => {
         cartApiHandlder()
-    }, 2000)
+    }, 1500)
+
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
-            dd()
+            cartUpdateHandler()
             return () => {
-                dd.cancel();
+                cartUpdateHandler.cancel();
             };
         }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartBtnClick])
-
 
     return (
         <MainContext.Provider

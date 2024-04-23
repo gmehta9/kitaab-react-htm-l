@@ -32,7 +32,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                     {(!contentLoading && sellerList?.length === 0) &&
                         <tr>
                             <td colSpan={5} className="text-center">
-                                No order history.
+                                No sell order history.
                             </td>
                         </tr>
                     }
