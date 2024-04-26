@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import Auth from "../../auth/Auth";
-import { axiosInstance } from "../../axios/axios-config";
+import { axiosInstance, headers } from "../../axios/axios-config";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 
@@ -14,11 +14,16 @@ function ChangePassword({ changePasswordShow, setChangePasswordShow }) {
 
     const changePasswordFormSubmitHandler = (data) => {
         setIsContentLoading(true)
-        axiosInstance.post("auth/pass-change", data).then((res) => {
+        axiosInstance.post("auth/pass-change", data, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((res) => {
             if (res) {
                 toast.success("Password update Successfully!");
                 setIsContentLoading(false)
-                Auth.login({ user: res.user, token: res.token }, true)
+                // Auth.login({ user: res.user, token: res.token }, true)
                 setChangePasswordShow(false)
             }
         }).catch((error) => {

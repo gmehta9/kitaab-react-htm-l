@@ -26,7 +26,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
         axiosInstance.get("auth/sign-out", {
             headers: {
                 ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
             }
         }).then((res) => {
             if (res) {

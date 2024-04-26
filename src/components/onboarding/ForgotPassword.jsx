@@ -27,7 +27,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow
         <>
             <Modal backdrop="static" centered show={forgotShowModal} onHide={() => setForgotShowModal(false)}>
                 <Modal.Header className="position-relative justify-content-center border-0">
-                    <Modal.Title className="font-weight-bold">Frogot Password</Modal.Title>
+                    <Modal.Title className="font-weight-bold">Forgot Password</Modal.Title>
                     <button
                         onClick={() => {
                             reset()

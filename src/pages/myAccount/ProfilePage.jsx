@@ -7,9 +7,12 @@ import { axiosInstance, headers } from "../../axios/axios-config";
 
 function ProfilePage() {
     const { setIsContentLoading } = useOutletContext()
-    const [stateList, setStateList] = useState();
-    const userLogin = Auth.loggedInUser()
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
+    const [stateList, setStateList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+
+    const userLogin = Auth.loggedInUser();
+
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const profileUpdateHandler = (data) => {
 
@@ -70,7 +73,6 @@ function ProfilePage() {
                 'Accept': 'application/json'
             }
         }).then(function (response) {
-
             return response.json();
         }).then(function (myJson) {
             setStateList(myJson)
@@ -79,6 +81,18 @@ function ProfilePage() {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        if (watch('state')) {
+            stateList.forEach(element => {
+                if (element.value === watch('state')) {
+                    setCityList(element.cities)
+                }
+            });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [watch('state'), stateList]);
 
     // useEffect(() => {
     //     if (userLogin) {
@@ -196,14 +210,17 @@ function ProfilePage() {
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
                                         <i className='bx bx-current-location' ></i>
                                     </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        autoComplete="false"
-                                        {...register('city', {
+                                    <Form.Select
+                                        className="form-control"
+                                        {...register('state', {
                                             required: true
                                         })}
-                                        placeholder="Enter your city"
-                                    />
+                                    >
+                                        <option value=''>Select State</option>
+                                        {stateList.map((state, index) =>
+                                            <option key={index + 'st'} value={state.value}>{state.label}</option>
+                                        )}
+                                    </Form.Select>
                                 </InputGroup>
                             </Col>
                             <Col lg={4} className="mb-3">
@@ -211,15 +228,17 @@ function ProfilePage() {
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
                                         <i className='bx bx-current-location' ></i>
                                     </InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        title="Enter state"
-                                        autoComplete="false"
-                                        {...register('state', {
+                                    <Form.Select
+                                        className="form-control"
+                                        {...register('city', {
                                             required: true
                                         })}
-                                        placeholder="Enter your state"
-                                    />
+                                    >
+                                        <option value=''>Select City</option>
+                                        {cityList && cityList.map((city, index) =>
+                                            <option key={index + 'cty'} value={city?.value}>{city?.label}</option>
+                                        )}
+                                    </Form.Select>
                                 </InputGroup>
 
                             </Col>

@@ -20,7 +20,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
 
                     {contentLoading &&
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={6} className="text-center">
                                 <Spinner
                                     className="mx-auto"
                                     animation="border"
