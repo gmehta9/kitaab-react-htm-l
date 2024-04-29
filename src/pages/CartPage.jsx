@@ -41,17 +41,17 @@ function CartPage() {
         }
     }
 
-    const cartQtyHandler = (event, object) => {
-        const { value } = event.target
-        const updateCart = cartData.map((cdItem) => {
-            if ((cdItem?.product_id || cdItem?.id) === (object?.product_id || object.id) && +value !== 0) {
-                cdItem.quantity = value
-            }
-            return cdItem
-        })
+    // const cartQtyHandler = (event, object) => {
+    //     const { value } = event.target
+    //     const updateCart = cartData.map((cdItem) => {
+    //         if ((cdItem?.product_id || cdItem?.id) === (object?.product_id || object.id) && +value !== 0) {
+    //             cdItem.quantity = value
+    //         }
+    //         return cdItem
+    //     })
 
-        setCartData(updateCart)
-    }
+    //     setCartData(updateCart)
+    // }
 
     const orderPlacesHandler = (index) => {
         if (useLoggedIN?.is_address === "0") {
@@ -99,7 +99,7 @@ function CartPage() {
                                     <tr>
                                         <th>#</th>
                                         <th>Book Name</th>
-                                        <th>Quantity</th>
+                                        <th>Author</th>
                                         <th>Price</th>
                                     </tr>
                                 </thead>
@@ -116,7 +116,8 @@ function CartPage() {
                                             <td>{index + 1}</td>
                                             <td>{catData?.title || catData?.product?.title}</td>
                                             <td>
-                                                <input
+                                                {catData?.auther}
+                                                {/* <input
                                                     style={{ width: '70px' }}
                                                     type="number"
                                                     max={catData?.transact_type === 'sell' ? 10 : undefined}
@@ -124,7 +125,7 @@ function CartPage() {
                                                     value={catData.quantity || 1}
                                                     name="qty"
                                                     onChange={(targetValue) => cartQtyHandler(targetValue, catData)}
-                                                />
+                                                /> */}
                                             </td>
                                             <td>
                                                 {(catData?.transact_type || catData?.product?.transact_type) === 'sell' ?

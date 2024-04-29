@@ -2,6 +2,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
+import toast from "react-hot-toast";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props
@@ -24,7 +25,8 @@ function AddToCartButton(props) {
             return
         }
         if (existingItem) {
-            updateQuantity(existingItem.id, existingItem.quantity + 1);
+            toast('Book Already in cart!')
+            // updateQuantity(existingItem.id, existingItem.quantity + 1);
         } else {
             setCartData([...cartData, { ...items, quantity: 1 }]);
         }
