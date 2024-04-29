@@ -25,7 +25,7 @@ function AddToCartButton(props) {
             return
         }
         if (existingItem) {
-            toast('Book Already in cart!')
+            toast('Book already in cart!')
             // updateQuantity(existingItem.id, existingItem.quantity + 1);
         } else {
             setCartData([...cartData, { ...items, quantity: 1 }]);
