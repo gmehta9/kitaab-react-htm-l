@@ -10,7 +10,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                         <th>#</th>
                         <th>Order ID</th>
                         <th>Order Title</th>
-                        <th>Order Quantity</th>
+                        <th>Author</th>
                         <th>Buyer Id </th>
                         <th>Action</th>
                     </tr>
@@ -31,7 +31,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
 
                     {(!contentLoading && sellerList?.length === 0) &&
                         <tr>
-                            <td colSpan={5} className="text-center">
+                            <td colSpan={6} className="text-center">
                                 No sell order history.
                             </td>
                         </tr>
@@ -42,8 +42,8 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
                             <td>{ord.unique_id || ('ord-' + ord.id)}</td>
                             <td>{ord.title}</td>
-                            <td>{ord.quantity}</td>
-                            <td>{ord.quantity}</td>
+                            <td>{'--'}</td>
+                            <td>{ord?.auther}</td>
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)

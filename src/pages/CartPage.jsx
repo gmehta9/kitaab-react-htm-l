@@ -78,7 +78,7 @@ function CartPage() {
             setIsContentLoading(false)
         })
     }
-
+    console.log(cartData);
     return (
         <>
             <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} />
@@ -100,6 +100,7 @@ function CartPage() {
                                         <th>#</th>
                                         <th>Book Name</th>
                                         <th>Author</th>
+                                        <th>Transact Type</th>
                                         <th>Price</th>
                                     </tr>
                                 </thead>
@@ -114,9 +115,9 @@ function CartPage() {
                                     {cartData?.map((catData, index) =>
                                         <tr key={index + 'catdata'}>
                                             <td>{index + 1}</td>
-                                            <td>{catData?.title || catData?.product?.title}</td>
-                                            <td>
-                                                {catData?.auther}
+                                            <td className="text-capitalize">{catData?.title || catData?.product?.title}</td>
+                                            <td className="text-capitalize">
+                                                {catData?.auther || catData?.product.auther}
                                                 {/* <input
                                                     style={{ width: '70px' }}
                                                     type="number"
@@ -127,10 +128,11 @@ function CartPage() {
                                                     onChange={(targetValue) => cartQtyHandler(targetValue, catData)}
                                                 /> */}
                                             </td>
+                                            <td className="text-capitalize">{catData?.transact_type || catData?.product?.transact_type}</td>
                                             <td>
                                                 {(catData?.transact_type || catData?.product?.transact_type) === 'sell' ?
                                                     (catData?.sale_price || catData?.product?.sale_price) || (catData?.price || catData?.product?.price)
-                                                    : 'Sharing for 60 days'
+                                                    : '0'
                                                 }
 
                                             </td>

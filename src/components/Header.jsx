@@ -35,6 +35,8 @@ function Header({ isContentLoading, setIsContentLoading }) {
                 setIsUserLoggedIn(false)
             }
         }).catch((error) => {
+            navigate('/')
+            setIsUserLoggedIn(false)
             // setLoading(false);
         });
 

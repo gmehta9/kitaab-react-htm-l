@@ -41,7 +41,7 @@ function BuyOrdersList({ orderList, contentLoading, pagination, setModalShow, se
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
                             <td>{ord.unique_id || ('ord-' + ord.id)}</td>
                             <td>{ord.title}</td>
-                            <td>{ord.quantity}</td>
+                            <td>{ord?.auther}</td>
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)

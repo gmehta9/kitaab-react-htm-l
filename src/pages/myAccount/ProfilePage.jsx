@@ -84,6 +84,7 @@ function ProfilePage() {
 
     useEffect(() => {
         if (watch('state')) {
+
             stateList.forEach(element => {
                 if (element.value === watch('state')) {
                     setCityList(element.cities)

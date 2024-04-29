@@ -119,13 +119,15 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                         <Row>
                             <Col lg="6">
                                 <Form.Group className="mb-4" controlId="emailid">
-                                    <Form.Label>Email<sup className="text-danger small">*</sup></Form.Label>
+                                    <Form.Label>Email
+                                        {/* <sup className="text-danger small">*</sup> */}
+                                    </Form.Label>
                                     <Form.Control
                                         type="text"
                                         autoComplete="false"
                                         name="email"
                                         {...register('email', {
-                                            required: "Email is required",
+                                            // required: "Email is required",
                                             pattern: {
                                                 value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                                                 message: "Enter valid email",
