@@ -39,7 +39,8 @@ function Login({ setIsUserLoggedIn, setIsContentLoading }) {
         axiosInstance.post("auth/sign-in", {
             ...data,
             type: 'Buyer/Seller'
-        },).then((res) => {
+        }, { headers: headers }
+        ).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");
                 setIsContentLoading(false)
@@ -48,6 +49,7 @@ function Login({ setIsUserLoggedIn, setIsContentLoading }) {
                 handleClose('login')
             }
         }).catch((error) => {
+            console.log(error);
             setIsContentLoading(false)
         });
     }

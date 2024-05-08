@@ -8,7 +8,7 @@ const onRequest = (config) => {
 }
 
 const onRequestError = (error) => {
-  // console.error(`[request error] [${JSON.stringify(error)}]`);
+  console.error(`[request error] [${error}]`);
   return Promise.reject(error);
 }
 
@@ -18,7 +18,7 @@ const onResponse = (response) => {
 }
 
 const onResponseError = (error) => {
-  console.log(error.response);
+  console.log(error);
 
   // toast.error(error?.response?.data?.message || 'Something went wrong!')
   toast.error(error?.response?.data?.message || 'Something went wrong!', {
