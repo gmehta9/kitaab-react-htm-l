@@ -8,19 +8,23 @@ import { axiosInstance, headers } from "../axios/axios-config";
 import toast from "react-hot-toast";
 import MainContext from "../context/Mcontext.context";
 import ChangePassword from "./onboarding/ChangePassword";
+import { openLoginModal } from "../redux/authModalSlice";
+import { useDispatch } from "react-redux";
 
-function Header({ isContentLoading, setIsContentLoading }) {
+function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
 
     const [pageScroll, setPageScroll] = useState('');
     const { cartData } = useContext(MainContext)
-    const [loginModalShow, setLoginModalShow] = useState(false);
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-
     const [changePasswordShow, setChangePasswordShow] = useState(false);
+
+    const dispatch = useDispatch();
 
     const location = useLocation();
     const navigate = useNavigate();
 
+    const handleLoginClick = () => {
+        dispatch(openLoginModal());
+    };
     const logoutHandler = () => {
         Auth.logout()
         axiosInstance.get("auth/sign-out", {
@@ -58,7 +62,9 @@ function Header({ isContentLoading, setIsContentLoading }) {
 
     }, [location.pathname])
     useEffect(() => {
-        setIsUserLoggedIn(Auth.isUserAuthenticated())
+        if (setIsUserLoggedIn) {
+            setIsUserLoggedIn(Auth.isUserAuthenticated())
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [Auth.loggedInUser])
@@ -82,7 +88,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                             <Nav.Link
                                 onClick={() => {
                                     if (!isUserLoggedIn) {
-                                        setLoginModalShow(true)
+                                        handleLoginClick()
                                     } else {
                                         navigate('/product', {
                                             state: 'Sell/Share'
@@ -110,7 +116,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                     <Dropdown.Item
                                         onClick={() => {
                                             if (!isUserLoggedIn) {
-                                                setLoginModalShow(true)
+                                                handleLoginClick()
                                             } else {
                                                 navigate('/account/order-history')
                                             }
@@ -121,7 +127,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                                     <Dropdown.Item
                                         onClick={() => {
                                             if (!isUserLoggedIn) {
-                                                setLoginModalShow(true)
+                                                handleLoginClick()
                                             } else {
                                                 navigate('/account/sell-history')
                                             }
@@ -146,7 +152,7 @@ function Header({ isContentLoading, setIsContentLoading }) {
                             {!isUserLoggedIn ?
                                 <Button
                                     type="button"
-                                    onClick={() => setLoginModalShow(true)}
+                                    onClick={() => handleLoginClick()}
                                     className="btn btn-primary text-white px-3 ml-3 align-self-lg-center">
                                     <Image
                                         src={`${srcPriFixLocal}user-icon.svg`}
@@ -203,9 +209,8 @@ function Header({ isContentLoading, setIsContentLoading }) {
 
             <Login
                 setIsContentLoading={setIsContentLoading}
-                loginModalShow={loginModalShow}
                 setIsUserLoggedIn={setIsUserLoggedIn}
-                setLoginModalShow={setLoginModalShow} />
+            />
         </>
     )
 }

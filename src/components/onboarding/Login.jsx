@@ -4,31 +4,48 @@ import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import Auth from "../../auth/Auth";
-import { axiosInstance } from "../../axios/axios-config";
+import { axiosInstance, headers } from "../../axios/axios-config";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { closeLoginModal, closeSignupModal, openSignupModal } from "../../redux/authModalSlice";
 
 
-function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsContentLoading }) {
-    const [signUpShowModal, setSignUpShowModal] = useState(false);
+function Login({ setIsUserLoggedIn, setIsContentLoading }) {
+
     const [forgotShowModal, setForgotShowModal] = useState(false);
+    const isSignupModalOpen = useSelector(state => state.authModal.signupModalOpen);
+    const isSignINModalOpen = useSelector(state => state.authModal.loginModalOpen);
 
-    // const [userType, setUserType] = useState('')
+    const dispatch = useDispatch();
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+
+    const handleClose = (type) => {
+        switch (type) {
+            case 'login':
+                dispatch(closeLoginModal())
+                break;
+            case 'signup':
+                dispatch(closeSignupModal())
+                break;
+            default:
+                break;
+        }
+    }
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
         axiosInstance.post("auth/sign-in", {
             ...data,
             type: 'Buyer/Seller'
-        }).then((res) => {
+        },).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");
                 setIsContentLoading(false)
                 Auth.login({ user: res.user, token: res.token }, true)
                 setIsUserLoggedIn(true)
-                setLoginModalShow(false)
+                handleClose('login')
             }
         }).catch((error) => {
             setIsContentLoading(false)
@@ -40,13 +57,13 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
     }, [reset])
     return (
         <>
-            <Modal backdrop="static" centered show={loginModalShow} >
+            <Modal backdrop="static" centered show={isSignINModalOpen} >
                 <Modal.Header className="position-relative justify-content-center border-0">
                     <Modal.Title className="font-weight-bold">Login</Modal.Title>
                     <button
                         onClick={() => {
                             reset()
-                            setLoginModalShow(false)
+                            handleClose('login')
                         }}
                         className="bg-transparent border-0 position-absolute close-btn">
                         ✖
@@ -81,7 +98,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                             </Col>
 
                         </Row> */}
-                        <Form.Group className="mb-4" controlId="emailOrphone">
+                        <Form.Group className="mb-4" >
                             <Form.Label>Email & Phone no</Form.Label>
                             <Form.Control
                                 type="text"
@@ -98,7 +115,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                                 </span>
                             }
                         </Form.Group>
-                        <Form.Group className="mb-2" controlId="passwordemailOrphone">
+                        <Form.Group className="mb-2">
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 autoComplete="false"
@@ -118,7 +135,7 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                         <div className="text-right">
                             <Link
                                 onClick={() => {
-                                    setLoginModalShow(false)
+                                    handleClose('login')
                                     setForgotShowModal(true)
                                 }}>Forgot Password?</Link>
                         </div>
@@ -135,8 +152,8 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                         </Button>
                         <div className="mb-4">
                             Not Registered? <Link onClick={() => {
-                                setSignUpShowModal(true)
-                                setLoginModalShow(false)
+                                dispatch(openSignupModal())
+                                handleClose('login')
                             }}>Create Account</Link>
                         </div>
                     </Modal.Footer>
@@ -148,14 +165,13 @@ function Login({ loginModalShow, setLoginModalShow, setIsUserLoggedIn, setIsCont
                 setIsContentLoading={setIsContentLoading}
                 forgotShowModal={forgotShowModal}
                 setForgotShowModal={setForgotShowModal}
-                setLoginModalShow={setLoginModalShow} />
+            />
 
             {/* SignUP Modal */}
             <SignUp
                 setIsContentLoading={setIsContentLoading}
-                signUpShowModal={signUpShowModal}
-                setLoginModalShow={setLoginModalShow}
-                setSignUpShowModal={setSignUpShowModal} />
+                signUpShowModal={isSignupModalOpen}
+            />
 
         </>
     )

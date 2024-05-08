@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "../../redux/authModalSlice";
 
-function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow, setIsContentLoading }) {
+function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoading }) {
 
     const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
-
+    const dispatch = useDispatch();
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
         axiosInstance.post("auth/pass-reset", data, {
@@ -15,7 +17,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow
         }).then((res) => {
             if (res) {
                 setIsContentLoading(false)
-                toast.success("Login Successfully!");
+                toast.success("Password successfully sent to email!");
 
             }
         }).catch((error) => {
@@ -73,7 +75,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setLoginModalShow
                         <div className="mb-4">
                             <Link onClick={() => {
                                 setForgotShowModal(false)
-                                setLoginModalShow(true)
+                                dispatch(openLoginModal())
                             }}>Login</Link>
                         </div>
                     </Modal.Footer>

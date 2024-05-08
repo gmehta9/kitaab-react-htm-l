@@ -8,14 +8,18 @@ import MainContext from "../context/Mcontext.context";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
 import ManageAddress from "./myAccount/ManageAddress";
+import { useDispatch } from "react-redux";
+import { openLoginModal } from "../redux/authModalSlice";
 
 
 function CartPage() {
     const navigate = useNavigate()
+    const dispatch = useDispatch();
     const [addressModalShow, setAddressModalShow] = useState(false)
     const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
     const { cartData, setCartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
-    const { isContentLoading, setIsContentLoading } = useOutletContext()
+    const { setIsContentLoading } = useOutletContext()
+
     const useLoggedIN = Auth.loggedInUser();
 
     const cartDeleteHandle = (obj, ii) => {
@@ -54,6 +58,12 @@ function CartPage() {
     // }
 
     const orderPlacesHandler = (index) => {
+
+        if (!useLoggedIN) {
+            dispatch(openLoginModal())
+            return
+        }
+
         if (useLoggedIN?.is_address === "0") {
             setAddressModalShow(true)
             return
@@ -78,7 +88,6 @@ function CartPage() {
             setIsContentLoading(false)
         })
     }
-    console.log(cartData);
     return (
         <>
             <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} />
@@ -108,7 +117,7 @@ function CartPage() {
                                 <tbody>
                                     {cartData?.length === 0 &&
                                         <tr>
-                                            <td colSpan={4} className="text-center">Cart is Empty</td>
+                                            <td colSpan={5} className="text-center">Cart is Empty</td>
                                         </tr>
                                     }
 
@@ -154,7 +163,7 @@ function CartPage() {
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
                                 onClick={orderPlacesHandler}
-                                variant="dark">Proceed</Button>
+                                variant="dark">Place Your Order</Button>
                         </Col>
                     </Row>
                 </Container>

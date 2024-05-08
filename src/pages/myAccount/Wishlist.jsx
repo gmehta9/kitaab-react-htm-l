@@ -114,6 +114,8 @@ function Wishlist() {
             setValue('title', editObj.title)
             setValue('author', editObj.author)
             setValue('publication_year', editObj.publication_year)
+        } else if (modalShowWL !== 'edit') {
+            reset()
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalShowWL])

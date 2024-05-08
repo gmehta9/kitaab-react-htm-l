@@ -57,6 +57,7 @@ export const headers = {
 export const axiosInstance = setupInterceptorsTo(axios.create({
   baseURL: 'https://tinytyni.com/KbAPI/API_URL/api/',
   timeout: 10000,
+  // headers: headers
 }))
 
 // export const axiosInstance = axios.create({

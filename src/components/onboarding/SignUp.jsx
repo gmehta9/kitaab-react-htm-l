@@ -6,9 +6,16 @@ import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import Select from 'react-select'
+import { useDispatch } from "react-redux";
+import { closeSignupModal, openLoginModal } from "../../redux/authModalSlice";
 
+function SignUp({ signUpShowModal, setIsContentLoading }) {
 
-function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsContentLoading }) {
+    const dispatch = useDispatch();
+
+    const handleClose = () => {
+        dispatch(closeSignupModal());
+    }
     const [stateList, setStateList] = useState()
     const [cityList, setCityList] = useState()
     const [city, setCity] = useState()
@@ -18,15 +25,13 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
-        console.log(data);
-
         axiosInstance.post("auth/sign-up", data, {
             // headers: headers,
         }).then((res) => {
             if (res) {
                 toast.success("SignUp Successfully!");
-                setSignUpShowModal(false)
-                setLoginModalShow(true)
+                handleClose()
+                dispatch(openLoginModal())
                 setIsContentLoading(false)
             }
         }).catch((error) => {
@@ -65,14 +70,14 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
 
     return (
         <>
-            <Modal backdrop="static" centered show={signUpShowModal} onHide={() => setSignUpShowModal(false)}>
+            <Modal backdrop="static" centered show={signUpShowModal} onHide={() => handleClose()}>
                 <Modal.Header className="position-relative justify-content-center border-0">
                     <Modal.Title className="font-weight-bold">Create Account</Modal.Title>
 
                     <button
                         onClick={() => {
                             reset()
-                            setSignUpShowModal(false)
+                            handleClose()
                         }}
                         className="bg-transparent border-0 position-absolute close-btn">
                         ✖
@@ -267,14 +272,13 @@ function SignUp({ setLoginModalShow, signUpShowModal, setSignUpShowModal, setIsC
                             className="px-4 mb-3"
                             variant="primary"
                             type="submit"
-                        // onClick={() => setSignUpShowModal(false)}
                         >
                             Submit
                         </Button>
                         <div className="mb-4">
                             <Link type="button" onClick={() => {
-                                setLoginModalShow(true)
-                                setSignUpShowModal(false)
+                                dispatch(openLoginModal())
+                                handleClose()
                             }} >Login</Link>
                         </div>
                     </Modal.Footer>

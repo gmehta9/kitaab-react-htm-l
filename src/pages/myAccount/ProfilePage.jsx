@@ -10,8 +10,6 @@ function ProfilePage() {
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
 
-    const userLogin = Auth.loggedInUser();
-
     const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const profileUpdateHandler = (data) => {

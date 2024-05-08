@@ -10,11 +10,11 @@ function AddToCartButton(props) {
 
     const navigate = useNavigate()
     const { setCartData, cartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
-    const updateQuantity = (id, newQuantity) => {
-        setCartData(prevCart => prevCart.map(item =>
-            item.id === id ? { ...item, quantity: newQuantity } : item
-        ));
-    };
+    // const updateQuantity = (id, newQuantity) => {
+    //     setCartData(prevCart => prevCart.map(item =>
+    //         item.id === id ? { ...item, quantity: newQuantity } : item
+    //     ));
+    // };
 
     const cartItemHandler = (items) => {
 
