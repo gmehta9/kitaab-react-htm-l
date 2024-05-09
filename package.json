@@ -27,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "PUBLIC_URL='.' react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "build:prod": "PUBLIC_URL=/kitaabJunction-web/ env-cmd -f .env.prod npm run-script build",
     "test": "react-scripts test",

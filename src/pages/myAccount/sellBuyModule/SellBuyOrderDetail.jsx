@@ -10,7 +10,7 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter">
                 <div className="d-flex pt-4 pl-4 position-relative">
-                    <span className="h5 font-weight-bold mx-auto">Order Detail (data?.unique_id)</span>
+                    <span className="h5 font-weight-bold mx-auto">Order Detail ( {data?.unique_id})</span>
                     <span className="btn btn-dark p-1 lh-1 position-absolute" onClick={() => setModalShow(undefined)}>X</span>
                 </div>
                 <Modal.Body>
@@ -29,11 +29,11 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                                 <div className="col small font-weight-bold">{data?.email}</div>
                             </div>
                             <div className="row">
-                                <div className="col-3 small">Phone No:</div>
-                                <div className="col small font-weight-bold">{data?.Phone}</div>
+                                <div className="col-3 small">City:</div>
+                                <div className="col small font-weight-bold">{data?.city}</div>
                             </div>
                             <div className="row">
-                                <div className="col-3">Address:</div>
+                                <div className="col-3 small">Address:</div>
                                 <div className="col small font-weight-bold">{data?.address}</div>
                             </div>
                         </div>
@@ -45,30 +45,32 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                                 <div className="col-3 small">Name:</div>
                                 <div className="col small font-weight-bold">{data?.product_owner_name}</div>
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col-3 small">Email ID:</div>
                                 <div className="col small font-weight-bold">{data?.product_owner_email}</div>
-                            </div>
-                            <div className="row">
-                                <div className="col-3 small">Phone No:</div>
-                                <div className="col small font-weight-bold">{data?.product_owner_phone}</div>
-                            </div>
+                            </div> */}
                             <div className="row">
                                 <div className="col-3 small">Address:</div>
                                 <div className="col small font-weight-bold">{data?.product_owner_address}</div>
                             </div>
+                            <div className="row">
+                                <div className="col-3 small">City:</div>
+                                <div className="col small font-weight-bold">{data?.product_owner_city}</div>
+                            </div>
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row table-responsive">
 
                         <Table>
                             <thead>
-                                <th>Order ID</th>
-                                <th>Order Image</th>
-                                <th>Order Title</th>
-                                <th>Author</th>
-                                <th>Order Transec type</th>
-                                <th>Order Price</th>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Order Image</th>
+                                    <th>Order Title</th>
+                                    <th>Author</th>
+                                    <th>Order Transec type</th>
+                                    <th>Order Price</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
