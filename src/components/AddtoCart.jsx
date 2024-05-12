@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
 import toast from "react-hot-toast";
+import Auth from "../auth/Auth";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props
@@ -16,28 +17,27 @@ function AddToCartButton(props) {
     //     ));
     // };
 
-    const cartItemHandler = (items) => {
 
-        const existingItem = cartData.find(item => item.id === items.id);
+    const cartItemHandler = (obj) => {
+        const existingItem = cartData.find(item => (+item?.product_id || item?.id) === (+obj?.product_id || obj?.id));
 
         if (!cartData && cartData.length === 0) {
-            setCartData([{ ...items, quantity: 1 }]);
+            setCartData([{ ...obj, quantity: 1 }]);
             return
         }
         if (existingItem) {
             toast('Book already in cart!')
             // updateQuantity(existingItem.id, existingItem.quantity + 1);
         } else {
-            setCartData([...cartData, { ...items, quantity: 1 }]);
+            setCartData([...cartData, { ...obj, quantity: 1 }]);
         }
 
     }
-
     return (
         <Button
             type="button"
             onClick={() => {
-                if (isEditAble) {
+                if (productDetail?.created_by_user?.id === Auth.loggedInUser()?.id) {
                     navigate('/product/edit', {
                         state: {
                             pId: productDetail.id
@@ -49,7 +49,7 @@ function AddToCartButton(props) {
                 }
             }}
             className="mb-3">
-            {!isEditAble ? "Add to Cart" : 'Edit'}
+            {productDetail?.created_by_user?.id !== Auth.loggedInUser()?.id ? "Add to Cart" : 'Edit'}
         </Button>
     )
 }

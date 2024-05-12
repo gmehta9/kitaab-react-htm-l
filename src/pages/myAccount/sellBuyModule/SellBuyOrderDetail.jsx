@@ -2,7 +2,7 @@ import { Image, Modal, Table } from "react-bootstrap";
 import { MEDIA_URL, replaceLogo } from "../../../helper/Utils";
 
 function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
-    console.log(data);
+
     return (
         <>
             <Modal

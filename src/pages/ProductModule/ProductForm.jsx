@@ -3,12 +3,13 @@ import { Col, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { apiUrl, axiosInstance, headers } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import Auth from "../../auth/Auth";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { MEDIA_URL } from "../../helper/Utils";
 import { srcPriFixLocal } from "../../helper/Helper";
+import axios from "axios";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
@@ -53,9 +54,9 @@ function ProductForm() {
         formData.append('type', uploadKeyName)
         formData.append('file', file)
 
-        return axiosInstance.post('upload-image', formData, {
+        return axios.post(apiUrl + 'upload-image', formData, {
             headers: {
-                "Content-Type": "multipart/form-data",
+                // "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${Auth.token()}`
             },
         }).then((res) => {
@@ -80,6 +81,7 @@ function ProductForm() {
             if (!responseImg) {
                 return
             }
+            console.log('responseImg.image', responseImg.image);
             body = { ...data, image: responseImg.image }
         }
 

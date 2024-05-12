@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
@@ -88,13 +88,43 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
 
             <Modal size="lg" show={addressModalShow} onHide={handleClose}>
                 <Modal.Header>
-                    <Modal.Title>Add Address</Modal.Title>
+                    <Modal.Title>Shipping Address</Modal.Title>
                     <button type="button" onClick={handleClose} className="closed btn">X</button>
                 </Modal.Header>
                 <Modal.Body>
                     <Form autoComplete="false" onSubmit={handleSubmit(addressSubmitHandler)}>
                         <Modal.Body className="border-0 px-5">
-                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+
+                            <Row>
+                                <Col xs="6">
+                                    <div className="order-type text-center">
+                                        <input
+                                            id="self"
+                                            className="d-none"
+                                            type="radio"
+                                            name="order_type"
+                                            value={'self'} />
+                                        <label htmlFor="self" className="rounded-3 border w-75 p-3 link">
+                                            Self Pickup
+                                        </label>
+                                    </div>
+                                </Col>
+                                <Col xs="6">
+                                    <div className="order-type text-center">
+                                        <input
+                                            id="paid"
+                                            className="d-none"
+                                            type="radio"
+                                            name="order_type"
+                                            value={'paid'} />
+                                        <label htmlFor="paid" className="rounded-3 border w-75 p-3">
+                                            Paid Delivery
+                                        </label>
+                                    </div>
+                                </Col>
+                            </Row>
+
+                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
                                     type="text"
@@ -111,41 +141,50 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                         {errors?.name?.message}
                                     </span>
                                 }
-                            </Form.Group> */}
-                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>Email ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    autoComplete="false"
-                                    {...register('email', {
-                                        required: 'Please enter your phone or email.'
-                                    })}
-                                    placeholder="Enter your phone or email."
-                                    autoFocus
-                                />
-                                {errors?.email &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.email?.message}
-                                    </span>
-                                }
-                            </Form.Group> */}
-                            {/* <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>Phone</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    autoComplete="false"
-                                    {...register('phone_number', {
-                                        required: 'Please enter your phone or email.'
-                                    })}
-                                    placeholder="Enter your phone."
-                                    autoFocus
-                                />
-                                {errors?.phone_number &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.phone_number?.message}
-                                    </span>
-                                }
-                            </Form.Group> */}
+                            </Form.Group>
+
+                            <Row>
+                                <Col lg="6">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>Email ID</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            autoComplete="false"
+                                            {...register('email', {
+                                                required: 'Please enter your phone or email.'
+                                            })}
+                                            placeholder="Enter your phone or email."
+                                            autoFocus
+                                        />
+                                        {errors?.email &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.email?.message}
+                                            </span>
+                                        }
+                                    </Form.Group>
+                                </Col>
+                                <Col lg="6">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>Phone</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            autoComplete="false"
+                                            {...register('phone_number', {
+                                                required: 'Please enter your phone or email.'
+                                            })}
+                                            placeholder="Enter your phone."
+                                            autoFocus
+                                        />
+                                        {errors?.phone_number &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.phone_number?.message}
+                                            </span>
+                                        }
+                                    </Form.Group>
+                                </Col>
+
+                            </Row>
+
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control
@@ -163,69 +202,78 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                     </span>
                                 }
                             </Form.Group>
-
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>City</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    autoComplete="false"
-                                    {...register('city', {
-                                        required: 'Please enter your city.'
-                                    })}
-                                    placeholder="Enter your city."
-                                    autoFocus
-                                />
-                                {errors?.city &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.city?.message}
-                                    </span>
-                                }
-                            </Form.Group>
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>State</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    autoComplete="false"
-                                    {...register('state', {
-                                        required: 'Please enter state.'
-                                    })}
-                                    placeholder="Enter your state."
-                                    autoFocus
-                                />
-                                {errors?.state &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.state?.message}
-                                    </span>
-                                }
-                            </Form.Group>
-                            <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>Pin Code</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    autoComplete="false"
-                                    name="pin_code"
-                                    pattern="[0-9]*"
-                                    inputMode="numeric"
-                                    {...register('pin_code', {
-                                        required: 'Please enter your pin code.',
-                                        maxLength: {
-                                            value: 6,
-                                            message: 'Enter a valid pin code'
-                                        },
-                                        pattern: {
-                                            value: /^\d+$/,
-                                            message: 'Invalid pin code.'
+                            <Row>
+                                <Col lg="4">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>City</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            autoComplete="false"
+                                            {...register('city', {
+                                                required: 'Please enter your city.'
+                                            })}
+                                            placeholder="Enter your city."
+                                            autoFocus
+                                        />
+                                        {errors?.city &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.city?.message}
+                                            </span>
                                         }
-                                    })}
-                                    placeholder="Enter your pin code."
-                                    autoFocus
-                                />
-                                {errors?.pin_code &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.pin_code?.message}
-                                    </span>
-                                }
-                            </Form.Group>
+                                    </Form.Group>
+                                </Col>
+                                <Col lg="4">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>State</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            autoComplete="false"
+                                            {...register('state', {
+                                                required: 'Please enter state.'
+                                            })}
+                                            placeholder="Enter your state."
+                                            autoFocus
+                                        />
+                                        {errors?.state &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.state?.message}
+                                            </span>
+                                        }
+                                    </Form.Group>
+                                </Col>
+
+                                <Col lg="4">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>Pin Code</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            autoComplete="false"
+                                            name="pin_code"
+                                            pattern="[0-9]*"
+                                            inputMode="numeric"
+                                            {...register('pin_code', {
+                                                required: 'Please enter your pin code.',
+                                                maxLength: {
+                                                    value: 6,
+                                                    message: 'Enter a valid pin code'
+                                                },
+                                                pattern: {
+                                                    value: /^\d+$/,
+                                                    message: 'Invalid pin code.'
+                                                }
+                                            })}
+                                            placeholder="Enter your pin code."
+                                            autoFocus
+                                        />
+                                        {errors?.pin_code &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.pin_code?.message}
+                                            </span>
+                                        }
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+
 
 
                         </Modal.Body>
@@ -237,7 +285,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow }) {
                                 variant="primary"
                                 type="submit"
                             >
-                                Submit
+                                Place Your Order
                             </Button>
 
                         </Modal.Footer>

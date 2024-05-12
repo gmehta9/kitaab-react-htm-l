@@ -63,7 +63,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                     src={MEDIA_URL + 'product/' + items.image}
                     onClick={() => ClikedItem(items.id)}
                     className="thumbnail product-thumb rounded w-100" />
-                <div className="book-info text-center mt-2" >
+                <div className="book-info text-center mt-2 p-2" >
                     <div className="author-name" onClick={() => ClikedItem(items.id)} >
                         {items.auther}
                     </div>

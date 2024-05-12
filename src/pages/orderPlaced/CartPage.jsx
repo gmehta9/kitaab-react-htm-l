@@ -1,22 +1,22 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import toast from "react-hot-toast";
 import { useContext, useState } from "react";
-import Footer from "../components/Footer";
-import MainContext from "../context/Mcontext.context";
-import { axiosInstance, headers } from "../axios/axios-config";
-import Auth from "../auth/Auth";
-import ManageAddress from "./myAccount/ManageAddress";
+import Footer from "../../components/Footer";
+import MainContext from "../../context/Mcontext.context";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import Auth from "../../auth/Auth";
+import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
-import { openLoginModal } from "../redux/authModalSlice";
+import { openLoginModal } from "../../redux/authModalSlice";
 
 
 function CartPage() {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const [addressModalShow, setAddressModalShow] = useState(false)
-    const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
+    // const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
     const { cartData, setCartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
     const { setIsContentLoading } = useOutletContext()
 
@@ -90,7 +90,7 @@ function CartPage() {
     }
     return (
         <>
-            <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} />
+            {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}
             <div className="inner-pages row border-top ">
                 <Container className="my-5">
 
@@ -162,8 +162,11 @@ function CartPage() {
                             <Button
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
-                                onClick={orderPlacesHandler}
-                                variant="dark">Place Your Order</Button>
+                                onClick={() => setAddressModalShow(true)
+                                    // orderPlacesHandler
+                                }
+                                variant="dark">Proceed</Button>
+                            {/* Place Your Order */}
                         </Col>
                     </Row>
                 </Container>

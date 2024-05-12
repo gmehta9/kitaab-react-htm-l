@@ -45,7 +45,7 @@ export function setupInterceptorsTo(axiosInstance) {
 }
 
 const token = Auth?.token();
-
+export const apiUrl = 'https://tinytyni.com/KbAPI/API_URL/api/'
 export const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
@@ -55,7 +55,7 @@ export const headers = {
 }
 
 export const axiosInstance = setupInterceptorsTo(axios.create({
-  baseURL: 'https://tinytyni.com/KbAPI/API_URL/api/',
+  baseURL: apiUrl,
   timeout: 10000,
   // headers: headers
 }))

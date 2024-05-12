@@ -42,6 +42,11 @@ $secondry: #868686;
 
     .book-name {
         font-family: "medium-font";
+        text-overflow: ellipsis;
+        /* IE, Safari (WebKit) */
+        overflow: hidden;
+        /* don't show excess chars */
+        white-space: nowrap;
     }
 
     .book-price {
@@ -448,4 +453,41 @@ $secondry: #868686;
 
 .visually-hidden {
     display: none;
+}
+
+
+.order-type {
+    label {
+        position: relative;
+        line-height: 1;
+        cursor: pointer;
+
+        &::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 1px solid #6B6B6B;
+            border-radius: 50%;
+            position: absolute;
+            left: 18%;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+    }
+
+    input {
+        &:checked~label {
+            color: #fff;
+            background-color: #535755;
+
+            &::before {
+                content: '✓';
+                border: 1px solid #f9f9f9;
+                background-color: #535755;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
 }
