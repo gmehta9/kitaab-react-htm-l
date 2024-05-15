@@ -176,7 +176,13 @@ function CartPage() {
                             <Button
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
-                                onClick={() => setAddressModalShow(true)
+                                onClick={() => {
+                                    if (!useLoggedIN) {
+                                        dispatch(openLoginModal())
+                                        return
+                                    }
+                                    setAddressModalShow(true)
+                                }
                                     // orderPlacesHandler
                                 }
                                 variant="dark">Proceed</Button>
@@ -188,6 +194,7 @@ function CartPage() {
             </div>
 
             <ManageAddress
+                cartData={cartData}
                 addressModalShow={addressModalShow}
                 setAddressModalShow={setAddressModalShow} />
 

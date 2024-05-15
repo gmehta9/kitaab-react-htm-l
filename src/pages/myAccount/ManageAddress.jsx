@@ -5,13 +5,49 @@ import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
 
-function ManageAddress({ setAddressModalShow, addressModalShow }) {
+function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
 
     const userLogin = Auth.loggedInUser()
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const handleClose = () => {
         setAddressModalShow(false)
+    }
+
+    const orderPlacesHandler = (index) => {
+
+        const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+        axiosInstance['post']('order',
+            order
+            // {
+            //     order: order,
+            //     // shipping_name
+            //     // shipping_email
+            //     // shipping_phone_no
+            //     // shipping_address
+            //     // shipping_state
+            //     // shipping_city
+            //     // shipping_pin_code
+            //     // shipping_order_type
+            // }
+            , {
+
+                headers: {
+                    ...headers,
+                    ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+                }
+            }).then((res) => {
+                if (res) {
+                    toast.success("Order Placed successfully, Please check your email", {
+                        duration: 5000
+                    });
+                    // setIsContentLoading(false)
+                    // navigate('/account/order-history')
+                    // setCartData([])
+                }
+            }).catch((error) => {
+                // setIsContentLoading(false)
+            })
     }
 
     const ProfileAddressHandler = () => {
