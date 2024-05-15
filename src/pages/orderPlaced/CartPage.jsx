@@ -70,23 +70,37 @@ function CartPage() {
         }
         setIsContentLoading(true)
         const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
-        axiosInstance['post']('order', order, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((res) => {
-            if (res) {
-                toast.success("Order Placed successfully, Please check your email", {
-                    duration: 5000
-                });
+        axiosInstance['post']('order',
+            order
+            // {
+            //     order: order,
+            //     // shipping_name
+            //     // shipping_email
+            //     // shipping_phone_no
+            //     // shipping_address
+            //     // shipping_state
+            //     // shipping_city
+            //     // shipping_pin_code
+            //     // shipping_order_type
+            // }
+            , {
+
+                headers: {
+                    ...headers,
+                    ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+                }
+            }).then((res) => {
+                if (res) {
+                    toast.success("Order Placed successfully, Please check your email", {
+                        duration: 5000
+                    });
+                    setIsContentLoading(false)
+                    navigate('/account/order-history')
+                    setCartData([])
+                }
+            }).catch((error) => {
                 setIsContentLoading(false)
-                navigate('/account/order-history')
-                setCartData([])
-            }
-        }).catch((error) => {
-            setIsContentLoading(false)
-        })
+            })
     }
     return (
         <>
