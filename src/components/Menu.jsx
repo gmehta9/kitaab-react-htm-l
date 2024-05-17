@@ -9,7 +9,7 @@ import MainContext from "../context/Mcontext.context";
 import { openLoginModal } from "../redux/authModalSlice";
 import { useDispatch } from "react-redux";
 
-function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordShow, meanuID }) {
+function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordShow, meanuID, setMenuShow }) {
 
     const { cartData } = useContext(MainContext)
 
@@ -58,12 +58,28 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
     return (
         <>
             <Navbar.Collapse id={meanuID} className={`align-items-start ${className}`}>
+                {meanuID &&
+                    <Navbar.Brand
+                        className="mobile-logo"
+                        onClick={() => {
+                            navigate('/')
+                            setMenuShow(false)
+                        }}>
+                        <Image
+                            src={`${srcPriFixLocal}KJ-Logo-(1).png`}
+                            className="logo" />
+                    </Navbar.Brand>
+                }
                 <Nav className="ml-auto menu-bar position-relative">
                     <Nav.Link
-                        onClick={() => navigate('/')}
+                        onClick={() => {
+                            navigate('/')
+                            setMenuShow(false);
+                        }}
                         className="mr-lg-5 mb-0 h4 align-self-lg-center">Home</Nav.Link >
                     <Nav.Link
                         onClick={() => {
+                            setMenuShow(false);
                             if (!isUserLoggedIn) {
                                 handleLoginClick()
                             } else {
@@ -84,8 +100,8 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 className="mr-lg-5 mb-0 h4 align-self-lg-center">
                                 My List
                             </Nav.Link> */}
-                    <Dropdown className="position-relative mr-lg-5 mb-0 align-self-lg-center" drop={'start'}>
-                        <Dropdown.Toggle variant="" className="profile-avtar  ml-4" drop={'start'}>
+                    <Dropdown className="position-relative mr-lg-5 mb-0 align-self-lg-center dowpdown-section" drop={'start'}>
+                        <Dropdown.Toggle variant="" className="dowpdown-section-btn1  ml-4" drop={'start'}>
                             <span className="h4">My List</span>
                         </Dropdown.Toggle>
 
@@ -115,7 +131,12 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
 
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Nav.Link onClick={() => navigate('/cart')} className="mr-lg-4  align-self-lg-center position-relative">
+                    <Nav.Link
+                        onClick={() => {
+                            setMenuShow(false);
+                            navigate('/cart')
+                        }}
+                        className="mr-lg-4  align-self-lg-center position-relative">
                         <span className="position-relative">
                             <span
                                 className="position-absolute bg-primary text-white rounded-circle text-center cart-count">
@@ -132,14 +153,14 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                         <Button
                             type="button"
                             onClick={() => handleLoginClick()}
-                            className="btn btn-primary text-white px-3 ml-3 align-self-lg-center">
+                            className="btn btn-primary text-white px-3 ml-3 align-self-lg-center login">
                             <Image
                                 src={`${srcPriFixLocal}user-icon.svg`}
                             />  Login
                         </Button>
                         :
-                        <Dropdown className="position-relative pl-2" drop={'start'}>
-                            <Dropdown.Toggle variant="" className="profile-avtar ml-4" drop={'start'}>
+                        <Dropdown className="position-relative pl-2 dowpdown-section" drop={'start'}>
+                            <Dropdown.Toggle variant="" className="dowpdown-section-btn2 ml-4" drop={'start'}>
                                 <Image
                                     className="rounded-circle"
                                     src={`${srcPriFixLocal}default-avatar.jpg`}

@@ -7,14 +7,14 @@ import Auth from "../auth/Auth";
 import ChangePassword from "./onboarding/ChangePassword";
 
 import Menu from "./Menu";
+import './menu.scss';
 
 function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
 
     const [pageScroll, setPageScroll] = useState('');
     const [changePasswordShow, setChangePasswordShow] = useState(false);
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
+    const [mobileMenu, setMobileMenu] = useState(false);
+    const [menuShow, setMenuShow] = useState(false);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -25,6 +25,20 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
                 setPageScroll('page-scrolled')
             } else {
                 setPageScroll('')
+            }
+        });
+        return () => window.removeEventListener("scroll", () => { })
+    }, [])
+
+    useEffect(() => {
+        if (window.innerWidth < 990) {
+            setMobileMenu(true)
+        }
+        window.addEventListener("resize", (event) => {
+            if (window.innerWidth < 990) {
+                setMobileMenu(true)
+            } else {
+                setMobileMenu(false)
             }
         });
         return () => window.removeEventListener("scroll", () => { })
@@ -51,19 +65,33 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
                             src={`${srcPriFixLocal}KJ-Logo-(1).png`}
                             className="logo" />
                     </Navbar.Brand>
-                    <Navbar.Toggle></Navbar.Toggle>
-                    {/* <button onClick={() => setShow(true)} className="menu-toggle d-flex d-lg-none d-xl-none">
-                        <i class='bx bx-menu'></i>
-                    </button> */}
+                    {/* <Navbar.Toggle></Navbar.Toggle> */}
+                    <button onClick={() => setMenuShow(!menuShow)} className="menu-toggle d-flex d-lg-none d-xl-none">
+                        {menuShow ?
+                            <i class='bx bx-x'></i>
+                            :
+                            <i class='bx bx-menu'></i>
+                        }
+                    </button>
+
                     <Menu
                         isUserLoggedIn={isUserLoggedIn}
+                        setMenuShow={setMenuShow}
                         setIsUserLoggedIn={setIsUserLoggedIn}
                         setChangePasswordShow={setChangePasswordShow}
-                    // className='for-mobile active'
-                    // meanuID="sidebar-mobile "
+                        className={`${mobileMenu ? `for-mobile ${menuShow ? 'active' : ''}` : ''}`}
+                        meanuID={`${mobileMenu ? 'sidebar-mobile' : ''}`}
                     />
                 </Container>
             </Navbar>
+
+            {/* <Menu
+                isUserLoggedIn={isUserLoggedIn}
+                setIsUserLoggedIn={setIsUserLoggedIn}
+                setChangePasswordShow={setChangePasswordShow}
+                className='for-mobile active'
+                meanuID="sidebar-mobile "
+            /> */}
 
             <ChangePassword
                 changePasswordShow={changePasswordShow}
