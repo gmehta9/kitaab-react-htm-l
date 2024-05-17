@@ -10,13 +10,13 @@ import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';
 
 // import Wishlist from './pages/MyAccount/Wishlist';
 import ProfilePage from './pages/myAccount/ProfilePage';
-import ProductModuleLayout from './pages/productModule/ProductModuleLayout';
-import ProductByList from './pages/productModule/ProductByList';
-import ProductByID from './pages/productModule/ProductByID';
+import ProductModuleLayout from './pages/ProductModule/ProductModuleLayout';
+import ProductByList from './pages/ProductModule/ProductByList';
+import ProductByID from './pages/ProductModule/ProductByID';
 import ChatLayout from './pages/chat/ChatLayout';
 import Chat from './pages/chat/Chat';
 import ManageAddress from './pages/myAccount/ManageAddress';
-import ProductForm from './pages/productModule/ProductForm';
+import ProductForm from './pages/ProductModule/ProductForm';
 import CartPage from './pages/orderPlaced/CartPage';
 import OrderSuccess from './pages/OrderSuccess';
 import Wishlist from './pages/myAccount/Wishlist';

@@ -4,50 +4,43 @@ import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
-
+    const navigate = useNavigate()
     const userLogin = Auth.loggedInUser()
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const handleClose = () => {
         setAddressModalShow(false)
     }
 
-    const orderPlacesHandler = (index) => {
+    const orderPlacesHandler = (data) => {
 
-        const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
-        axiosInstance['post']('order',
-            order
-            // {
-            //     order: order,
-            //     // shipping_name
-            //     // shipping_email
-            //     // shipping_phone_no
-            //     // shipping_address
-            //     // shipping_state
-            //     // shipping_city
-            //     // shipping_pin_code
-            //     // shipping_order_type
-            // }
-            , {
+        // const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+        const order = cartData.map(item => item.id);
+        axiosInstance['post']('order', {
+            ...data,
+            shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
+            'cart_ids': order,
 
-                headers: {
-                    ...headers,
-                    ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-                }
-            }).then((res) => {
-                if (res) {
-                    toast.success("Order Placed successfully, Please check your email", {
-                        duration: 5000
-                    });
-                    // setIsContentLoading(false)
-                    // navigate('/account/order-history')
-                    // setCartData([])
-                }
-            }).catch((error) => {
-                // setIsContentLoading(false)
-            })
+        }, {
+            headers: {
+                ...headers,
+                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+            }
+        }).then((res) => {
+            if (res) {
+                toast.success("Order Placed successfully, Please check your email.", {
+                    duration: 5000
+                });
+                handleClose()
+                navigate('/account/order-history')
+
+            }
+        }).catch((error) => {
+            // setIsContentLoading(false)
+        })
     }
 
     const ProfileAddressHandler = () => {
@@ -58,45 +51,45 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
             }
         }).then((response) => {
             if (response) {
-                // console.log(response);
+
                 const user = response?.data
-                setValue('name', user?.name)
-                setValue('phone_number', user?.phone_number)
-                setValue('email', user?.email)
-                setValue('city', user?.city)
-                setValue('state', user?.state)
-                setValue('address', user?.address)
+                setValue('shipping_name', user?.name)
+                setValue('shipping_phone_no', user?.phone_number)
+                setValue('shipping_email', user?.email)
+                setValue('shipping_city', user?.city)
+                setValue('shipping_state', user?.state)
+                setValue('shipping_address', user?.address)
             }
         }).catch((error) => {
         });
     }
 
-    const addressSubmitHandler = (data) => {
-        axiosInstance['post']('auth/profile', data, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
-            if (res) {
-                if (data.address) {
-                    const t = Auth.token()
-                    const u = Auth.loggedInUser()
+    // const addressSubmitHandler = (data) => {
+    //     axiosInstance['post']('auth/profile', data, {
+    //         headers: {
+    //             ...headers,
+    //             Authorization: `Bearer ${Auth.token()}`,
+    //         }
+    //     }).then((res) => {
+    //         if (res) {
+    //             if (data.address) {
+    //                 const t = Auth.token()
+    //                 const u = Auth.loggedInUser()
 
-                    Auth.login({
-                        user: {
-                            ...u,
-                            is_address: true
-                        },
-                        token: t
-                    })
-                    handleClose()
-                    toast.success("Address updated successfully!");
-                }
-            }
-        }).catch((error) => {
-        });
-    }
+    //                 Auth.login({
+    //                     user: {
+    //                         ...u,
+    //                         is_address: true
+    //                     },
+    //                     token: t
+    //                 })
+    //                 handleClose()
+    //                 toast.success("Address updated successfully!");
+    //             }
+    //         }
+    //     }).catch((error) => {
+    //     });
+    // }
     useEffect(() => {
         // if (userLogin) {
         //     console.log(userLogin);
@@ -128,7 +121,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                     <button type="button" onClick={handleClose} className="closed btn">X</button>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form autoComplete="false" onSubmit={handleSubmit(addressSubmitHandler)}>
+                    <Form autoComplete="false" onSubmit={handleSubmit(orderPlacesHandler)}>
                         <Modal.Body className="border-0 px-5">
 
                             <Row>
@@ -139,7 +132,10 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                             className="d-none"
                                             type="radio"
                                             name="order_type"
-                                            value={'self'} />
+                                            value={'self_pickup'}
+                                            {...register('shipping_order_type', {
+                                                required: 'Please enter your phone or email.'
+                                            })} />
                                         <label htmlFor="self" className="rounded-3 border w-75 p-3 link">
                                             Self Pickup
                                         </label>
@@ -152,7 +148,10 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                             className="d-none"
                                             type="radio"
                                             name="order_type"
-                                            value={'paid'} />
+                                            value={'paid_delivery'}
+                                            {...register('shipping_order_type', {
+                                                required: 'Please enter your phone or email.'
+                                            })} />
                                         <label htmlFor="paid" className="rounded-3 border w-75 p-3">
                                             Paid Delivery
                                         </label>
@@ -166,15 +165,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                     type="text"
                                     autoComplete="false"
                                     name="phoneEmail"
-                                    {...register('name', {
+                                    {...register('shipping_name', {
                                         required: 'Please enter your phone or email.'
                                     })}
                                     placeholder="Enter your phone or email."
                                     autoFocus
                                 />
-                                {errors?.name &&
+                                {errors?.shipping_name &&
                                     <span className="text-danger small position-absolute">
-                                        {errors?.name?.message}
+                                        {errors?.shipping_name?.message}
                                     </span>
                                 }
                             </Form.Group>
@@ -186,15 +185,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                         <Form.Control
                                             type="text"
                                             autoComplete="false"
-                                            {...register('email', {
+                                            {...register('shipping_email', {
                                                 required: 'Please enter your phone or email.'
                                             })}
                                             placeholder="Enter your phone or email."
                                             autoFocus
                                         />
-                                        {errors?.email &&
+                                        {errors?.shipping_email &&
                                             <span className="text-danger small position-absolute">
-                                                {errors?.email?.message}
+                                                {errors?.shipping_email?.message}
                                             </span>
                                         }
                                     </Form.Group>
@@ -205,15 +204,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                         <Form.Control
                                             type="text"
                                             autoComplete="false"
-                                            {...register('phone_number', {
+                                            {...register('shipping_phone_no', {
                                                 required: 'Please enter your phone or email.'
                                             })}
                                             placeholder="Enter your phone."
                                             autoFocus
                                         />
-                                        {errors?.phone_number &&
+                                        {errors?.shipping_phone_no &&
                                             <span className="text-danger small position-absolute">
-                                                {errors?.phone_number?.message}
+                                                {errors?.shipping_phone_no?.message}
                                             </span>
                                         }
                                     </Form.Group>
@@ -226,15 +225,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
-                                    {...register('address', {
+                                    {...register('shipping_address', {
                                         required: 'Please enter your address.'
                                     })}
                                     placeholder="Enter your address."
                                     autoFocus
                                 />
-                                {errors?.address &&
+                                {errors?.shipping_address &&
                                     <span className="text-danger small position-absolute">
-                                        {errors?.address?.message}
+                                        {errors?.shipping_address?.message}
                                     </span>
                                 }
                             </Form.Group>
@@ -245,15 +244,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                         <Form.Control
                                             type="text"
                                             autoComplete="false"
-                                            {...register('city', {
+                                            {...register('shipping_city', {
                                                 required: 'Please enter your city.'
                                             })}
                                             placeholder="Enter your city."
                                             autoFocus
                                         />
-                                        {errors?.city &&
+                                        {errors?.shipping_city &&
                                             <span className="text-danger small position-absolute">
-                                                {errors?.city?.message}
+                                                {errors?.shipping_city?.message}
                                             </span>
                                         }
                                     </Form.Group>
@@ -264,15 +263,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                         <Form.Control
                                             type="text"
                                             autoComplete="false"
-                                            {...register('state', {
+                                            {...register('shipping_state', {
                                                 required: 'Please enter state.'
                                             })}
                                             placeholder="Enter your state."
                                             autoFocus
                                         />
-                                        {errors?.state &&
+                                        {errors?.shipping_state &&
                                             <span className="text-danger small position-absolute">
-                                                {errors?.state?.message}
+                                                {errors?.shipping_state?.message}
                                             </span>
                                         }
                                     </Form.Group>
@@ -287,7 +286,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                             name="pin_code"
                                             pattern="[0-9]*"
                                             inputMode="numeric"
-                                            {...register('pin_code', {
+                                            {...register('shipping_pin_code', {
                                                 required: 'Please enter your pin code.',
                                                 maxLength: {
                                                     value: 6,
@@ -301,9 +300,9 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                                             placeholder="Enter your pin code."
                                             autoFocus
                                         />
-                                        {errors?.pin_code &&
+                                        {errors?.shipping_pin_code &&
                                             <span className="text-danger small position-absolute">
-                                                {errors?.pin_code?.message}
+                                                {errors?.shipping_pin_code?.message}
                                             </span>
                                         }
                                     </Form.Group>

@@ -4,11 +4,12 @@ import { useContext } from "react";
 import MainContext from "../context/Mcontext.context";
 import toast from "react-hot-toast";
 import Auth from "../auth/Auth";
+import { openLoginModal } from "../redux/authModalSlice";
+import { useDispatch } from "react-redux";
 
 function AddToCartButton(props) {
     const { isEditAble, productDetail } = props
-    // const loggedUser = Auth.isUserAuthenticated()
-
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const { setCartData, cartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
     // const updateQuantity = (id, newQuantity) => {
@@ -19,6 +20,13 @@ function AddToCartButton(props) {
 
 
     const cartItemHandler = (obj) => {
+
+        if (!Auth.isUserAuthenticated()) {
+            dispatch(openLoginModal())
+            return
+        }
+
+
         const existingItem = cartData.find(item => (+item?.product_id || item?.id) === (+obj?.product_id || obj?.id));
 
         if (!cartData && cartData.length === 0) {
@@ -29,6 +37,10 @@ function AddToCartButton(props) {
             toast('Book already in cart!')
             // updateQuantity(existingItem.id, existingItem.quantity + 1);
         } else {
+            toast("Added to cart.", {
+                duration: 2000,
+                position: 'top-right'
+            });
             setCartData([...cartData, { ...obj, quantity: 1 }]);
         }
 

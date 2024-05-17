@@ -55,7 +55,7 @@ export const MainProvider = ({ children }) => {
 
     const cartUpdateHandler = debounce((event) => {
         cartApiHandlder()
-    }, 1500)
+    }, 1000)
 
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartData.length > 0) {
@@ -66,7 +66,7 @@ export const MainProvider = ({ children }) => {
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [cartBtnClick])
+    }, [cartBtnClick, Auth.isUserAuthenticated()])
 
     return (
         <MainContext.Provider

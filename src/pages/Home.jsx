@@ -230,12 +230,12 @@ function HomePage() {
                     Book By <span>Categories</span>
                 </div>
                 <div className="">
-                    <div className="p-0 d-flex justify-content-center my-4">
+                    <div className="p-0 row justify-content-center my-4">
                         <button type="button"
                             onClick={() => {
                                 setSelectCatID(undefined)
                             }}
-                            className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${!selectCatID ? ' text-primary border-bottom' : 'border-0'}`}>
+                            className={` btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${!selectCatID ? ' text-primary border-bottom' : 'border-0'}`}>
                             All
                         </button>
 
