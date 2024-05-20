@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Image, Navbar, Offcanvas } from "react-bootstrap";
+import { Container, Image, Navbar } from "react-bootstrap";
 import Login from "../components/onboarding/Login";
 import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";

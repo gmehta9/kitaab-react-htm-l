@@ -159,8 +159,8 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             />  Login
                         </Button>
                         :
-                        <Dropdown className="position-relative pl-2 dowpdown-section" drop={'start'}>
-                            <Dropdown.Toggle variant="" className="dowpdown-section-btn2 ml-4" drop={'start'}>
+                        <Dropdown className="position-relative pl-2 dropdown-section-myaccount" drop={'start'}>
+                            <Dropdown.Toggle variant="" className="dropdown-section-btn2 ml-4" drop={'start'}>
                                 <Image
                                     className="rounded-circle"
                                     src={`${srcPriFixLocal}default-avatar.jpg`}

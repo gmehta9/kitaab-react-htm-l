@@ -6,7 +6,7 @@ import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
+function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData }) {
     const navigate = useNavigate()
     const userLogin = Auth.loggedInUser()
     const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
@@ -34,6 +34,8 @@ function ManageAddress({ setAddressModalShow, addressModalShow, cartData }) {
                 toast.success("Order Placed successfully, Please check your email.", {
                     duration: 5000
                 });
+                setCartBtnClick(1 + 9)
+                setCartData([])
                 handleClose()
                 navigate('/account/order-history')
 

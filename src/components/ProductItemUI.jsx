@@ -60,6 +60,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                 </Button> */}
                 <Image
                     onError={replaceLogo}
+                    loading="lazy"
                     src={MEDIA_URL + 'product/' + items.image}
                     onClick={() => ClikedItem(items.id)}
                     className="thumbnail product-thumb rounded w-100" />

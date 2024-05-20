@@ -8,7 +8,7 @@ import { openLoginModal } from "../redux/authModalSlice";
 import { useDispatch } from "react-redux";
 
 function AddToCartButton(props) {
-    const { isEditAble, productDetail } = props
+    const { productDetail } = props
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { setCartData, cartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)

@@ -1,11 +1,11 @@
-import { useNavigate, useOutletContext } from "react-router-dom";
+// import { useNavigate, useOutletContext } from "react-router-dom";
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
 // import Header from "../components/Header";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { useContext, useState } from "react";
 import Footer from "../../components/Footer";
 import MainContext from "../../context/Mcontext.context";
-import { axiosInstance, headers } from "../../axios/axios-config";
+// import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
@@ -13,12 +13,12 @@ import { openLoginModal } from "../../redux/authModalSlice";
 
 
 function CartPage() {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const dispatch = useDispatch();
     const [addressModalShow, setAddressModalShow] = useState(false)
     // const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
     const { cartData, setCartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
-    const { setIsContentLoading } = useOutletContext()
+    // const { setIsContentLoading } = useOutletContext()
 
     const useLoggedIN = Auth.loggedInUser();
 
@@ -57,51 +57,51 @@ function CartPage() {
     //     setCartData(updateCart)
     // }
 
-    const orderPlacesHandler = (index) => {
+    // const orderPlacesHandler = (index) => {
 
-        if (!useLoggedIN) {
-            dispatch(openLoginModal())
-            return
-        }
+    //     if (!useLoggedIN) {
+    //         dispatch(openLoginModal())
+    //         return
+    //     }
 
-        if (useLoggedIN?.is_address === "0") {
-            setAddressModalShow(true)
-            return
-        }
-        setIsContentLoading(true)
-        const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
-        axiosInstance['post']('order',
-            order
-            // {
-            //     order: order,
-            //     // shipping_name
-            //     // shipping_email
-            //     // shipping_phone_no
-            //     // shipping_address
-            //     // shipping_state
-            //     // shipping_city
-            //     // shipping_pin_code
-            //     // shipping_order_type
-            // }
-            , {
+    //     if (useLoggedIN?.is_address === "0") {
+    //         setAddressModalShow(true)
+    //         return
+    //     }
+    //     setIsContentLoading(true)
+    //     const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+    //     axiosInstance['post']('order',
+    //         order
+    //         // {
+    //         //     order: order,
+    //         //     // shipping_name
+    //         //     // shipping_email
+    //         //     // shipping_phone_no
+    //         //     // shipping_address
+    //         //     // shipping_state
+    //         //     // shipping_city
+    //         //     // shipping_pin_code
+    //         //     // shipping_order_type
+    //         // }
+    //         , {
 
-                headers: {
-                    ...headers,
-                    ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-                }
-            }).then((res) => {
-                if (res) {
-                    toast.success("Order Placed successfully, Please check your email", {
-                        duration: 5000
-                    });
-                    setIsContentLoading(false)
-                    navigate('/account/order-history')
-                    setCartData([])
-                }
-            }).catch((error) => {
-                setIsContentLoading(false)
-            })
-    }
+    //             headers: {
+    //                 ...headers,
+    //                 ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
+    //             }
+    //         }).then((res) => {
+    //             if (res) {
+    //                 toast.success("Order Placed successfully, Please check your email", {
+    //                     duration: 5000
+    //                 });
+    //                 setIsContentLoading(false)
+    //                 navigate('/account/order-history')
+    //                 setCartData([])
+    //             }
+    //         }).catch((error) => {
+    //             setIsContentLoading(false)
+    //         })
+    // }
     return (
         <>
             {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}
@@ -195,6 +195,8 @@ function CartPage() {
 
             <ManageAddress
                 cartData={cartData}
+                setCartData={setCartData}
+                setCartBtnClick={setCartBtnClick}
                 addressModalShow={addressModalShow}
                 setAddressModalShow={setAddressModalShow} />
 
