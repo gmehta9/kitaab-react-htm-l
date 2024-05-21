@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { Button, Dropdown, Image, Nav, Navbar } from "react-bootstrap";
 import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,7 +13,6 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
 
     const { cartData } = useContext(MainContext)
 
-
     const dispatch = useDispatch();
 
     const location = useLocation();
@@ -22,8 +21,9 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
     const handleLoginClick = () => {
         dispatch(openLoginModal());
     };
-    const logoutHandler = () => {
-        Auth.logout()
+    const logoutHandler = useCallback(() => {
+
+        // Auth.logout()
         axiosInstance.get("auth/sign-out", {
             headers: {
                 ...headers,
@@ -31,17 +31,20 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
             }
         }).then((res) => {
             if (res) {
+                Auth.logout()
                 navigate('/')
                 toast.success('Logout successfully.')
                 setIsUserLoggedIn(false)
             }
         }).catch((error) => {
+            Auth.logout()
             navigate('/')
             setIsUserLoggedIn(false)
             // setLoading(false);
         });
 
-    }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isUserLoggedIn])
 
     useEffect(() => {
         window.scrollTo(0, 0)
