@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../redux/authModalSlice";
 
-function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoading }) {
+function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoading, isContentLoading }) {
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, reset, setFocus, formState: { errors } } = useForm({ mode: 'onChange' })
     const dispatch = useDispatch();
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
@@ -16,11 +16,13 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoadi
             headers: headers,
         }).then((res) => {
             if (res) {
-                setIsContentLoading(false)
                 toast.success("Password successfully sent to email!");
-
+                reset()
+                setIsContentLoading(false)
+                setForgotShowModal(false)
             }
         }).catch((error) => {
+            setFocus('email')
             setIsContentLoading(false)
         });
     }
@@ -69,6 +71,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoadi
                             className="px-4 mb-3"
                             variant="primary"
                             type="submit"
+                            disabled={isContentLoading}
                         >
                             Submit
                         </Button>
