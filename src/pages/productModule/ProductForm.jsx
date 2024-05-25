@@ -60,7 +60,8 @@ function ProductForm() {
                 Authorization: `Bearer ${Auth.token()}`
             },
         }).then((res) => {
-            return res
+            console.log(res);
+            return res.data.image
             // upload_profile_image
         }).catch((error) => {
             setIsContentLoading(false)
@@ -79,10 +80,11 @@ function ProductForm() {
         if (data.file[0]) {
             const responseImg = await FileUploadhandler(data.file[0], 'product')
             if (!responseImg) {
+
                 return
             }
-            console.log('responseImg.image', responseImg.image);
-            body = { ...data, image: responseImg.image }
+            console.log('responseImg.image', responseImg);
+            body = { ...data, image: responseImg }
         }
 
         delete body['file'];
