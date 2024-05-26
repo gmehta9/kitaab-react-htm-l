@@ -17,7 +17,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
 
     const orderPlacesHandler = (data) => {
 
-        // const order = cartData.map(item => ({ product_id: item.id, quantity: item.quantity }));
+        // const isOrderReadyAvaible = cartData.some(item => (item.isReadyForOrder));
+
+        // if (!isOrderReadyAvaible) {
+        //     toast.error("No order Selected in cart!", {
+        //         duration: 2000
+        //     });
+        //     return
+        // }
+
         const order = cartData.map(item => item.id);
         axiosInstance['post']('order', {
             ...data,

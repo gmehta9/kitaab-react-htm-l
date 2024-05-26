@@ -10,6 +10,7 @@ import Auth from "../../auth/Auth";
 import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../redux/authModalSlice";
+import toast from "react-hot-toast";
 
 
 function CartPage() {
@@ -43,6 +44,22 @@ function CartPage() {
             const cd = cartData.filter((item) => (item?.product_id || item?.id) !== (obj?.product_id || obj.id))
             setCartData(cd)
         }
+    }
+
+    const proccedNextHandler = () => {
+        if (!useLoggedIN) {
+            dispatch(openLoginModal())
+            return
+        }
+        const isOrderReadyAvaible = cartData.some(item => (item.isReadyForOrder));
+
+        if (!isOrderReadyAvaible) {
+            toast.error("No order selected in cart!", {
+                duration: 2000
+            });
+            return
+        }
+        setAddressModalShow(true)
     }
 
     // const cartQtyHandler = (event, object) => {
@@ -102,6 +119,16 @@ function CartPage() {
     //             setIsContentLoading(false)
     //         })
     // }
+
+    const isReadyHandler = (event, cd) => {
+        const { checked } = event.target
+        const updateCart = cartData.map(item => {
+            item.isReadyForOrder = checked
+            return item
+        })
+        setCartData(updateCart)
+    }
+
     return (
         <>
             {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}
@@ -120,6 +147,7 @@ function CartPage() {
 
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>#</th>
                                         <th>Book Name</th>
                                         <th>Author</th>
@@ -131,12 +159,30 @@ function CartPage() {
                                 <tbody>
                                     {cartData?.length === 0 &&
                                         <tr>
-                                            <td colSpan={5} className="text-center">Cart is Empty</td>
+                                            <td colSpan={6} className="text-center">Cart is Empty</td>
                                         </tr>
                                     }
 
                                     {cartData?.map((catData, index) =>
                                         <tr key={index + 'catdata'}>
+                                            <td>
+                                                <div className="form-check">
+                                                    <label className="check-box-container">
+                                                        <input type="checkbox"
+                                                            onChange={(event) => isReadyHandler(event, catData)}
+                                                            checked={catData.isReadyForOrder}
+                                                        />
+                                                        <span className="checkmark"></span>
+                                                    </label>
+                                                    {/* <input
+                                                        id={`id+${index}`}
+                                                        className="form-check-input"
+                                                        type="checkbox" />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor={`id+${index}`}></label> */}
+                                                </div>
+                                            </td>
                                             <td>{index + 1}</td>
                                             <td className="text-capitalize">{catData?.title || catData?.product?.title}</td>
                                             <td className="text-capitalize">
@@ -177,11 +223,8 @@ function CartPage() {
                                 disabled={cartData?.length === 0}
                                 className="ml-auto"
                                 onClick={() => {
-                                    if (!useLoggedIN) {
-                                        dispatch(openLoginModal())
-                                        return
-                                    }
-                                    setAddressModalShow(true)
+                                    proccedNextHandler()
+
                                 }
                                     // orderPlacesHandler
                                 }

@@ -55,10 +55,10 @@ export const MainProvider = ({ children }) => {
 
     const cartUpdateHandler = debounce((event) => {
         cartApiHandlder()
-    }, 1000)
+    }, 1500)
 
     useEffect(() => {
-        if (Auth.isUserAuthenticated() && cartData.length > 0) {
+        if (Auth.isUserAuthenticated() && cartBtnClick > 0) {
             cartUpdateHandler()
             return () => {
                 cartUpdateHandler.cancel();

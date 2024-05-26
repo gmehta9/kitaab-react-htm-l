@@ -41,7 +41,7 @@ function AddToCartButton(props) {
                 duration: 2000,
                 position: 'top-right'
             });
-            setCartData([...cartData, { ...obj, quantity: 1 }]);
+            setCartData([...cartData, { ...obj, quantity: 1, isReadyForOrder: true }]);
         }
 
     }

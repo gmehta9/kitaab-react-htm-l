@@ -11,7 +11,7 @@ function OrderSuccess() {
                         <div className="success-container rounded-4 pb-4">
 
                             <br />
-                            <div className="checkmark">
+                            <div className="checkmark-succ">
                                 <svg className="animated-check" viewBox="0 0 24 24">
                                     <path d="M4.1 12.7L9 17.6 20.3 6.3" fill="none" /> </svg>
                             </div>

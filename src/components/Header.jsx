@@ -68,9 +68,9 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
                     {/* <Navbar.Toggle></Navbar.Toggle> */}
                     <button onClick={() => setMenuShow(!menuShow)} className="menu-toggle d-flex d-lg-none d-xl-none">
                         {menuShow ?
-                            <i class='bx bx-x'></i>
+                            <i className='bx bx-x'></i>
                             :
-                            <i class='bx bx-menu'></i>
+                            <i className='bx bx-menu'></i>
                         }
                     </button>
 

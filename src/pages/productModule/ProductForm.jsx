@@ -204,7 +204,7 @@ function ProductForm() {
                 <span
                     onClick={() => navigate(-1)}
                     className="mr-2 btn p-0">
-                    <i class='bx bx-arrow-back '></i>
+                    <i className='bx bx-arrow-back '></i>
                 </span>
                 {location?.state?.pId ? 'Edit' : 'Add'} Book</h2>
             <form className="mb-4" onSubmit={handleSubmit(productFormHandler)}>
