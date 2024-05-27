@@ -54,8 +54,8 @@ function CartPage() {
         const isOrderReadyAvaible = cartData.some(item => (item.isReadyForOrder));
 
         if (!isOrderReadyAvaible) {
-            toast.error("No order selected in cart!", {
-                duration: 2000
+            toast.error("No product selected in the cart for place order!", {
+                duration: 4000
             });
             return
         }
@@ -121,9 +121,12 @@ function CartPage() {
     // }
 
     const isReadyHandler = (event, cd) => {
+        console.log(cd);
         const { checked } = event.target
         const updateCart = cartData.map(item => {
-            item.isReadyForOrder = checked
+            if (item?.product_id === cd?.product_id || cd === 'all') {
+                item.isReadyForOrder = checked
+            }
             return item
         })
         setCartData(updateCart)
@@ -147,7 +150,17 @@ function CartPage() {
 
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th>
+                                            <div className="form-check">
+                                                <label className="check-box-container">
+                                                    <input type="checkbox"
+                                                        onChange={(event) => isReadyHandler(event, 'all')}
+                                                    // checked={catData.isReadyForOrder}
+                                                    />
+                                                    <span className="checkmark"></span>
+                                                </label>
+                                            </div>
+                                        </th>
                                         <th>#</th>
                                         <th>Book Name</th>
                                         <th>Author</th>
