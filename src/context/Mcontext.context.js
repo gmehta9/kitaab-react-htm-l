@@ -9,10 +9,12 @@ const MainContext = createContext(null);
 export const MainProvider = ({ children }) => {
 
     const [cartData, setCartData] = useState([]);
+    const [isCartLoading, setIsCartLoading] = useState(false)
     const [copyCartData, setCopyCartData] = useState([]);
     const [cartBtnClick, setCartBtnClick] = useState(0);
 
     const getCartApiHandlder = () => {
+        setIsCartLoading(true)
         axiosInstance['get']('cart', {
             headers: {
                 ...headers,
@@ -21,10 +23,12 @@ export const MainProvider = ({ children }) => {
         }).then((res) => {
             if (res) {
                 console.log(res);
+                setIsCartLoading(false)
                 setCartData(res.data)
                 setCopyCartData(res.data)
             }
         }).catch((error) => {
+            setIsCartLoading(false)
         });
     }
 
@@ -76,7 +80,8 @@ export const MainProvider = ({ children }) => {
                 cartBtnClick,
                 setCartBtnClick,
                 copyCartData,
-                setCopyCartData
+                setCopyCartData,
+                isCartLoading
             }}>
             {children}
         </MainContext.Provider>

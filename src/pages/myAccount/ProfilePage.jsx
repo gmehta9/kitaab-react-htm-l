@@ -4,6 +4,7 @@ import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import Auth from "../../auth/Auth";
 import { axiosInstance, headers } from "../../axios/axios-config";
+import toast from "react-hot-toast";
 
 function ProfilePage() {
     const { setIsContentLoading } = useOutletContext()
@@ -25,7 +26,7 @@ function ProfilePage() {
                 setIsContentLoading(false)
                 const t = Auth.token()
                 const u = Auth.loggedInUser()
-
+                toast.success('Profile updated successfully.')
                 Auth.login({
                     user: {
                         ...u,

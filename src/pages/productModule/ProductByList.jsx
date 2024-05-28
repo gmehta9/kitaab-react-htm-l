@@ -48,7 +48,8 @@ function ProductByList() {
             params.searching = search
         }
         if (author) {
-            params['author[0]'] = author
+            // params['author[0]'] = author
+            params['auther_searching'] = author
         }
         if (searchByState) {
             params['state'] = searchByState

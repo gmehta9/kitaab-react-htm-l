@@ -1,8 +1,8 @@
 // import { useNavigate, useOutletContext } from "react-router-dom";
-import { Button, Col, Container, Row, Table } from "react-bootstrap";
+import { Button, Col, Container, Row, Spinner, Table } from "react-bootstrap";
 // import Header from "../components/Header";
 // import toast from "react-hot-toast";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import MainContext from "../../context/Mcontext.context";
 // import { axiosInstance, headers } from "../../axios/axios-config";
@@ -17,8 +17,8 @@ function CartPage() {
     // const navigate = useNavigate()
     const dispatch = useDispatch();
     const [addressModalShow, setAddressModalShow] = useState(false)
-    // const [isInnerPageLoading, setIsInnerPageLoading] = useState(false)
-    const { cartData, setCartData, cartBtnClick, setCartBtnClick } = useContext(MainContext)
+
+    const { cartData, setCartData, cartBtnClick, setCartBtnClick, isCartLoading } = useContext(MainContext)
     // const { setIsContentLoading } = useOutletContext()
 
     const useLoggedIN = Auth.loggedInUser();
@@ -124,7 +124,7 @@ function CartPage() {
         console.log(cd);
         const { checked } = event.target
         const updateCart = cartData.map(item => {
-            if (item?.product_id === cd?.product_id || cd === 'all') {
+            if ((item?.product_id || item.id) === (cd?.product_id || cd?.id) || cd === 'all') {
                 item.isReadyForOrder = checked
             }
             return item
@@ -170,13 +170,23 @@ function CartPage() {
                                 </thead>
 
                                 <tbody>
-                                    {cartData?.length === 0 &&
+                                    {!isCartLoading && cartData?.length === 0 &&
                                         <tr>
                                             <td colSpan={6} className="text-center">Cart is Empty</td>
                                         </tr>
                                     }
+                                    {isCartLoading && cartData?.length === 0 &&
+                                        <tr>
+                                            <td colSpan={6} className="text-center">
+                                                <Spinner
+                                                    className="mx-auto"
+                                                    animation="border"
+                                                    variant="secondary" />
+                                            </td>
+                                        </tr>
+                                    }
 
-                                    {cartData?.map((catData, index) =>
+                                    {!isCartLoading && cartData?.map((catData, index) =>
                                         <tr key={index + 'catdata'}>
                                             <td>
                                                 <div className="form-check">
