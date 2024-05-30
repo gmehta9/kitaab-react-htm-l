@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Image, Row } from "react-bootstrap";
+import { Alert, Col, Image, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -74,6 +74,11 @@ function ProductByID() {
                 </Row>
                 :
                 <>
+                    {productDetail.is_approved === '0' &&
+                        <Alert variant={'warning'}>
+                            Booking approval is pending
+                        </Alert>
+                    }
                     <Row className="mt-5">
                         <Col xl={4} md={4}>
 
@@ -87,7 +92,9 @@ function ProductByID() {
 
                         </Col>
                         <Col xl={8} md={8}>
-
+                            <div className="">
+                                Refrence ID :  {productDetail?.unique_id}
+                            </div>
                             <div className="product">
                                 <div className="product-heading text-capitalize">{productDetail?.title}</div>
                                 <div className="product-short-detail" dangerouslySetInnerHTML={{ __html: productDetail?.short_description }}></div>

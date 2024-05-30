@@ -54,6 +54,9 @@ function ProductByList() {
         if (searchByState) {
             params['state'] = searchByState
         }
+        if (location.state === 'Sell/Share') {
+            params.user_id = Auth.loggedInUser().id
+        }
         if (searchByCity) {
             params['city'] = searchByCity
         }
