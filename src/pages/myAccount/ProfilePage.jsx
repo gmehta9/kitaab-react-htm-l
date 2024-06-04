@@ -11,7 +11,7 @@ function ProfilePage() {
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
 
-    const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const profileUpdateHandler = (data) => {
 
@@ -40,7 +40,7 @@ function ProfilePage() {
         });
     }
 
-    const getProfileUpdateHandler = () => {
+    const getProfileUpdateHandler = (sl) => {
         setIsContentLoading(true)
         axiosInstance.get(`auth/profile`, {
             headers: {
@@ -49,8 +49,14 @@ function ProfilePage() {
             }
         }).then((response) => {
             if (response) {
-                // console.log(response);
-                const user = response?.data
+                const user = response?.data;
+
+                sl.forEach(element => {
+                    if (element.value === user?.state) {
+                        setCityList(element.cities)
+                    }
+                });
+
                 setValue('name', user?.name)
                 setValue('phone_number', user?.phone_number)
                 setValue('email', user?.email)
@@ -75,24 +81,25 @@ function ProfilePage() {
             return response.json();
         }).then(function (myJson) {
             setStateList(myJson)
+            getProfileUpdateHandler(myJson)
         })
-        getProfileUpdateHandler()
+
+        // setTimeout(() => {
+
+        // }, 1000);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    useEffect(() => {
-        if (watch('state')) {
+    // useEffect(() => {
+    //     if (watch('state')) {
+    //         // console.log('stateList', stateList);
+    //         // console.log(`getValues('city')`, getValues('city'), watch('state'))
 
-            stateList.forEach(element => {
-                if (element.value === watch('state')) {
-                    setCityList(element.cities)
-                }
-            });
-        }
+    //     }
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [watch('state'), stateList]);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [stateList, watch('state')]);
 
     // useEffect(() => {
     //     if (userLogin) {
@@ -212,6 +219,7 @@ function ProfilePage() {
                                     </InputGroup.Text>
                                     <Form.Select
                                         className="form-control"
+                                        value={watch('state')}
                                         {...register('state', {
                                             required: true
                                         })}
@@ -228,17 +236,21 @@ function ProfilePage() {
                                     <InputGroup.Text id="basic-addon1" className="border-right-0 icon-input">
                                         <i className='bx bx-current-location' ></i>
                                     </InputGroup.Text>
+
                                     <Form.Select
                                         className="form-control"
+                                        value={watch('city')}
                                         {...register('city', {
                                             required: true
                                         })}
                                     >
+
                                         <option value=''>Select City</option>
                                         {cityList && cityList.map((city, index) =>
                                             <option key={index + 'cty'} value={city?.value}>{city?.label}</option>
                                         )}
                                     </Form.Select>
+
                                 </InputGroup>
 
                             </Col>
