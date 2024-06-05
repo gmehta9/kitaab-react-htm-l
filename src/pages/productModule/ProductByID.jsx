@@ -74,7 +74,7 @@ function ProductByID() {
                 </Row>
                 :
                 <>
-                    {productDetail.is_approved === '0' &&
+                    {productDetail?.is_approved === '0' &&
                         <Alert variant={'warning'}>
                             Booking approval is pending
                         </Alert>

@@ -44,7 +44,7 @@ function ProductItemUI({ items, className, isEditAble }) {
     return (
         <Col className={className}>
             <div className="book-card clickable position-relative" >
-                {items.is_approved === '0' &&
+                {items?.is_approved === '0' &&
                     <span onClick={() => ClikedItem(items.id)} className="position-absolute approval-status">Pending For Approval</span>
                 }
 

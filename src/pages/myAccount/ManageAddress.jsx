@@ -27,6 +27,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
         // }
 
         const order = cartData.map(item => item.id);
+
         axiosInstance['post']('order', {
             ...data,
             shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',

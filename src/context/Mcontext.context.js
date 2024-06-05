@@ -43,6 +43,7 @@ export const MainProvider = ({ children }) => {
             }
         }).then((res) => {
             if (res) {
+                getCartApiHandlder()
                 setCopyCartData(cartData)
             }
         }).catch((error) => {
