@@ -84,22 +84,21 @@ function ProfilePage() {
             getProfileUpdateHandler(myJson)
         })
 
-        // setTimeout(() => {
-
-        // }, 1000);
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // useEffect(() => {
-    //     if (watch('state')) {
-    //         // console.log('stateList', stateList);
-    //         // console.log(`getValues('city')`, getValues('city'), watch('state'))
+    useEffect(() => {
+        if (watch('state')) {
+            stateList.forEach(element => {
+                if (element.value === watch('state')) {
+                    setCityList(element.cities)
+                }
+            });
 
-    //     }
+        }
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [stateList, watch('state')]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [stateList, watch('state')]);
 
     // useEffect(() => {
     //     if (userLogin) {

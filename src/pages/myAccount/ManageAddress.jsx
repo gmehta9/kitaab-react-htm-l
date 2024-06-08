@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
@@ -6,10 +6,12 @@ import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData }) {
+function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData, setIsContentLoading }) {
     const navigate = useNavigate()
     const userLogin = Auth.loggedInUser()
-    const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, setValue, watch, getValues, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const [stateList, setStateList] = useState([]);
+    const [cityList, setCityList] = useState([]);
 
     const handleClose = () => {
         setAddressModalShow(false)
@@ -27,7 +29,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
         // }
 
         const order = cartData.map(item => item.id);
-
+        setIsContentLoading(true)
         axiosInstance['post']('order', {
             ...data,
             shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
@@ -46,15 +48,15 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                 setCartBtnClick(1 + 9)
                 setCartData([])
                 handleClose()
+                setIsContentLoading(false)
                 navigate('/account/order-history')
-
             }
         }).catch((error) => {
-            // setIsContentLoading(false)
+            setIsContentLoading(false)
         })
     }
 
-    const ProfileAddressHandler = () => {
+    const ProfileAddressHandler = (sl) => {
         axiosInstance.get(`auth/profile`, {
             headers: {
                 ...headers,
@@ -64,6 +66,11 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
             if (response) {
 
                 const user = response?.data
+                sl.forEach(element => {
+                    if (element.value === user?.state) {
+                        setCityList(element.cities)
+                    }
+                });
                 setValue('shipping_name', user?.name)
                 setValue('shipping_phone_no', user?.phone_number)
                 setValue('shipping_email', user?.email)
@@ -75,41 +82,35 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
         });
     }
 
-    // const addressSubmitHandler = (data) => {
-    //     axiosInstance['post']('auth/profile', data, {
-    //         headers: {
-    //             ...headers,
-    //             Authorization: `Bearer ${Auth.token()}`,
-    //         }
-    //     }).then((res) => {
-    //         if (res) {
-    //             if (data.address) {
-    //                 const t = Auth.token()
-    //                 const u = Auth.loggedInUser()
-
-    //                 Auth.login({
-    //                     user: {
-    //                         ...u,
-    //                         is_address: true
-    //                     },
-    //                     token: t
-    //                 })
-    //                 handleClose()
-    //                 toast.success("Address updated successfully!");
-    //             }
-    //         }
-    //     }).catch((error) => {
-    //     });
-    // }
     useEffect(() => {
-        // if (userLogin) {
-        //     console.log(userLogin);
-        //     setValue('name', userLogin?.name)
-        //     setValue('phone_number', userLogin?.phone_number)
-        //     setValue('email', userLogin?.email)
-        //     setValue('city', userLogin?.city)
-        //     setValue('state', userLogin?.state)
-        // }
+        fetch('cityState.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            setStateList(myJson)
+            ProfileAddressHandler(myJson)
+        })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        if (watch('shipping_state')) {
+            stateList.forEach(element => {
+                if (element.value === watch('shipping_state')) {
+                    setCityList(element.cities)
+                }
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [stateList, watch('shipping_state')]);
+
+    useEffect(() => {
+
         if (userLogin) {
             ProfileAddressHandler()
         }
@@ -142,10 +143,10 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             id="self"
                                             className="d-none"
                                             type="radio"
-                                            name="order_type"
+                                            name="shipping_order_type"
                                             value={'self_pickup'}
                                             {...register('shipping_order_type', {
-                                                required: 'Please enter your phone or email.'
+                                                required: 'Field required.'
                                             })} />
                                         <label htmlFor="self" className="rounded-3 border w-75 p-3 link">
                                             Self Pickup
@@ -158,16 +159,21 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             id="paid"
                                             className="d-none"
                                             type="radio"
-                                            name="order_type"
+                                            name="shipping_order_type"
                                             value={'paid_delivery'}
                                             {...register('shipping_order_type', {
-                                                required: 'Please enter your phone or email.'
+                                                required: 'Field required.'
                                             })} />
                                         <label htmlFor="paid" className="rounded-3 border w-75 p-3">
                                             Paid Delivery
                                         </label>
                                     </div>
                                 </Col>
+                                {errors?.shipping_name &&
+                                    <span className="text-danger small position-absolute">
+                                        {errors?.shipping_name?.message}
+                                    </span>
+                                }
                             </Row>
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
@@ -251,35 +257,20 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                             <Row>
                                 <Col lg="4">
                                     <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                        <Form.Label>City</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            autoComplete="false"
-                                            {...register('shipping_city', {
-                                                required: 'Please enter your city.'
-                                            })}
-                                            placeholder="Enter your city."
-                                            autoFocus
-                                        />
-                                        {errors?.shipping_city &&
-                                            <span className="text-danger small position-absolute">
-                                                {errors?.shipping_city?.message}
-                                            </span>
-                                        }
-                                    </Form.Group>
-                                </Col>
-                                <Col lg="4">
-                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                         <Form.Label>State</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            autoComplete="false"
+
+                                        <Form.Select
+                                            className="form-control"
+                                            value={watch('shipping_state')}
                                             {...register('shipping_state', {
-                                                required: 'Please enter state.'
+                                                required: 'Please select state.'
                                             })}
-                                            placeholder="Enter your state."
-                                            autoFocus
-                                        />
+                                        >
+                                            <option value=''>Select State</option>
+                                            {stateList.map((state, index) =>
+                                                <option key={index + 'st'} value={state.value}>{state.label}</option>
+                                            )}
+                                        </Form.Select>
                                         {errors?.shipping_state &&
                                             <span className="text-danger small position-absolute">
                                                 {errors?.shipping_state?.message}
@@ -287,6 +278,30 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                         }
                                     </Form.Group>
                                 </Col>
+                                <Col lg="4">
+                                    <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
+                                        <Form.Label>City</Form.Label>
+
+                                        <Form.Select
+                                            className="form-control"
+                                            value={watch('shipping_city')}
+                                            {...register('shipping_city', {
+                                                required: 'Please select city.'
+                                            })}
+                                        >
+                                            <option value=''>Select City</option>
+                                            {cityList && cityList.map((city, index) =>
+                                                <option key={index + 'cty'} value={city?.value}>{city?.label}</option>
+                                            )}
+                                        </Form.Select>
+                                        {errors?.shipping_city &&
+                                            <span className="text-danger small position-absolute">
+                                                {errors?.shipping_city?.message}
+                                            </span>
+                                        }
+                                    </Form.Group>
+                                </Col>
+
 
                                 <Col lg="4">
                                     <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">

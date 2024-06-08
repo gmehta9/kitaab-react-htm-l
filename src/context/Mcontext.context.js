@@ -24,7 +24,11 @@ export const MainProvider = ({ children }) => {
             if (res) {
                 console.log(res);
                 setIsCartLoading(false)
-                setCartData(res.data)
+                const upList = res.data.map((itm) => {
+                    itm.isReadyForOrder = true
+                    return itm
+                })
+                setCartData(upList)
                 setCopyCartData(res.data)
             }
         }).catch((error) => {

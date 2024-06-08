@@ -262,7 +262,7 @@ function HomePage() {
                         No product found!
                     </div>
                 }
-                <Row lg={"5"} md={"4"} sm={"2"} xs={"2"}>
+                <Row lg={"5"} md={"4"} sm={"2"} xs={"2"} className="justify-content-center">
 
                     {productList && productList.map((items, index) =>
                         <React.Fragment key={index + 'prd'}>

@@ -10,7 +10,7 @@ function BuyOrdersList({ orderList, contentLoading, pagination, setModalShow, se
                         <th>#</th>
                         <th>Order ID</th>
                         <th>Order Title</th>
-                        <th>Order Quantity</th>
+                        <th>Author</th>
                         <th>Action</th>
                     </tr>
                 </thead>

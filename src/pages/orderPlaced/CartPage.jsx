@@ -11,6 +11,7 @@ import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../redux/authModalSlice";
 import toast from "react-hot-toast";
+import { useOutletContext } from "react-router-dom";
 
 
 function CartPage() {
@@ -19,7 +20,7 @@ function CartPage() {
     const [addressModalShow, setAddressModalShow] = useState(false)
 
     const { cartData, setCartData, cartBtnClick, setCartBtnClick, isCartLoading } = useContext(MainContext)
-    // const { setIsContentLoading } = useOutletContext()
+    const { setIsContentLoading } = useOutletContext()
 
     const useLoggedIN = Auth.loggedInUser();
 
@@ -197,13 +198,7 @@ function CartPage() {
                                                         />
                                                         <span className="checkmark"></span>
                                                     </label>
-                                                    {/* <input
-                                                        id={`id+${index}`}
-                                                        className="form-check-input"
-                                                        type="checkbox" />
-                                                    <label
-                                                        className="form-check-label"
-                                                        htmlFor={`id+${index}`}></label> */}
+
                                                 </div>
                                             </td>
                                             <td>{index + 1}</td>
@@ -264,7 +259,8 @@ function CartPage() {
                 setCartData={setCartData}
                 setCartBtnClick={setCartBtnClick}
                 addressModalShow={addressModalShow}
-                setAddressModalShow={setAddressModalShow} />
+                setAddressModalShow={setAddressModalShow}
+                setIsContentLoading={setIsContentLoading} />
 
         </>
     )

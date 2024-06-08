@@ -21,7 +21,7 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
 
     useEffect(() => {
         window.addEventListener("scroll", (event) => {
-            if (window.scrollY > 100) {
+            if (window.scrollY > 50) {
                 setPageScroll('page-scrolled')
             } else {
                 setPageScroll('')
