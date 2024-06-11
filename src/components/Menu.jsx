@@ -131,7 +131,27 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 className="border-bottom py-2 pl-3">
                                 <i className='bx bx-notepad'></i> Sell History
                             </Dropdown.Item>
-
+                            <Dropdown.Item
+                                onClick={() => {
+                                    if (!isUserLoggedIn) {
+                                        handleLoginClick()
+                                    } else {
+                                        navigate('/account/chat')
+                                    }
+                                }} className="border-bottom py-2 pl-3">
+                                <i className='bx bx-chat'></i> Chat
+                            </Dropdown.Item>
+                            <Dropdown.Item
+                                onClick={() => {
+                                    if (!isUserLoggedIn) {
+                                        handleLoginClick()
+                                    } else {
+                                        navigate('/account/wishlist')
+                                    }
+                                }}
+                                className="border-bottom py-2 pl-3">
+                                <i className='bx bx-heart'></i> Wish List
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <Nav.Link
@@ -178,12 +198,12 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
                                     <i className='bx bxs-user-account'></i> Account
                                 </Dropdown.Item>
-                                <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
+                                {/* <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
                                     <i className='bx bx-chat'></i> Chat
                                 </Dropdown.Item>
                                 <Dropdown.Item href="#/account/wishlist" className="border-bottom py-2 pl-3">
                                     <i className='bx bx-heart'></i> Wish List
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                                 {isUserLoggedIn &&
                                     <>
                                         <Dropdown.Item href="#/product/add" className="border-bottom py-2 pl-3">

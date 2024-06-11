@@ -42,8 +42,8 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                             <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
                             <td>{ord.unique_id || ('ord-' + ord.id)}</td>
                             <td>{ord.title}</td>
-                            <td>{'--'}</td>
                             <td>{ord?.auther}</td>
+                            <td>{'--'}</td>
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)
