@@ -21,7 +21,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
     const [city, setCity] = useState()
     const [state, setState] = useState()
     const selectInputRef = useRef()
-    const { register, handleSubmit, reset, resetField, setValue, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, reset, resetField, setValue, clearErrors, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
@@ -55,17 +55,6 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
-
-    // useEffect(() => {
-    //     if (state?.value && city?.value) {
-    //         setCity(null)
-    //         // selectInputRef.current.clearValue()
-    //     }
-
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [state])
-
 
 
     return (
@@ -228,11 +217,13 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
                                     <Select
                                         options={stateList}
                                         value={state}
+                                        name="state"
                                         onChange={(e) => {
                                             setState(e)
                                             setValue('state', e.value)
                                             setCity(null)
-                                            resetField('city')
+                                            clearErrors('state')
+                                            setValue('city', '')
                                             setCityList(e.cities)
                                         }}
                                     />
@@ -253,6 +244,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
                                         value={city}
                                         onChange={(e) => {
                                             setCity(e)
+                                            clearErrors('city')
                                             setValue('city', e.value)
                                         }}
                                     />
