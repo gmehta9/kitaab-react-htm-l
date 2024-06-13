@@ -64,6 +64,16 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                             </div>
                         </div>
                     </div>
+
+                    <div className="row my-4 px-3">
+                        <div className="col-md-12">
+                            <div className="alert bg-info p-1 text-center " role="alert">
+                                <span className="font-weight-bold">Order Type:</span>    {data?.shipping_order_type === 'self_pickup' ? 'Self Pickup' : 'Paid Delivery'}
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div className="row table-responsive">
 
                         <Table>
