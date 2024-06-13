@@ -83,8 +83,8 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                                     <th>Order Image</th>
                                     <th>Order Title</th>
                                     <th>Author</th>
-                                    <th>Order Transec type</th>
-                                    <th>Order Price</th>
+                                    <th>Transact Type</th>
+                                    <th>Price</th>
                                 </tr>
                             </thead>
                             <tbody>
