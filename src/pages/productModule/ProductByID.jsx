@@ -125,8 +125,9 @@ function ProductByID() {
                                 <div className="">
                                     <span className="font-weight-bold">Author:</span> <span className="text-capitalize">{productDetail?.auther}</span>
                                 </div>
+
                                 <div className="">
-                                    <span className="font-weight-bold">Author City:</span> <span className="text-capitalize">{productDetail?.city}</span>
+                                    <span className="font-weight-bold">Seller's City:</span> <span className="text-capitalize">{productDetail?.city}</span>
                                 </div>
 
 

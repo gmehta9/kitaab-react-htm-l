@@ -11,7 +11,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                         <th>Order ID</th>
                         <th>Order Title</th>
                         <th>Author</th>
-                        <th>Buyer Id </th>
+                        {/* <th>Buyer Id </th> */}
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -43,7 +43,7 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                             <td>{ord.unique_id || ('ord-' + ord.id)}</td>
                             <td>{ord.title}</td>
                             <td>{ord?.auther}</td>
-                            <td>{'--'}</td>
+                            {/* <td>{'--'}</td> */}
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)
