@@ -484,6 +484,10 @@ $secondry: #868686;
         position: relative;
         line-height: 1;
         cursor: pointer;
+        padding: 10px 15px 10px 60px;
+        height: 60px;
+        align-items: center;
+        display: grid;
 
         &::before {
             content: '';
@@ -492,7 +496,7 @@ $secondry: #868686;
             border: 1px solid #6B6B6B;
             border-radius: 50%;
             position: absolute;
-            left: 18%;
+            left: 10%;
             top: 50%;
             transform: translate(0, -50%);
         }

@@ -19,16 +19,14 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
 
     const orderPlacesHandler = (data) => {
 
-        // const isOrderReadyAvaible = cartData.some(item => (item.isReadyForOrder));
+        const order = cartData.filter(cd => cd.isReadyForOrder).map(item => item.id);
 
-        // if (!isOrderReadyAvaible) {
-        //     toast.error("No order Selected in cart!", {
-        //         duration: 2000
-        //     });
-        //     return
-        // }
-
-        const order = cartData.map(item => item.id);
+        if (!order || order?.length === 0) {
+            toast.error("No order Selected in cart!", {
+                duration: 2000
+            });
+            return
+        }
         setIsContentLoading(true)
         axiosInstance['post']('order', {
             ...data,
@@ -148,7 +146,9 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             {...register('shipping_order_type', {
                                                 required: 'Field required.'
                                             })} />
-                                        <label htmlFor="self" className="rounded-3 border w-75 p-3 link">
+                                        <label
+                                            htmlFor="self"
+                                            className={`rounded-3 text-left border w-75 link  ${errors?.shipping_order_type && 'border-danger'}`}>
                                             Self Pickup
                                         </label>
                                     </div>
@@ -164,16 +164,19 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             {...register('shipping_order_type', {
                                                 required: 'Field required.'
                                             })} />
-                                        <label htmlFor="paid" className="rounded-3 border w-75 p-3">
-                                            Paid Delivery
+                                        <label
+                                            htmlFor="paid"
+                                            className={`rounded-3 text-left border w-75 ${errors?.shipping_order_type && 'border-danger'}`}>
+                                            Paid Delivery <span className="small">(only in Delhi-NCR)</span>
                                         </label>
                                     </div>
                                 </Col>
-                                {errors?.shipping_name &&
-                                    <span className="text-danger small position-absolute">
-                                        {errors?.shipping_name?.message}
-                                    </span>
-                                }
+                                <Col xs="12" className="position-relative pb-3">
+                                    {errors?.shipping_order_type &&
+                                        <span className="text-danger small position-absolute">
+                                            {errors?.shipping_order_type?.message}
+                                        </span>
+                                    }</Col>
                             </Row>
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">

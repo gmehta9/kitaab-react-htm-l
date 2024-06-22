@@ -221,7 +221,6 @@ function CartPage() {
                                                     (catData?.sale_price || catData?.product?.sale_price) || (catData?.price || catData?.product?.price)
                                                     : '0'
                                                 }
-
                                             </td>
                                             <td>
                                                 <button
@@ -242,7 +241,6 @@ function CartPage() {
                                 className="ml-auto"
                                 onClick={() => {
                                     proccedNextHandler()
-
                                 }
                                     // orderPlacesHandler
                                 }

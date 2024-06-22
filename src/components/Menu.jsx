@@ -1,5 +1,5 @@
-import { useCallback, useContext, useEffect } from "react";
-import { Button, Dropdown, Image, Nav, Navbar } from "react-bootstrap";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Button, Dropdown, Image, Modal, Nav, Navbar } from "react-bootstrap";
 import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
 import Auth from "../auth/Auth";
@@ -17,6 +17,8 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
 
     const location = useLocation();
     const navigate = useNavigate();
+
+    const [comingSoon, setCominingSoon] = useState(false)
 
     const handleLoginClick = () => {
         dispatch(openLoginModal());
@@ -93,10 +95,10 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                         }}
                         className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'Sell/Share' ? 'text-primary' : ''}`}>Sell/Share</Nav.Link>
                     <Nav.Link
-                        onClick={() => alert('In progress')}
+                        onClick={() => setCominingSoon(true)}
                         className="mr-lg-5 mb-0 h4 align-self-lg-center">Community</Nav.Link>
                     <Nav.Link
-                        onClick={() => alert('In progress')}
+                        onClick={() => setCominingSoon(true)}
                         className="mr-lg-5 mb-0 h4 align-self-lg-center">Library</Nav.Link>
                     {/* <Nav.Link
                                 onClick={() => alert('In progress')}
@@ -132,13 +134,8 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 <i className='bx bx-notepad'></i> Sell History
                             </Dropdown.Item>
                             <Dropdown.Item
-                                onClick={() => {
-                                    if (!isUserLoggedIn) {
-                                        handleLoginClick()
-                                    } else {
-                                        navigate('/account/chat')
-                                    }
-                                }} className="border-bottom py-2 pl-3">
+                                onClick={() => setCominingSoon(true)}
+                                className="border-bottom py-2 pl-3">
                                 <i className='bx bx-chat'></i> Chat
                             </Dropdown.Item>
                             <Dropdown.Item
@@ -227,6 +224,20 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
 
                 </Nav>
             </Navbar.Collapse>
+            <Modal
+                show={comingSoon}
+                centered
+                onHide={() => setCominingSoon(!comingSoon)}>
+                <button
+                    style={{
+                        display: 'flex',
+                        width: '40px',
+                        position: 'absolute',
+                        right: '0'
+                    }}
+                    className="btn " onClick={() => setCominingSoon(!comingSoon)} >✖</button>
+                <Image className="w-100" src="./assets/images/coming-soon.jpg" />
+            </Modal>
         </>
     )
 }

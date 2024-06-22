@@ -34,12 +34,12 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                                 <div className="col small font-weight-bold">{data?.shipping_email}</div>
                             </div>
                             <div className="row">
-                                <div className="col-3 small">City:</div>
-                                <div className="col small font-weight-bold text-capitalize">{data?.shipping_city}</div>
+                                <div className="col-3 small">Address:</div>
+                                <div className="col small font-weight-bold">{data?.shipping_address}</div>
                             </div>
                             <div className="row">
-                                <div className="col-3 small">Address:</div>
-                                <div className="col small font-weight-bold">{data?.address}</div>
+                                <div className="col-3 small">City:</div>
+                                <div className="col small font-weight-bold text-capitalize">{data?.shipping_city}</div>
                             </div>
                         </div>
                         <div className="col-md-6">
