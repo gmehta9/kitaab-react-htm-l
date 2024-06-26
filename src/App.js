@@ -21,6 +21,10 @@ import CartPage from './pages/orderPlaced/CartPage';
 import OrderSuccess from './pages/OrderSuccess';
 import Wishlist from './pages/myAccount/Wishlist';
 import SellBuyModuleMainLayout from './pages/myAccount/sellBuyModule/SellBuyModuleMainLayout';
+import AboutPage from './pages/innerpages/About';
+import InnerPageLayout from './pages/innerpages/InnerPageLayout';
+import FAQPage from './pages/innerpages/FAQ';
+import ContactPage from './pages/innerpages/Contact';
 
 function App() {
 
@@ -108,9 +112,27 @@ function App() {
             },
           ]
         },
+        {
+          path: '',
+          element: <InnerPageLayout />,
+          children: [
+            {
+              path: 'about-us',
+              element: <AboutPage />
+            },
+            {
+              path: 'contact-us',
+              element: <ContactPage />
+            },
+            {
+              path: 'faq',
+              element: <FAQPage />
+            }
+          ]
+        }
+
       ]
     },
-
 
     {
       path: "*",

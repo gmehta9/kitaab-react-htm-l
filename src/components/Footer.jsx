@@ -18,13 +18,13 @@ function Footer() {
                             <Link className="mx-3 text-white">
                                 Home
                             </Link>
-                            <Link className="mx-3 text-white">
+                            <Link to={'/about-us'} className="mx-3 text-white">
                                 About Us
                             </Link>
-                            <Link className="mx-3 text-white">
+                            <Link to={'/contact-us'} className="mx-3 text-white">
                                 Contact us
                             </Link>
-                            <Link className="mx-3 text-white">
+                            <Link to={'/faq'} className="mx-3 text-white">
                                 FAQ's
                             </Link>
                         </div>
