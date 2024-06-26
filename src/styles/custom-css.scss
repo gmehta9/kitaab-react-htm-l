@@ -519,6 +519,12 @@ $secondry: #868686;
     }
 }
 
+.inner-search {
+    .rbt-menu.dropdown-menu.show {
+        display: none !important;
+    }
+}
+
 .form-check {
     position: relative;
 

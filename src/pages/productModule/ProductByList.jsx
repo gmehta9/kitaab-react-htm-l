@@ -141,12 +141,9 @@ function ProductByList() {
 
     useEffect(() => {
 
-        if (selectedCat || searchParams.get('st')) {
-            getProductListHandler(1, searchParams.get('st'), searchByAuthorText, searchByState, searchByCity)
-        }
-
+        getProductListHandler(1, searchParams.get('st'), searchByAuthorText, searchByState, searchByCity)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedCat, searchByAuthorText, searchByState, searchByCity])
+    }, [selectedCat, searchByAuthorText, searchByState, searchByCity, searchParams.get('st')])
 
     useEffect(() => {
         if (location?.state === 'Sell/Share') {

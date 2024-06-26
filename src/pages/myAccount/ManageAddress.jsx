@@ -75,6 +75,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                 setValue('shipping_city', user?.city)
                 setValue('shipping_state', user?.state)
                 setValue('shipping_address', user?.address)
+                setValue('shipping_pin_code', user?.pin_code)
             }
         }).catch((error) => {
         });

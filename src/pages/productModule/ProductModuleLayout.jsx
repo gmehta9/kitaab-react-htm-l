@@ -73,9 +73,9 @@ function ProductModuleLayout() {
         return show
     }
     useEffect(() => {
-        if (searchText) {
-            getProductListBySearchText(searchText)
-        }
+        // if (searchText) {
+        //     getProductListBySearchText(searchText)
+        // }
     }, [searchText])
     return (
         <div className="inner-pages row border-top ">
@@ -90,30 +90,30 @@ function ProductModuleLayout() {
                                     id="async-example"
                                     isLoading={isSearchContentLoading}
                                     labelKey="title"
-                                    className="border-0 p-0 form-control rounded"
+                                    className="border-0 p-0 form-control rounded inner-search"
                                     minLength={3}
                                     onSearch={serachtext}
-                                    options={searchedContentList}
+                                    // options={searchedContentList}
                                     placeholder="Search Books by Title, Author"
-                                    renderMenuItemChildren={(option) => (
-                                        <span onClick={() => navigate('/product/product-detail', {
-                                            state: {
-                                                productId: option.id
-                                            }
-                                        })}>
-                                            <img
-                                                onError={replaceLogo}
-                                                alt={option.title}
-                                                src={MEDIA_URL + 'product/' + option.image}
-                                                style={{
-                                                    height: '24px',
-                                                    marginRight: '10px',
-                                                    width: '24px',
-                                                }}
-                                            />
-                                            <span>{option.title}</span>
-                                        </span>
-                                    )}
+                                // renderMenuItemChildren={(option) => (
+                                //     <span onClick={() => navigate('/product/product-detail', {
+                                //         state: {
+                                //             productId: option.id
+                                //         }
+                                //     })}>
+                                //         <img
+                                //             onError={replaceLogo}
+                                //             alt={option.title}
+                                //             src={MEDIA_URL + 'product/' + option.image}
+                                //             style={{
+                                //                 height: '24px',
+                                //                 marginRight: '10px',
+                                //                 width: '24px',
+                                //             }}
+                                //         />
+                                //         <span>{option.title}</span>
+                                //     </span>
+                                // )}
                                 />
                                 <Button
                                     onClick={() => {
