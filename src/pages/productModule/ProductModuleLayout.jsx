@@ -150,7 +150,7 @@ function ProductModuleLayout() {
             </Container>
 
 
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 }

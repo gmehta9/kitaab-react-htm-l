@@ -53,7 +53,7 @@ function ProductByID() {
         getProductByIdHandler()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.state?.productId])
-
+    console.log(location);
 
     return (
         <>

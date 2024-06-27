@@ -7,10 +7,10 @@ function InnerPageLayout() {
 
     return (
         <Row>
-            <Container className="inner-pages row border-top mx-auto">
+            <Container style={{ minHeight: '30rem' }} className="inner-pages row border-top mx-auto">
                 <Outlet />
             </Container>
-            <Footer />
+            {/* <Footer /> */}
         </Row>
     )
 }

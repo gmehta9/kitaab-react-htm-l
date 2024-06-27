@@ -91,7 +91,7 @@ function MyAccountLayoutPage() {
 
 
             </Container>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 }

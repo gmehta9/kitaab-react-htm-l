@@ -2,7 +2,7 @@
 import { Button, Col, Container, Row, Spinner, Table } from "react-bootstrap";
 // import Header from "../components/Header";
 // import toast from "react-hot-toast";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Footer from "../../components/Footer";
 import MainContext from "../../context/Mcontext.context";
 // import { axiosInstance, headers } from "../../axios/axios-config";
@@ -11,11 +11,11 @@ import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../redux/authModalSlice";
 import toast from "react-hot-toast";
-import { useOutletContext } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 
 function CartPage() {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const [addressModalShow, setAddressModalShow] = useState(false)
 
@@ -202,7 +202,20 @@ function CartPage() {
                                                 </div>
                                             </td>
                                             <td>{index + 1}</td>
-                                            <td className="text-capitalize">{catData?.title || catData?.product?.title}</td>
+                                            <td className="text-capitalize">
+                                                <span
+                                                    className="text-primary"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => {
+                                                        navigate('/product/product-detail', {
+                                                            state: {
+                                                                productId: catData.product_id
+                                                            }
+                                                        })
+                                                    }}>
+                                                    {catData?.title || catData?.product?.title}{catData.product_id}
+                                                </span>
+                                            </td>
                                             <td className="text-capitalize">
                                                 {catData?.auther || catData?.product.auther}
                                                 {/* <input
@@ -249,7 +262,7 @@ function CartPage() {
                         </Col>
                     </Row>
                 </Container>
-                <Footer />
+                {/* <Footer /> */}
             </div>
 
             <ManageAddress
