@@ -90,7 +90,7 @@ function HomePage() {
         setIsContentLoading(true)
         const params = {
             page: p,
-            size: 5,
+            size: 10,
         };
         let APIUrl = 'product'
 
