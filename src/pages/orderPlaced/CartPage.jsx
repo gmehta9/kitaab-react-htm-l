@@ -136,7 +136,7 @@ function CartPage() {
     return (
         <>
             {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}
-            <div className="inner-pages row border-top ">
+            <div className="inner-pages row border-top">
                 <Container className="my-5">
 
                     <Row>
