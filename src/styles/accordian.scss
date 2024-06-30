@@ -1,0 +1,20 @@
+.accordion {
+    .accordion-item {
+        margin-bottom: 20px;
+        background: #e1e1e1;
+
+        .accordion-header {
+            font-size: 16px;
+
+            button {
+                width: 100%;
+                text-align: left;
+                padding: 15px;
+            }
+        }
+
+        .accordion-body {
+            padding: 20px;
+        }
+    }
+}

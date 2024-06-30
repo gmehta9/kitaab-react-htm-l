@@ -30,10 +30,10 @@ function FAQPage() {
         <Container>
             <div className="mt-5">
                 <h3 className="font-weight-bold">FAQ's</h3>
-                <Accordion defaultActiveKey="0">
+                <Accordion defaultActiveKey="1">
                     {faqs.map(item =>
                         <React.Fragment>
-                            <Accordion.Item eventKey={item.id.toString()}>
+                            <Accordion.Item className eventKey={item.id.toString()}>
                                 <Accordion.Header className="w-100">{item.heading}</Accordion.Header>
                                 <Accordion.Body>
                                     {item.content}
