@@ -33,10 +33,11 @@ function FAQPage() {
                 <Accordion defaultActiveKey="1">
                     {faqs.map(item =>
                         <React.Fragment>
+
                             <Accordion.Item className eventKey={item.id.toString()}>
                                 <Accordion.Header className="w-100">{item.heading}</Accordion.Header>
                                 <Accordion.Body>
-                                    {item.content}
+                                    <div dangerouslySetInnerHTML={{ __html: item.content }}></div>
                                 </Accordion.Body>
                             </Accordion.Item>
 
