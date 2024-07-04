@@ -64,7 +64,7 @@ export const MainProvider = ({ children }) => {
 
     const cartUpdateHandler = debounce((event) => {
         cartApiHandlder()
-    }, 1500)
+    }, 1000)
 
     useEffect(() => {
         if (Auth.isUserAuthenticated() && cartBtnClick > 0) {

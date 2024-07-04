@@ -42,6 +42,7 @@ function AddToCartButton(props) {
                 position: 'top-right'
             });
             setCartData([...cartData, { ...obj, quantity: 1, isReadyForOrder: true }]);
+            setCartBtnClick(cartBtnClick + 1)
         }
 
     }
@@ -57,7 +58,7 @@ function AddToCartButton(props) {
                     })
                 } else {
                     cartItemHandler(productDetail)
-                    setCartBtnClick(cartBtnClick + 1)
+
                 }
             }}
             className="mb-3">

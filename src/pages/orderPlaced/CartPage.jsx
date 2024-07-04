@@ -63,7 +63,7 @@ function CartPage() {
         setAddressModalShow(true)
     }
 
-    // const cartQtyHandler = (event, object) => {
+    // const cartQtyHandler = (event, object) => {  
     //     const { value } = event.target
     //     const updateCart = cartData.map((cdItem) => {
     //         if ((cdItem?.product_id || cdItem?.id) === (object?.product_id || object.id) && +value !== 0) {
@@ -122,7 +122,6 @@ function CartPage() {
     // }
 
     const isReadyHandler = (event, cd) => {
-        console.log(cd);
         const { checked } = event.target
         const updateCart = cartData.map(item => {
             if ((item?.product_id || item.id) === (cd?.product_id || cd?.id) || cd === 'all') {
@@ -209,15 +208,15 @@ function CartPage() {
                                                     onClick={() => {
                                                         navigate('/product/product-detail', {
                                                             state: {
-                                                                productId: catData.product_id
+                                                                productId: catData?.product_id
                                                             }
                                                         })
                                                     }}>
-                                                    {catData?.title || catData?.product?.title}{catData.product_id}
+                                                    {catData?.title || catData?.product?.title}
                                                 </span>
                                             </td>
                                             <td className="text-capitalize">
-                                                {catData?.auther || catData?.product.auther}
+                                                {catData?.auther || catData?.product?.auther}
                                                 {/* <input
                                                     style={{ width: '70px' }}
                                                     type="number"

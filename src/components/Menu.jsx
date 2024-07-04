@@ -133,11 +133,11 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 className="border-bottom py-2 pl-3">
                                 <i className='bx bx-notepad'></i> Sell History
                             </Dropdown.Item>
-                            <Dropdown.Item
+                            {/* <Dropdown.Item
                                 onClick={() => setCominingSoon(true)}
                                 className="border-bottom py-2 pl-3">
                                 <i className='bx bx-chat'></i> Chat
-                            </Dropdown.Item>
+                            </Dropdown.Item> */}
                             <Dropdown.Item
                                 onClick={() => {
                                     if (!isUserLoggedIn) {

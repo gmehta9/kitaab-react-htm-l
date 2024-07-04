@@ -44,7 +44,8 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                     duration: 5000
                 });
                 setCartBtnClick(1 + 9)
-                setCartData(cartData.filter(cd => cd.isReadyForOrder).map(item => ({ product_id: item.product_id, quantity: 1 })))
+                console.log(cartData);
+                setCartData(cartData.filter(cd => !cd.isReadyForOrder).map(item => ({ product_id: item.product_id, quantity: 1 })))
                 handleClose()
                 setIsContentLoading(false)
                 navigate('/account/order-history')
