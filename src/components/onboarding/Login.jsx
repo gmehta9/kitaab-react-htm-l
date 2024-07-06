@@ -101,7 +101,7 @@ function Login({ setIsUserLoggedIn, setIsContentLoading }) {
 
                         </Row> */}
                         <Form.Group className="mb-4" >
-                            <Form.Label>Email & Phone no</Form.Label>
+                            <Form.Label>Email or Phone no</Form.Label>
                             <Form.Control
                                 type="text"
                                 autoComplete="emailOrphone"

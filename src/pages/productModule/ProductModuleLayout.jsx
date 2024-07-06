@@ -4,9 +4,9 @@ import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router
 import { srcPriFixLocal } from "../../helper/Helper";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 // import { axiosInstance, headers } from "../../axios/axios-config";
-import Auth from "../../auth/Auth";
+// import Auth from "../../auth/Auth";
 import { useEffect, useState } from "react";
-import { MEDIA_URL, debounce, replaceLogo } from "../../helper/Utils";
+import { debounce } from "../../helper/Utils";
 
 function ProductModuleLayout() {
     const location = useLocation()
@@ -14,7 +14,7 @@ function ProductModuleLayout() {
 
     const { setIsContentLoading } = useOutletContext()
     const [searchText, setSearchText] = useState()
-    const [isSearchContentLoading, setIsSearchContentLoading] = useState(false)
+    // const [isSearchContentLoading, setIsSearchContentLoading] = useState(false)
     // const [searchedContentList, setSearchedContentList] = useState([])
 
     const serachtext = debounce((event) => {
@@ -88,7 +88,7 @@ function ProductModuleLayout() {
                                 <AsyncTypeahead
                                     filterBy={() => true}
                                     id="async-example"
-                                    isLoading={isSearchContentLoading}
+                                    // isLoading={isSearchContentLoading}
                                     labelKey="title"
                                     className="border-0 p-0 form-control rounded inner-search"
                                     minLength={3}
