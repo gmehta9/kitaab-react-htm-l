@@ -23,13 +23,13 @@ function SellBuyModuleMainLayout() {
     const [contentLoading, setContentLoading] = useState(true)
     const [pagination, setPagination] = useState()
 
-    const getOrderHistoryHandlder = (apiSlug) => {
+    const getOrderHistoryHandlder = (apiSlug, page) => {
         setContentLoading(true)
         setOrderList([])
         setSellerList([])
         const params = {
             user_id: useLoggedIN?.id,
-            page: 1,
+            page: page || 1,
             size: 15
         }
         axiosInstance['get'](apiSlug + '?' + new URLSearchParams(params), {
@@ -176,6 +176,7 @@ function SellBuyModuleMainLayout() {
                     limit={pagination?.per_page}
                     changePage={(page) => {
                         setPagination({ ...pagination, current_page: page })
+                        getOrderHistoryHandlder(location.pathname === '/account/order-history' ? 'order-history' : 'sell-history', page)
                     }}
                 // ellipsis={1}
                 />

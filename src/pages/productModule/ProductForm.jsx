@@ -92,6 +92,7 @@ function ProductForm() {
         let method = 'post'
         if (location?.state?.pId) {
             method = 'put'
+            body.is_approved = 0
             api = api + '/' + location?.state?.pId
         }
 
@@ -162,7 +163,7 @@ function ProductForm() {
         const currentYear = new Date().getFullYear();
         const years = Array.from({ length: 35 }, (_, index) => (currentYear - index).toString());
         setYears(years)
-        getCategoriesListHandler()
+        getCategoriesListHandler(1)
         setValue('category_id', '')
         if (!Auth.isUserAuthenticated()) {
             navigate('/')
