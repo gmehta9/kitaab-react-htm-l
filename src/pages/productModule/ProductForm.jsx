@@ -40,6 +40,9 @@ function ProductForm() {
             if (response) {
                 setCategoriesList(response?.data?.data)
                 setIsContentLoading(false)
+                if (location?.state?.pId) {
+                    getProductByIdHandler(location?.state?.pId)
+                }
             }
         }).catch((error) => {
             setIsContentLoading(false)
@@ -151,12 +154,7 @@ function ProductForm() {
         }
         return num
     }
-    useEffect(() => {
-        if (location?.state?.pId) {
-            getProductByIdHandler(location?.state?.pId)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location?.state?.pId])
+
 
     useEffect(() => {
         register('short_description', { required: 'Field is required.' });
