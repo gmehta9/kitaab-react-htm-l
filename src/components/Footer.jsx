@@ -35,28 +35,36 @@ function Footer() {
                     <Col xs={6} className="d-flex justify-content-end">
                         <div className="d-flex ml-auto">
                             <span title="Twitter">
-                                <Image
-                                    className="mr-2"
-                                    src={`${srcPriFixLocal}facebook.svg`}
-                                />
+                                <a href="https://www.facebook.com/mykitaabjunction" target="_blank" rel="noreferrer">
+                                    <Image
+                                        className="mr-2"
+                                        src={`${srcPriFixLocal}facebook.svg`}
+                                    />
+                                </a>
                             </span>
                             <span title="linkedin">
-                                <Image
-                                    className="mr-2"
-                                    src={`${srcPriFixLocal}linkedin.svg`}
-                                />
+                                <a href="https://linkedin.com/" target="_blank" rel="noreferrer">
+                                    <Image
+                                        className="mr-2"
+                                        src={`${srcPriFixLocal}linkedin.svg`}
+                                    />
+                                </a>
                             </span>
                             <span title="insta">
-                                <Image
-                                    className="mr-2"
-                                    src={`${srcPriFixLocal}instagram.svg`}
-                                />
+                                <a href="https://instagram.com" target="_blank" rel="noreferrer">
+                                    <Image
+                                        className="mr-2"
+                                        src={`${srcPriFixLocal}instagram.svg`}
+                                    />
+                                </a>
                             </span>
                             <span title="twitter">
-                                <Image
-                                    className="mr-2"
-                                    src={`${srcPriFixLocal}twitter.svg`}
-                                />
+                                <a href="https://twitter.com/KitaabJ" target="_blank" rel="noreferrer">
+                                    <Image
+                                        className="mr-2"
+                                        src={`${srcPriFixLocal}twitter.svg`}
+                                    />
+                                </a>
                             </span>
                         </div>
                     </Col>
