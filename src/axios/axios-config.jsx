@@ -56,7 +56,7 @@ export const headers = {
 
 export const axiosInstance = setupInterceptorsTo(axios.create({
   baseURL: apiUrl,
-  timeout: 10000,
+  // timeout: 10000,
   // headers: headers
 }))
 
