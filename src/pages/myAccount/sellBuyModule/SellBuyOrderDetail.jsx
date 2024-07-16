@@ -56,11 +56,11 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
                             </div>
                             <div className="row">
                                 <div className="col-3 small">Address:</div>
-                                <div className="col small font-weight-bold">{data?.product_owner_address}</div>
+                                <div className="col small font-weight-bold text-capitalize">{data?.product_owner_address}</div>
                             </div>
                             <div className="row">
                                 <div className="col-3 small">City:</div>
-                                <div className="col small font-weight-bold">{data?.product_owner_city}</div>
+                                <div className="col small font-weight-bold text-capitalize">{data?.product_owner_city}</div>
                             </div>
                         </div>
                     </div>
