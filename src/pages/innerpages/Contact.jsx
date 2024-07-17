@@ -1,7 +1,27 @@
-import { Container } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Form, Spinner } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { axiosInstance, headers } from "../../axios/axios-config";
+import toast from "react-hot-toast";
 
 function ContactPage() {
 
+    const { register, handleSubmit, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const [isSubmitting, setIsSubmitting] = useState()
+    const leaveMessageHandler = (data) => {
+        setIsSubmitting(true)
+        axiosInstance.post("message", data, { headers: headers }
+        ).then((res) => {
+            if (res) {
+                toast.success("Form has been successfully submitted.");
+                setIsSubmitting(false)
+                reset()
+            }
+        }).catch((error) => {
+            console.log(error);
+            setIsSubmitting(false)
+        });
+    }
     return (
         <Container>
             <div className="mt-5">
@@ -58,29 +78,111 @@ function ContactPage() {
                     {/* <!-- Contact Form Block --> */}
                     <div className="col-xl-6">
                         <h2 className="pb-4">Leave a message</h2>
-                        <div className="row g-4">
-                            <div className="col-6 mb-3">
-                                <label for="exampleFormControlInput1" className="form-label">First Name</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="" />
+                        <Form onSubmit={handleSubmit(leaveMessageHandler)}>
+                            <div className="row g-4">
+                                <div className="col-6 mb-3">
+                                    <label for="exampleFormControlInput1" className="form-label">First Name</label>
+                                    <input
+                                        type="text"
+                                        {...register('first', {
+                                            required: 'Field Required!',
+                                        })}
+                                        className="form-control"
+                                        id="exampleFormControlInput1" placeholder="" />
+                                    {errors?.message?.first &&
+                                        <div className="small text-danger">
+                                            {errors?.message?.first}
+                                        </div>
+                                    }
+                                </div>
+                                <div className="col-6 mb-3">
+                                    <label for="exampleFormControlInput1" className="form-label">Last Name</label>
+                                    <input
+                                        type="text"
+                                        {...register('lastname', {
+                                            required: 'Field Required!',
+                                        })}
+                                        className="form-control"
+                                        id="exampleFormControlInput1"
+                                        placeholder=""
+                                    />
+                                    {errors?.message?.lastname &&
+                                        <div className="small text-danger">
+                                            {errors?.message?.lastname}
+                                        </div>
+                                    }
+                                </div>
                             </div>
-                            <div className="col-6 mb-3">
-                                <label for="exampleFormControlInput1" className="form-label">Last Name</label>
-                                <input type="text" className="form-control" id="exampleFormControlInput1" placeholder="" />
+                            <div className="mb-3">
+                                <label for="exampleFormControlInput1" className="form-label">Email ID</label>
+                                <input
+                                    type="email"
+                                    {...register('emailid', {
+                                        required: 'Field Required!',
+                                        pattern: {
+                                            value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                            message: "Enter valid email",
+                                        }
+                                    })}
+                                    className="form-control"
+                                    id="exampleFormControlInput1"
+                                    placeholder=""
+                                />
+                                {errors?.message?.emailid &&
+                                    <div className="small text-danger">
+                                        {errors?.message?.emailid}
+                                    </div>
+                                }
                             </div>
-                        </div>
-                        <div className="mb-3">
-                            <label for="exampleFormControlInput1" className="form-label">Email ID</label>
-                            <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="" />
-                        </div>
-                        <div className="mb-3">
-                            <label for="exampleFormControlInput1" className="form-label">Phone Number</label>
-                            <input type="tel" className="form-control" id="exampleFormControlInput1" placeholder="" />
-                        </div>
-                        <div className="mb-3">
-                            <label for="exampleFormControlTextarea1" className="form-label">Message</label>
-                            <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-                        <button type="button" className="btn btn-dark">Send Message</button>
+                            <div className="mb-3">
+                                <label for="exampleFormControlInput1" className="form-label">Phone Number</label>
+                                <input
+                                    type="tel"
+                                    {...register('phone_number', {
+                                        required: "Phone no is required.",
+                                        minLength: {
+                                            value: 10,
+                                            message: "The Phone no. must be 10 digits.",
+                                        },
+                                        maxLength: {
+                                            value: 10,
+                                            message: "The Phone no. must be 10 digits.",
+                                        },
+                                        pattern: {
+                                            // value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
+                                            value: /^[0-9]{10}$/,
+                                            message: "The Phone no. must be 10 digits.",
+                                        },
+                                    })}
+                                    className="form-control"
+                                    id="exampleFormControlInput1"
+                                    placeholder=""
+                                />
+                                {errors?.message?.phone_number &&
+                                    <div className="small text-danger">
+                                        {errors?.message?.phone_number}
+                                    </div>
+                                }
+                            </div>
+                            <div className="mb-3">
+                                <label for="exampleFormControlTextarea1" className="form-label">Message</label>
+                                <textarea
+                                    {...register('message', {
+                                        required: 'Field Required!',
+                                    })}
+                                    className="form-control"
+                                    id="exampleFormControlTextarea1"
+                                    rows="3"></textarea>
+                                {errors?.message?.message &&
+                                    <div className="small text-danger">
+                                        {errors?.message?.message}
+                                    </div>
+                                }
+                            </div>
+                            <button type="submit" disabled={isSubmitting} className="btn btn-dark px-5">
+                                {isSubmitting ? <Spinner animation="border" size="sm" variant="light" /> : 'Send Message'}
+                            </button>
+                        </Form>
                     </div>
                 </div>
             </div>
