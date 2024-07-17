@@ -10,7 +10,7 @@ function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState()
     const leaveMessageHandler = (data) => {
         setIsSubmitting(true)
-        axiosInstance.post("message", data, { headers: headers }
+        axiosInstance.post("contact-us", data, { headers: headers }
         ).then((res) => {
             if (res) {
                 toast.success("Form has been successfully submitted.");
