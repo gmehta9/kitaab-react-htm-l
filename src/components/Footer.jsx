@@ -38,6 +38,7 @@ function Footer() {
                                 <a href="https://www.facebook.com/mykitaabjunction" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
+                                        width={'30'}
                                         src={`${srcPriFixLocal}facebook.svg`}
                                     />
                                 </a>
@@ -46,6 +47,7 @@ function Footer() {
                                 <a href="https://linkedin.com/" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
+                                        width={'30'}
                                         src={`${srcPriFixLocal}linkedin.svg`}
                                     />
                                 </a>
@@ -54,6 +56,7 @@ function Footer() {
                                 <a href="https://instagram.com" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
+                                        width={'30'}
                                         src={`${srcPriFixLocal}instagram.svg`}
                                     />
                                 </a>
@@ -62,6 +65,7 @@ function Footer() {
                                 <a href="https://twitter.com/KitaabJ" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
+                                        width={'40'}
                                         src={`${srcPriFixLocal}twitter.svg`}
                                     />
                                 </a>
