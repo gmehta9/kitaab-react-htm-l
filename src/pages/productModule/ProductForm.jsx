@@ -238,7 +238,7 @@ function ProductForm() {
                                 className="form-control">
                                 <option value="" disabled>Select Product</option>
                                 {categoriesList && categoriesList.map((cat, index) =>
-                                    <option key={index + 'cat'} value={cat.id}>{cat.name}</option>
+                                    <option key={index + 'cat'} value={cat.id}>{cat?.name}</option>
                                 )}
 
                             </select>

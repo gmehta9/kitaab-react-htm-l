@@ -190,7 +190,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             <Dropdown.Menu align="start" className="p-0 dropdown-menu-right">
                                 <div
                                     className="pl-3 mt-2 mb-2 text-primary text-capitalize text-truncate" style={{ width: '195px' }}>
-                                    Hello, {loggedInUser.name}
+                                    Hello, {loggedInUser?.name}
                                 </div>
                                 <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
                                     <i className='bx bxs-user-account'></i> Account

@@ -84,14 +84,14 @@ function ContactPage() {
                                     <label for="exampleFormControlInput1" className="form-label">First Name</label>
                                     <input
                                         type="text"
-                                        {...register('first', {
+                                        {...register('first_name', {
                                             required: 'Field Required!',
                                         })}
                                         className="form-control"
                                         id="exampleFormControlInput1" placeholder="" />
-                                    {errors?.message?.first &&
+                                    {errors?.message?.first_name &&
                                         <div className="small text-danger">
-                                            {errors?.message?.first}
+                                            {errors?.message?.first_name}
                                         </div>
                                     }
                                 </div>
@@ -99,16 +99,16 @@ function ContactPage() {
                                     <label for="exampleFormControlInput1" className="form-label">Last Name</label>
                                     <input
                                         type="text"
-                                        {...register('lastname', {
+                                        {...register('last_name', {
                                             required: 'Field Required!',
                                         })}
                                         className="form-control"
                                         id="exampleFormControlInput1"
                                         placeholder=""
                                     />
-                                    {errors?.message?.lastname &&
+                                    {errors?.message?.last_name &&
                                         <div className="small text-danger">
-                                            {errors?.message?.lastname}
+                                            {errors?.message?.last_name}
                                         </div>
                                     }
                                 </div>
@@ -117,7 +117,7 @@ function ContactPage() {
                                 <label for="exampleFormControlInput1" className="form-label">Email ID</label>
                                 <input
                                     type="email"
-                                    {...register('emailid', {
+                                    {...register('email', {
                                         required: 'Field Required!',
                                         pattern: {
                                             value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
@@ -128,9 +128,9 @@ function ContactPage() {
                                     id="exampleFormControlInput1"
                                     placeholder=""
                                 />
-                                {errors?.message?.emailid &&
+                                {errors?.message?.email &&
                                     <div className="small text-danger">
-                                        {errors?.message?.emailid}
+                                        {errors?.message?.email}
                                     </div>
                                 }
                             </div>

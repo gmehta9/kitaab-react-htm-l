@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useOutletContext, useSearchParams } from "rea
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { debounce } from "../../helper/Utils";
+import Select from 'react-select'
 // const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
 
 
@@ -22,6 +23,9 @@ function ProductByList() {
     const [searchByAuthorText, setSearchByAuthorText] = useState()
     const [searchByState, setSearchByState] = useState()
     const [searchByCity, setSearchByCity] = useState()
+
+    const [cityList, setCityList] = useState()
+    const [stateList, setStateList] = useState()
 
     const [productList, setProductList] = useState()
 
@@ -151,6 +155,27 @@ function ProductByList() {
         }
     }, [location?.state])
 
+    useEffect(() => {
+        fetch('cityState.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            return response.json();
+        }).then(function (myJson) {
+            console.log(myJson);
+            let cityies = []
+            myJson.forEach(itm => {
+                cityies = [...cityies, ...itm.cities]
+            })
+
+            setStateList(myJson)
+            setCityList(cityies)
+        })
+    }, [])
+
+
     return (
         <>
             <div className="h2 mt-4 font-weight-bold">
@@ -162,23 +187,33 @@ function ProductByList() {
                         <Col lg={3}>
                             <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Search by State & City</Form.Label>
-                                <Form.Control
+                                <Select
+                                    options={stateList}
+                                    isClearable={true}
+                                    onChange={(event) => serachtext(event?.value, 'state')}
+                                />
+                                {/* <Form.Control
                                     type="text"
                                     autoComplete="false"
                                     name="CityName"
                                     className="small"
                                     onChange={(event) => serachtext(event.target.value, 'state')}
                                     placeholder="State Name"
-                                />
+                                /> */}
                             </Form.Group>
                             <Form.Group className="mb-4" controlId="name">
-                                <Form.Control
+                                <Select
+                                    options={cityList}
+                                    isClearable={true}
+                                    onChange={(event) => serachtext(event?.value, 'city')}
+                                />
+                                {/* <Form.Control
                                     type="text"
                                     autoComplete="false"
                                     name="CityName"
                                     onChange={(event) => serachtext(event.target.value, 'city')}
                                     placeholder="City Name"
-                                />
+                                /> */}
                             </Form.Group>
 
                             <Form.Group className="mb-2" controlId="name">
