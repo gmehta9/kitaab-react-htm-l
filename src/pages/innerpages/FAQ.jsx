@@ -9,7 +9,7 @@ const faqs = [
     },
     {
         id: 2,
-        heading: 'How the quality of books delivered is ensured?',
+        heading: 'Why should I share my books with others ?',
         content: `
         <p>Following are few compelling reasons to share books with others:</p>
 <ul>
@@ -24,14 +24,14 @@ const faqs = [
     },
     {
         id: 3,
-        heading: 'What if the book delivered is not in good shape ',
+        heading: 'What if the book delivered is not in good shape ?',
         content: `
         <p>We have liberal return policy since our primary goal is not to earn profit but earn respect of our stakeholders while expanding knowledge base of the community we live in.</p>
         <p>No charges if the book was delivered by us & the return request is submitted to us within 7 days of the delivery.</p>`
     },
     {
         id: 4,
-        heading: 'What if I do not find book I am looking for?',
+        heading: 'What if I do not find book I am looking for ?',
         content: 'No problem, please add it in your Wishlist on our website and we will get back to you as soon as it lands in our inventory.'
     }
 ]
