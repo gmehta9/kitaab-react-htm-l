@@ -44,7 +44,7 @@ function Footer() {
                                 </a>
                             </span>
                             <span title="linkedin">
-                                <a href="https://linkedin.com/" target="_blank" rel="noreferrer">
+                                <a href="https://www.linkedin.com/in/kitaab-junction-5913622b6?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B%2FsACibXvQKuYhsyH%2BXNeAg%3D%3D" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
                                         width={'30'}
@@ -53,7 +53,7 @@ function Footer() {
                                 </a>
                             </span>
                             <span title="insta">
-                                <a href="https://instagram.com" target="_blank" rel="noreferrer">
+                                <a href="https://www.instagram.com/junctionkitaab/" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
                                         width={'30'}

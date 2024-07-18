@@ -171,6 +171,7 @@ function ContactPage() {
                                         required: 'Field Required!',
                                     })}
                                     className="form-control"
+                                    maxLength={500}
                                     id="exampleFormControlTextarea1"
                                     rows="3"></textarea>
                                 {errors?.message?.message &&
