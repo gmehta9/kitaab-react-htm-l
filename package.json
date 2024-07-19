@@ -1,9 +1,9 @@
 {
-  "name": "my-app",
+  "name": "kitaabjunction",
   "version": "0.1.0",
   "private": true,
-  "start_url": ".",
-  "homepage": "/kitaabJunction-web/",
+  "start_url": "https://kitaabjunction.com/",
+  "homepage": "https://kitaabjunction.com/",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",
@@ -30,6 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:prod": "PUBLIC_URL=/kitaabJunction-web/ env-cmd -f .env.prod npm run-script build",
+    "build:live": "env-cmd -f .env.live npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
