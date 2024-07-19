@@ -155,6 +155,7 @@ function HomePage() {
     }, [searchText])
     useEffect(() => {
         getCategoriesListHandler(1)
+        document.title = `Home | Kitaab Juction`;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

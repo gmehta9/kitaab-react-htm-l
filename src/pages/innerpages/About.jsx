@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { Container } from "react-bootstrap";
 
 function AboutPage() {
-
+    useEffect(() => {
+        document.title = 'About us | Kitaab Juction';
+    }, []);
     return (
         <Container>
             <div className="mt-5">

@@ -168,7 +168,7 @@ function ProductForm() {
         }
         setValue('city', loggedUser?.city)
         setValue('state', loggedUser?.state)
-
+        document.title = `${location?.state?.pId ? 'Edit' : 'Add'} Book | Kitaab Juction'`;
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

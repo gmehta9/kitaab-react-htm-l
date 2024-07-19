@@ -2,7 +2,7 @@
 import { Button, Col, Container, Row, Spinner, Table } from "react-bootstrap";
 // import Header from "../components/Header";
 // import toast from "react-hot-toast";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import MainContext from "../../context/Mcontext.context";
 // import { axiosInstance, headers } from "../../axios/axios-config";
@@ -131,7 +131,9 @@ function CartPage() {
         })
         setCartData(updateCart)
     }
-
+    useEffect(() => {
+        document.title = 'My Cart | Kitaab Juction';
+    }, []);
     return (
         <>
             {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}

@@ -1,7 +1,11 @@
+import { useEffect } from "react";
 import { Button, Spinner, Table } from "react-bootstrap";
 
 function BuyOrdersList({ orderList, contentLoading, pagination, setModalShow, setModalType, setModalData }) {
 
+    useEffect(() => {
+        document.title = 'Buy Order | Kitaab Juction';
+    }, [])
     return (
         <>
             <Table striped bordered >

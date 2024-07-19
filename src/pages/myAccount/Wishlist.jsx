@@ -126,8 +126,10 @@ function Wishlist() {
         setYears(years)
         getWishListHandler(1)
 
+        document.title = 'My Wishlist | Kitaab Juction';
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
     return (
         <>
             <div className="d-flex align-items-center justify-content-between mb-3">

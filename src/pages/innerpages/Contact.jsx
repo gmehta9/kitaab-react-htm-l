@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
@@ -22,6 +22,11 @@ function ContactPage() {
             setIsSubmitting(false)
         });
     }
+
+    useEffect(() => {
+        document.title = 'Contact us | Kitaab Juction';
+    }, []);
+
     return (
         <Container>
             <div className="mt-5">

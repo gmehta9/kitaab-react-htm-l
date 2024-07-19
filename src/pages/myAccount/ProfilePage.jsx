@@ -84,9 +84,10 @@ function ProfilePage() {
             getProfileUpdateHandler(myJson)
         })
 
+        document.title = 'My Profile | Kitaab Juction';
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
     useEffect(() => {
         if (watch('state')) {
             stateList.forEach(element => {

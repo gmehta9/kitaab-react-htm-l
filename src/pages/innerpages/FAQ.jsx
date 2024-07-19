@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Accordion, Container } from "react-bootstrap";
 
 const faqs = [
@@ -38,6 +38,9 @@ const faqs = [
 
 function FAQPage() {
 
+    useEffect(() => {
+        document.title = `FAQ's | Kitaab Juction`;
+    }, []);
     return (
         <Container>
             <div className="mt-5">

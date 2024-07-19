@@ -45,7 +45,7 @@ function ProductByID() {
         if (productDetail?.created_by_user.id === Auth.loggedInUser()?.id) {
             setIsEditAble(true)
         }
-
+        document.title = 'Book Detail | Kitaab Juction';
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [Auth.loggedInUser()?.id])
 
