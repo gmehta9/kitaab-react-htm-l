@@ -1,30 +1,30 @@
 import { RouterProvider, createBrowserRouter, createHashRouter } from 'react-router-dom';
 import './App.scss';
-import React, { Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
 import PagesLayout from './pages/PagesLayout';
-
 import HomePage from './pages/Home';
-
 import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';
+import Loader from './components/Loader';
 
-// import Wishlist from './pages/MyAccount/Wishlist';
-import ProfilePage from './pages/myAccount/ProfilePage';
-import ProductModuleLayout from './pages/productModule/ProductModuleLayout';
-import ProductByList from './pages/productModule/ProductByList';
-import ProductByID from './pages/productModule/ProductByID';
-import ChatLayout from './pages/chat/ChatLayout';
-import Chat from './pages/chat/Chat';
-import ManageAddress from './pages/myAccount/ManageAddress';
-import ProductForm from './pages/productModule/ProductForm';
-import CartPage from './pages/orderPlaced/CartPage';
-import OrderSuccess from './pages/OrderSuccess';
-import Wishlist from './pages/myAccount/Wishlist';
-import SellBuyModuleMainLayout from './pages/myAccount/sellBuyModule/SellBuyModuleMainLayout';
-import AboutPage from './pages/innerpages/About';
-import InnerPageLayout from './pages/innerpages/InnerPageLayout';
-import FAQPage from './pages/innerpages/FAQ';
-import ContactPage from './pages/innerpages/Contact';
+const ProfilePage = lazy(() => import('./pages/myAccount/ProfilePage'));
+const ProductModuleLayout = lazy(() => import('./pages/productModule/ProductModuleLayout'));
+const ProductByList = lazy(() => import('./pages/productModule/ProductByList'));
+const ProductByID = lazy(() => import('./pages/productModule/ProductByID'));
+const ChatLayout = lazy(() => import('./pages/chat/ChatLayout'));
+const Chat = lazy(() => import('./pages/chat/Chat'));
+// const ManageAddress = lazy(() => import('./pages/myAccount/ManageAddress'));
+const ProductForm = lazy(() => import('./pages/productModule/ProductForm'));
+const CartPage = lazy(() => import('./pages/orderPlaced/CartPage'));
+// const OrderSuccess = lazy(() => import('./pages/OrderSuccess'));
+const Wishlist = lazy(() => import('./pages/myAccount/Wishlist'));
+const SellBuyModuleMainLayout = lazy(() => import('./pages/myAccount/sellBuyModule/SellBuyModuleMainLayout'));
+
+const AboutPage = lazy(() => import('./pages/innerpages/About'));
+const InnerPageLayout = lazy(() => import('./pages/innerpages/InnerPageLayout'));
+const FAQPage = lazy(() => import('./pages/innerpages/FAQ'));
+const ContactPage = lazy(() => import('./pages/innerpages/Contact'));
+
 
 function App() {
 
@@ -49,10 +49,10 @@ function App() {
           path: 'cart',
           element: <CartPage />,
         },
-        {
-          path: 'order-success',
-          element: <OrderSuccess />,
-        },
+        // {
+        //   path: 'order-success',
+        //   element: <OrderSuccess />,
+        // },
 
         {
           path: 'product',
@@ -84,10 +84,10 @@ function App() {
               path: 'profile',
               element: <ProfilePage />,
             },
-            {
-              path: 'manage-address',
-              element: <ManageAddress />,
-            },
+            // {
+            //   path: 'manage-address',
+            //   element: <ManageAddress />,
+            // },
             {
               path: 'order-history',
               element: <SellBuyModuleMainLayout />,
@@ -143,7 +143,7 @@ function App() {
 
   return (
     <React.StrictMode>
-      <Suspense fallback={'Loading...'}>
+      <Suspense fallback={<Loader />}>
 
         <Toaster
           position="top-center"

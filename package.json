@@ -30,7 +30,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:prod": "PUBLIC_URL=/kitaabJunction-web/ env-cmd -f .env.prod npm run-script build",
-    "build:live": "env-cmd -f .env.live npm run-script build",
+    "build:live": "PUBLIC_URL=https://kitaabjunction.com/ env-cmd -f .env.live npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

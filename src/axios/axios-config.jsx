@@ -45,7 +45,7 @@ export function setupInterceptorsTo(axiosInstance) {
 }
 
 const token = Auth?.token();
-export const apiUrl = 'https://tinytyni.com/KbAPI/API_URL/api/'
+export const apiUrl = process.env.REACT_APP_BASE_URL
 export const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
