@@ -192,7 +192,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                     className="pl-3 mt-2 mb-2 text-primary text-capitalize text-truncate" style={{ width: '195px' }}>
                                     Hello, {loggedInUser?.name}
                                 </div>
-                                <Dropdown.Item href="#/account/profile" className="border-bottom py-2 pl-3">
+                                <Dropdown.Item href="/account/profile" className="border-bottom py-2 pl-3">
                                     <i className='bx bxs-user-account'></i> Account
                                 </Dropdown.Item>
                                 {/* <Dropdown.Item href="#/account/chat" className="border-bottom py-2 pl-3">
@@ -203,7 +203,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 </Dropdown.Item> */}
                                 {isUserLoggedIn &&
                                     <>
-                                        <Dropdown.Item href="#/product/add" className="border-bottom py-2 pl-3">
+                                        <Dropdown.Item href="/product/add" className="border-bottom py-2 pl-3">
                                             <i className='bx bx-chat'></i> Add Product
                                         </Dropdown.Item>
                                         <Dropdown.Item

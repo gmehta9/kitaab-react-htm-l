@@ -4,6 +4,10 @@ import toast from "react-hot-toast";
 
 const onRequest = (config) => {
   // console.info(`[request] [${JSON.stringify(config)}]`);
+  const token = Auth.token();
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
   return config;
 }
 

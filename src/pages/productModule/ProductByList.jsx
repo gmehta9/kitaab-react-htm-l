@@ -139,7 +139,7 @@ function ProductByList() {
         if (location?.state !== 'Sell/Share') {
             getCategoriesListHandler(1)
         }
-        document.title = 'Book List | Kitaab Juction';
+        document.title = 'My Book List | Kitaab Juction';
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
