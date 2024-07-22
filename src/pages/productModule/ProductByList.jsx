@@ -165,32 +165,42 @@ function ProductByList() {
             return response.json();
         }).then(function (myJson) {
             console.log(myJson);
-            let cityies = []
-            myJson.forEach(itm => {
-                cityies = [...cityies, ...itm.cities]
-            })
+            // let cityies = []
+            // myJson.forEach(itm => {
+            //     cityies = [...cityies, ...itm.cities]
+            // })
 
             setStateList(myJson)
-            setCityList(cityies)
+            // setCityList(cityies)
         })
     }, [])
 
 
     return (
         <>
-            <div className="h2 mt-4 font-weight-bold">
+            <div className="h2 mt-4 font-weight-bold d-flex justify-content-between">
                 {location?.state === 'Sell/Share' ? 'Sell/Share list' : 'Books list'}
+                {Auth.isUserAuthenticated() &&
+                    <Button
+                        className="mb-3"
+                        onClick={() => navigate('add')}
+                        type="button">Add Product</Button>
+                }
             </div>
             <Row className="mt-4">
                 {location?.state !== 'Sell/Share' &&
                     <>
-                        <Col lg={3}>
+                        <Col lg={3} className="mb-4">
                             <Form.Group className="mb-2" controlId="name">
                                 <Form.Label>Search by State & City</Form.Label>
                                 <Select
                                     options={stateList}
+                                    id="stateId"
                                     isClearable={true}
-                                    onChange={(event) => serachtext(event?.value, 'state')}
+                                    onChange={(event) => {
+                                        setCityList(event?.cities)
+                                        serachtext(event?.value, 'state')
+                                    }}
                                 />
                                 {/* <Form.Control
                                     type="text"
@@ -204,6 +214,7 @@ function ProductByList() {
                             <Form.Group className="mb-4" controlId="name">
                                 <Select
                                     options={cityList}
+                                    id="cityId"
                                     isClearable={true}
                                     onChange={(event) => serachtext(event?.value, 'city')}
                                 />
@@ -290,12 +301,7 @@ function ProductByList() {
                                     onClick={() => navigate('/product')}>×</span>
                             </>}
                         </span>
-                        {Auth.isUserAuthenticated() &&
-                            <Button
-                                className="mb-3"
-                                onClick={() => navigate('add')}
-                                type="button">Add Product</Button>
-                        }
+
                     </div>
                     {productList?.length === 0 &&
                         <Row>
