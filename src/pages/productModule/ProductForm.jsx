@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import { apiUrl, axiosInstance, headers } from "../../axios/axios-config";
-import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
+import { Col, Row } from "react-bootstrap";
+import Resizer from "react-image-file-resizer";
+
 import Auth from "../../auth/Auth";
-import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { MEDIA_URL } from "../../helper/Utils";
+import { apiUrl, axiosInstance, headers } from "../../axios/axios-config";
 import { srcPriFixLocal } from "../../helper/Helper";
-import axios from "axios";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
@@ -18,6 +20,7 @@ function ProductForm() {
     const navigate = useNavigate();
 
     const [imageView, setImageView] = useState()
+    const [imageFile, setImageFile] = useState()
     const [years, setYears] = useState();
     const [categoriesList, setCategoriesList] = useState()
 
@@ -49,6 +52,22 @@ function ProductForm() {
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     });
+
+    const resizeFile = (file) =>
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                file,
+                700,
+                1064,
+                "JPEG",
+                100,
+                0,
+                (uri) => {
+                    resolve(uri);
+                },
+                "base64"
+            );
+        });
 
     const FileUploadhandler = async (file, uploadKeyName) => {
 
@@ -172,25 +191,36 @@ function ProductForm() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    const imageChnageHandler = async (file) => {
+
+        const image = await resizeFile(file[0]);
+        // if (file[0]?.size) {
+
+        // if (file[0]?.size > 2000000) {
+        //     toast.error('The file size should not be more than 2MB.')
+        //     setValue('file', undefined)
+        //     return
+        // }
+        // const responseImg = await FileUploadhandler(image, 'product')
+        // console.log(image, );
+        setImageFile(image)
+
+        setImageView(image);
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        // };
+        // reader.readAsDataURL(image);
+        // }
+    }
+
     useEffect(() => {
 
         if (getValues('file')) {
 
             const file = getValues('file')
-            if (file[0]?.size) {
+            if (file.length > 0) {
 
-                if (file[0]?.size > 2000000) {
-                    toast.error('The file size should not be more than 2MB.')
-                    setValue('file', undefined)
-                    return
-                }
-
-                const selectedFile = getValues('file')
-                const reader = new FileReader();
-                reader.onload = () => {
-                    setImageView(reader.result);
-                };
-                reader.readAsDataURL(selectedFile[0]);
+                imageChnageHandler(file)
             }
 
         }

@@ -71,7 +71,7 @@ function ContactPage() {
                                         <i className='bx bxl-whatsapp-square h2'></i>
                                         <div className="d-flex w-100 flex-column ml-2">
                                             <div className="">WhatsApp</div>
-                                            <a href="https://wa.me/919810296981">+91-9810296981</a>
+                                            <a href="https://wa.me/918076166586">+91-8076166586</a>
                                         </div>
                                     </div>
                                 </div>
