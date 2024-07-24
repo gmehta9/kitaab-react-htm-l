@@ -11,7 +11,7 @@ import ManageAddress from "../myAccount/ManageAddress";
 import { useDispatch } from "react-redux";
 import { openLoginModal } from "../../redux/authModalSlice";
 import toast from "react-hot-toast";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 
 function CartPage() {
@@ -131,9 +131,11 @@ function CartPage() {
         })
         setCartData(updateCart)
     }
+
     useEffect(() => {
         document.title = 'My Cart | Kitaab Juction';
     }, []);
+
     return (
         <>
             {/* <Header isContentLoading={isInnerPageLoading} setIsContentLoading={setIsInnerPageLoading} /> */}

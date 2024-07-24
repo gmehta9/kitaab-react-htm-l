@@ -111,14 +111,14 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
 
     useEffect(() => {
 
-        if (userLogin) {
+        if (Auth.isUserAuthenticated()) {
             ProfileAddressHandler()
         }
 
         register('phone_number')
         register('email')
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [Auth.isUserAuthenticated()])
 
     return (
         <>
