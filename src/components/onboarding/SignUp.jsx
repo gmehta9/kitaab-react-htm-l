@@ -40,7 +40,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
     }
 
     useEffect(() => {
-        fetch('cityState.json', {
+        fetch('/cityState.json', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

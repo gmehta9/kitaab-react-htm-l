@@ -1,7 +1,6 @@
 import { Button, Container, Image, InputGroup, Row } from "react-bootstrap";
 import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 // import Footer from "../../components/Footer";
-import { srcPriFixLocal } from "../../helper/Helper";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 // import { axiosInstance, headers } from "../../axios/axios-config";
 // import Auth from "../../auth/Auth";
@@ -125,7 +124,7 @@ function ProductModuleLayout() {
                                     id="basic-addon2"
                                     className="ml-2 align-items-center d-flex">
                                     <Image
-                                        src={`${srcPriFixLocal}search-icon-white.svg`}
+                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}search-icon-white.svg`}
                                     />
                                 </Button>
                                 {/* <DropdownButton

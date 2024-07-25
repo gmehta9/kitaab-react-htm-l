@@ -11,7 +11,7 @@ import Resizer from "react-image-file-resizer";
 import Auth from "../../auth/Auth";
 import { MEDIA_URL } from "../../helper/Utils";
 import { apiUrl, axiosInstance, headers } from "../../axios/axios-config";
-import { srcPriFixLocal } from "../../helper/Helper";
+import { base64ToFile } from "../../helper/Helper";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
@@ -57,15 +57,17 @@ function ProductForm() {
         new Promise((resolve) => {
             Resizer.imageFileResizer(
                 file,
-                700,
-                1064,
+                620,
+                930,
                 "JPEG",
-                100,
+                70,
                 0,
                 (uri) => {
                     resolve(uri);
                 },
-                "base64"
+                "file",
+                620,
+                930
             );
         });
 
@@ -99,10 +101,9 @@ function ProductForm() {
         }
         let body = data
         let api = "product"
-        if (data.file[0]) {
-            const responseImg = await FileUploadhandler(data.file[0], 'product')
+        if (imageFile) {
+            const responseImg = await FileUploadhandler(imageFile, 'product')
             if (!responseImg) {
-
                 return
             }
             console.log('responseImg.image', responseImg);
@@ -191,27 +192,21 @@ function ProductForm() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const imageChnageHandler = async (file) => {
+    const imageChangeHandler = async (file) => {
 
         const image = await resizeFile(file[0]);
-        // if (file[0]?.size) {
-
-        // if (file[0]?.size > 2000000) {
-        //     toast.error('The file size should not be more than 2MB.')
-        //     setValue('file', undefined)
-        //     return
-        // }
-        // const responseImg = await FileUploadhandler(image, 'product')
-        // console.log(image, );
         setImageFile(image)
-
-        setImageView(image);
-        // const reader = new FileReader();
-        // reader.onload = () => {
-        // };
-        // reader.readAsDataURL(image);
-        // }
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const imageUrl = event.target.result;
+            setImageView(imageUrl)
+        };
+        reader.readAsDataURL(image);
     }
+    // const responseImg = await FileUploadhandler(image, 'product')
+    // console.log(responseImg);
+
+
 
     useEffect(() => {
 
@@ -220,7 +215,7 @@ function ProductForm() {
             const file = getValues('file')
             if (file.length > 0) {
 
-                imageChnageHandler(file)
+                imageChangeHandler(file)
             }
 
         }
@@ -400,20 +395,23 @@ function ProductForm() {
 
                             <input
                                 {...register('file')}
-                                type="file" className="d-none" id="imageUpload" />
+                                type="file"
+                                accept="image/jpg,image/png,image/jpeg"
+                                className="d-none"
+                                id="imageUpload" />
                             <label htmlFor="imageUpload" className="product-upload-frame my-2 position-relative">
 
                                 {imageView ?
                                     <img src={`${imageView}`} className="image-preview" alt="" />
                                     :
                                     <span className="placeholder bg-transparent">
-                                        <img src={`${srcPriFixLocal}upload-placeholder.png`} className="opacity-50" alt="" />
+                                        <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}upload-placeholder.png`} className="opacity-50" alt="" />
                                     </span>
                                 }
                                 {/* <span className="placeholder bg-transparent d-block">
-                                    <img src="./assets/images/upload-placeholder.png" alt="" />
+                                    <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}upload-placeholder.png`} alt="" />
                                 </span> */}
-                                {/* <img src="./assets/images/book.webp" alt="" /> */}
+                                {/* <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}book.webp`} alt="" /> */}
 
                             </label>
                         </div>

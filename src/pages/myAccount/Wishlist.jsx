@@ -4,7 +4,7 @@ import { PaginationControl } from "react-bootstrap-pagination-control";
 import { useForm } from "react-hook-form";
 import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
-import { formatDateTime, srcPriFixLocal } from "../../helper/Helper";
+import { formatDateTime } from "../../helper/Helper";
 import { useOutletContext } from "react-router-dom";
 
 function Wishlist() {
@@ -193,7 +193,7 @@ function Wishlist() {
                                     </span>
                                     <span onClick={() => deletitemHandler(wl)}>
                                         <Image
-                                            src={`${srcPriFixLocal}delete_icon.svg`}
+                                            src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_icon.svg`}
                                         />
                                     </span>
                                 </div>

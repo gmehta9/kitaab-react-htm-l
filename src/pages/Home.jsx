@@ -2,7 +2,6 @@ import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
-import { srcPriFixLocal } from "../helper/Helper";
 import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance, headers } from "../axios/axios-config";
 import Auth from "../auth/Auth";
@@ -217,7 +216,7 @@ function HomePage() {
                             className="ml-2 px-4 align-items-center d-flex">
                             <Image
                                 className="mr-2"
-                                src={`${srcPriFixLocal}search-icon-white.svg`}
+                                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}search-icon-white.svg`}
                             />
                             Find Book
                         </Button>

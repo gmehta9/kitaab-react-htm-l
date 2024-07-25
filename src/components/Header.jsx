@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, Image, Navbar } from "react-bootstrap";
 import Login from "../components/onboarding/Login";
-import { srcPriFixLocal } from "../helper/Helper";
 import { useLocation, useNavigate } from "react-router-dom";
 import Auth from "../auth/Auth";
 import ChangePassword from "./onboarding/ChangePassword";
@@ -62,7 +61,7 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
                     <Navbar.Brand
                         onClick={() => navigate('/')}>
                         <Image
-                            src={`${srcPriFixLocal}KJ-Logo-(1).png`}
+                            src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}KJ-Logo-(1).png`}
                             className="logo" />
                     </Navbar.Brand>
                     {/* <Navbar.Toggle></Navbar.Toggle> */}

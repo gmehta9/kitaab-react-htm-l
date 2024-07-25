@@ -1,6 +1,5 @@
 import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import ProductItemUI from "../../components/ProductItemUI";
-import { srcPriFixLocal } from "../../helper/Helper";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
 import { axiosInstance, headers } from "../../axios/axios-config";
@@ -244,7 +243,7 @@ function ProductByList() {
                                 onClick={() => setCatListShow(!catListShow)}
                                 className="d-flex justify-content-between w-100 pl-0 "
                                 type="button">Categories
-                                <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${srcPriFixLocal}dropdown-arrow.svg`} />
+                                <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
                             </Button>
 
                             {catListShow &&
@@ -274,7 +273,7 @@ function ProductByList() {
                             {/* <Button
                     variant=""
                     className="d-flex justify-content-between w-100 pl-0"
-                    type="button">Author <Image className="dropdown-icon align-self-center" src={`${srcPriFixLocal}dropdown-arrow.svg`} />
+                    type="button">Author <Image className="dropdown-icon align-self-center" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
                 </Button> */}
 
                             {/* <ul className="pl-0 list-unstyled">
@@ -308,7 +307,7 @@ function ProductByList() {
                             <div
                                 style={{ height: '300px' }}
                                 className="text-center w-100 pt-5 h2 font-weight-bold">
-                                <Image width="250" src={`${srcPriFixLocal}no-product.png`} />
+                                <Image width="250" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}no-product.png`} />
                             </div>
                         </Row>
                     }

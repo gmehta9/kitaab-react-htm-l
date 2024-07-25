@@ -1,7 +1,7 @@
 export const MEDIA_URL = process.env.REACT_APP_MEDIA_URL
 
 export const replaceLogo = (e) => {
-    e.target.src = './assets/images/placeholder.jpg'
+    e.target.src = process.env.REACT_APP_MEDIA_LOCAL_URL + `placeholder.jpg'`
 }
 
 export const debounce = (fn, ms = 300) => {

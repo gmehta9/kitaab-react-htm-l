@@ -1,6 +1,5 @@
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { srcPriFixLocal } from "../helper/Helper";
 
 function Footer() {
 
@@ -9,7 +8,7 @@ function Footer() {
             <Image
                 className="mr-2 "
                 width={241}
-                src={`${srcPriFixLocal}Kitaab-Junction-footer.png`}
+                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}Kitaab-Junction-footer.png`}
             />
             <Container>
                 <Row className="mt-4">
@@ -39,7 +38,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${srcPriFixLocal}facebook.svg`}
+                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}facebook.svg`}
                                     />
                                 </a>
                             </span>
@@ -48,7 +47,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${srcPriFixLocal}linkedin.svg`}
+                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}linkedin.svg`}
                                     />
                                 </a>
                             </span>
@@ -57,7 +56,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${srcPriFixLocal}instagram.svg`}
+                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}instagram.svg`}
                                     />
                                 </a>
                             </span>
@@ -66,7 +65,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'40'}
-                                        src={`${srcPriFixLocal}twitter.svg`}
+                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}twitter.svg`}
                                     />
                                 </a>
                             </span>
