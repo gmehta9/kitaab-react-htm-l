@@ -2,8 +2,8 @@
   "name": "kitaabjunction",
   "version": "0.1.0",
   "private": true,
-  "start_url": "https://kitaabjunction.com/",
-  "homepage": "https://kitaabjunction.com/",
+  "start_url": "/kitaab-portal/kitaabJunction-web/",
+  "homepage": ".",
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.3",
     "@testing-library/jest-dom": "^5.17.0",
@@ -30,8 +30,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:prod": "PUBLIC_URL=/kitaabJunction-web/ env-cmd -f .env.prod npm run-script build",
-    "build:live": "PUBLIC_URL=https://kitaabjunction.com/ env-cmd -f .env.live npm run-script build",
+    "build:prod": "env-cmd -f .env.prod npm run-script build",
+    "build:live": "env-cmd -f .env.live npm run-script build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

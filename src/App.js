@@ -28,7 +28,7 @@ const ContactPage = lazy(() => import('./pages/innerpages/Contact'));
 
 function App() {
 
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
       path: '',
       element: <PagesLayout />,
@@ -139,7 +139,10 @@ function App() {
       element: '<NotFoundPage />',
     }
 
-  ]);
+  ]
+    // ,
+    //  { basename: ['live', 'local'].includes(process.env.REACT_APP_ENV) ? "" : "/kitaab-portal/api-gateway-hub/", }
+  );
 
   return (
     <React.StrictMode>
