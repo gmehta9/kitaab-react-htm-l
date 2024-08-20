@@ -10,7 +10,7 @@ import Resizer from "react-image-file-resizer";
 
 import Auth from "../../auth/Auth";
 import { MEDIA_URL } from "../../helper/Utils";
-import { apiUrl, axiosInstance, headers } from "../../axios/axios-config";
+import { apiUrl, axiosInstance } from "../../axios/axios-config";
 import { base64ToFile } from "../../helper/Helper";
 
 function ProductForm() {
@@ -34,12 +34,7 @@ function ProductForm() {
         };
         let APIUrl = 'category'
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 setCategoriesList(response?.data?.data)
                 setIsContentLoading(false)
@@ -78,12 +73,7 @@ function ProductForm() {
         formData.append('type', uploadKeyName)
         formData.append('file', file)
 
-        return axios.post(apiUrl + 'upload-image', formData, {
-            headers: {
-                // "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${Auth.token()}`
-            },
-        }).then((res) => {
+        return axios.post(apiUrl + 'upload-image', formData).then((res) => {
             console.log(res);
             return res.data.image
             // upload_profile_image
@@ -119,12 +109,7 @@ function ProductForm() {
             api = api + '/' + location?.state?.pId
         }
 
-        axiosInstance[method](api, body, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
+        axiosInstance[method](api, body).then((res) => {
             if (res) {
                 toast.success("Product added successfully!");
                 setIsContentLoading(false)
@@ -140,12 +125,7 @@ function ProductForm() {
 
         let APIUrl = 'product/' + id
 
-        axiosInstance.get(`${APIUrl}`, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}`).then((response) => {
             if (response) {
                 console.log(response);
                 setValue('title', response?.data?.title)

@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { MEDIA_URL, replaceLogo } from "../../helper/Utils";
 import AddToCartButton from "../../components/AddtoCart";
@@ -23,12 +23,7 @@ function ProductByID() {
 
         let APIUrl = 'product/' + location?.state?.productId
 
-        axiosInstance.get(`${APIUrl}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}`).then((response) => {
             if (response) {
                 console.log('response?.data?.data', response?.data);
                 setProductDetail(response?.data)

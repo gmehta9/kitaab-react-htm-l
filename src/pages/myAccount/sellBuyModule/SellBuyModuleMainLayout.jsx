@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import Auth from "../../../auth/Auth";
-import { axiosInstance, headers } from "../../../axios/axios-config";
+import { axiosInstance } from "../../../axios/axios-config";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import SellBuyOrderDetail from "./SellBuyOrderDetail";
 import SellOrdersList from "./SellOrdersList";
@@ -32,12 +32,7 @@ function SellBuyModuleMainLayout() {
             page: page || 1,
             size: 15
         }
-        axiosInstance['get'](apiSlug + '?' + new URLSearchParams(params), {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
+        axiosInstance['get'](apiSlug + '?' + new URLSearchParams(params)).then((res) => {
             if (res) {
 
                 const { data } = res.data

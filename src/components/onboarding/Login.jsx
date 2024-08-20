@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import SignUp from "./SignUp";
 import ForgotPassword from "./ForgotPassword";
 import Auth from "../../auth/Auth";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,7 +39,7 @@ function Login({ setIsUserLoggedIn, setIsContentLoading }) {
         axiosInstance.post("auth/sign-in", {
             ...data,
             type: 'Buyer/Seller'
-        }, { headers: headers }
+        }
         ).then((res) => {
             if (res) {
                 toast.success("Login Successfully!");

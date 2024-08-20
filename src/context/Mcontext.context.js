@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { axiosInstance, headers } from '../axios/axios-config';
+import { axiosInstance } from '../axios/axios-config';
 import Auth from '../auth/Auth';
 // import { debounce } from '../helper/Utils';
 import { debounce } from 'lodash'
@@ -15,12 +15,7 @@ export const MainProvider = ({ children }) => {
 
     const getCartApiHandlder = () => {
         setIsCartLoading(true)
-        axiosInstance['get']('cart', {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
+        axiosInstance['get']('cart').then((res) => {
             if (res) {
                 console.log(res);
                 setIsCartLoading(false)
@@ -40,12 +35,7 @@ export const MainProvider = ({ children }) => {
 
         const cd = cartData.map(item => ({ product_id: (item.product_id || item.id), quantity: +item.quantity }));
 
-        axiosInstance.post('cart', cd, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
+        axiosInstance.post('cart', cd).then((res) => {
             if (res) {
                 getCartApiHandlder()
                 setCopyCartData(cartData)

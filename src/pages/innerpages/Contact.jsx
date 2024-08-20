@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 
 function ContactPage() {
@@ -10,7 +10,7 @@ function ContactPage() {
     const [isSubmitting, setIsSubmitting] = useState()
     const leaveMessageHandler = (data) => {
         setIsSubmitting(true)
-        axiosInstance.post("contact-us", data, { headers: headers }
+        axiosInstance.post("contact-us", data
         ).then((res) => {
             if (res) {
                 toast.success("Form has been successfully submitted.");

@@ -3,7 +3,7 @@ import { useOutletContext } from "react-router-dom";
 import { Button, Col, Form, InputGroup, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import Auth from "../../auth/Auth";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 
 function ProfilePage() {
@@ -16,12 +16,7 @@ function ProfilePage() {
     const profileUpdateHandler = (data) => {
 
         setIsContentLoading(true)
-        axiosInstance['post']('auth/profile', data, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            }
-        }).then((res) => {
+        axiosInstance['post']('auth/profile', data).then((res) => {
             if (res) {
                 setIsContentLoading(false)
                 const t = Auth.token()
@@ -42,12 +37,7 @@ function ProfilePage() {
 
     const getProfileUpdateHandler = (sl) => {
         setIsContentLoading(true)
-        axiosInstance.get(`auth/profile`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance.get(`auth/profile`).then((response) => {
             if (response) {
                 const user = response?.data;
 

@@ -1,6 +1,6 @@
 import { Button, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
@@ -12,9 +12,7 @@ function ForgotPassword({ forgotShowModal, setForgotShowModal, setIsContentLoadi
     const dispatch = useDispatch();
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
-        axiosInstance.post("auth/pass-reset", data, {
-            headers: headers,
-        }).then((res) => {
+        axiosInstance.post("auth/pass-reset", data).then((res) => {
             if (res) {
                 toast.success("Password successfully sent to email!");
                 reset()

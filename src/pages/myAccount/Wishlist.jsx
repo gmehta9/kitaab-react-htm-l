@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Button, Form, Modal, Image, Spinner } from "react-bootstrap";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { useForm } from "react-hook-form";
-import { axiosInstance, headers } from "../../axios/axios-config";
-import Auth from "../../auth/Auth";
+import { axiosInstance } from "../../axios/axios-config";
 import { formatDateTime } from "../../helper/Helper";
 import { useOutletContext } from "react-router-dom";
 
@@ -23,12 +22,7 @@ function Wishlist() {
             size: 50,
         };
         setIsContentLoading(true)
-        axiosInstance.get(`${'wishlist'}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance.get(`${'wishlist'}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 setWishlist(response.data.data)
                 setPagination({
@@ -53,12 +47,7 @@ function Wishlist() {
             apisulg = apisulg + '/' + editObj.id
         }
 
-        axiosInstance[method](apisulg, data, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance[method](apisulg, data).then((response) => {
             if (response) {
 
                 if (modalShowWL === 'edit') {
@@ -84,12 +73,7 @@ function Wishlist() {
 
     const deletitemHandler = (wl) => {
         setIsContentLoading(true)
-        axiosInstance.delete(`wishlist/` + wl.id, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance.delete(`wishlist/` + wl.id).then((response) => {
             if (response) {
                 const wlUpdate = wishlist.filter(wlItem => wlItem.id !== wl.id)
                 setWishlist(wlUpdate)
