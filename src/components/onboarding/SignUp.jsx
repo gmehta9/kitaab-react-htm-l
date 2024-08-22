@@ -2,7 +2,7 @@
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import Select from 'react-select'
@@ -25,9 +25,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)
-        axiosInstance.post("auth/sign-up", data, {
-            headers: { headers },
-        }).then((res) => {
+        axiosInstance.post("auth/sign-up", data).then((res) => {
             if (res) {
                 toast.success("SignUp Successfully!");
                 handleClose()

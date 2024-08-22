@@ -8,6 +8,8 @@ const onRequest = (config) => {
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
   }
+  config.headers['Accept'] = `application/json`;
+  config.headers['Content-Type'] = `application/json`;
   return config;
 }
 
@@ -48,20 +50,15 @@ export function setupInterceptorsTo(axiosInstance) {
   return axiosInstance;
 }
 
-const token = Auth?.token();
 export const apiUrl = process.env.REACT_APP_BASE_URL
 export const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  ...(token &&
-    { Authorization: `Bearer ${token}` }
-  )
 }
 
 export const axiosInstance = setupInterceptorsTo(axios.create({
   baseURL: apiUrl,
   // timeout: 10000,
-  // headers: headers
 }))
 
 // export const axiosInstance = axios.create({

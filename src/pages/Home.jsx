@@ -3,8 +3,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import React, { useCallback, useEffect, useState } from "react";
-import { axiosInstance, headers } from "../axios/axios-config";
-import Auth from "../auth/Auth";
+import { axiosInstance } from "../axios/axios-config";
 import { MEDIA_URL, debounce, replaceLogo } from "../helper/Utils";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 
@@ -68,12 +67,7 @@ function HomePage() {
 
         let APIUrl = 'category'
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 setCategoriesList(response?.data?.data)
                 setIsContentLoading(false)
@@ -97,12 +91,7 @@ function HomePage() {
             params['category[0]'] = catID
         }
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 setProductList(response?.data?.data)
                 setIsContentLoading(false)
@@ -126,12 +115,7 @@ function HomePage() {
             params.searching = searchText
         }
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                Authorization: `Bearer ${Auth.token()}`,
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 console.log(response?.data?.data);
                 setSearchedContentList(response?.data?.data)

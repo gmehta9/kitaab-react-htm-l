@@ -2,7 +2,7 @@ import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import ProductItemUI from "../../components/ProductItemUI";
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext, useSearchParams } from "react-router-dom";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { debounce } from "../../helper/Utils";
 import Select from 'react-select'
@@ -69,12 +69,7 @@ function ProductByList() {
             })
         }
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
 
                 console.log('response?.data?.data', response?.data?.data);
@@ -103,12 +98,7 @@ function ProductByList() {
         };
         let APIUrl = 'category'
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            },
-        }).then((response) => {
+        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
                 setCategoriesList(response?.data?.data)
                 setIsContentLoading(false)

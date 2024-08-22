@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { axiosInstance, headers } from "../../axios/axios-config";
+import { axiosInstance } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -33,11 +33,6 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
             shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
             'cart_ids': order,
 
-        }, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
         }).then((res) => {
             if (res) {
                 toast.success("Order Placed successfully, Please check your email.", {
@@ -56,12 +51,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
     }
 
     const ProfileAddressHandler = (sl) => {
-        axiosInstance.get(`auth/profile`, {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((response) => {
+        axiosInstance.get(`auth/profile`).then((response) => {
             if (response) {
 
                 const user = response?.data

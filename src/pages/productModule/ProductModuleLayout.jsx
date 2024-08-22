@@ -2,7 +2,7 @@ import { Button, Container, Image, InputGroup, Row } from "react-bootstrap";
 import { Outlet, useLocation, useNavigate, useOutletContext } from "react-router-dom";
 // import Footer from "../../components/Footer";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
-// import { axiosInstance, headers } from "../../axios/axios-config";
+// import { axiosInstance } from "../../axios/axios-config";
 // import Auth from "../../auth/Auth";
 import { useEffect, useState } from "react";
 import { debounce } from "../../helper/Utils";
@@ -20,34 +20,6 @@ function ProductModuleLayout() {
         console.log(event);
         setSearchText(event)
     }, 500)
-
-    // const getProductListBySearchText = async (searchText) => {
-    //     setIsSearchContentLoading(true)
-    //     const params = {
-    //         page: 1,
-    //         size: 20,
-    //     };
-    //     let APIUrl = 'product'
-
-    //     if (searchText) {
-    //         params.searching = searchText
-    //     }
-
-    //     axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`, {
-    //         headers: {
-    //             ...headers,
-    //             Authorization: `Bearer ${Auth.token()}`,
-    //         },
-    //     }).then((response) => {
-    //         if (response) {
-    //             console.log(response?.data?.data);
-    //             setSearchedContentList(response?.data?.data)
-    //             setIsSearchContentLoading(false)
-    //         }
-    //     }).catch((error) => {
-    //         setIsSearchContentLoading(false)
-    //     });
-    // };
 
     const searchBarShow = () => {
         let show = true

@@ -30,17 +30,7 @@ function CartPage() {
             setCartBtnClick(cartBtnClick + 1)
             const cd = cartData.filter((item) => (item.product_id || item.id) !== (obj.product_id || obj.id))
             setCartData(cd)
-            // axiosInstance['delete']('cart/' + obj?.product_id || obj.id, {
-            //     headers: {
-            //         ...headers,
-            //         ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            //     }
-            // }).then((res) => {
-            //     if (res) {
-            //         const cd = cartData.filter((item) => (item.product_id || item.id) !== (obj.product_id || obj.id))
-            //         setCartData(cd)
-            //     }
-            // }).catch((error) => { })
+
         } else {
             const cd = cartData.filter((item) => (item?.product_id || item?.id) !== (obj?.product_id || obj.id))
             setCartData(cd)

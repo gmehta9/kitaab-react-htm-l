@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect, useState } from "react";
 import { Button, Dropdown, Image, Modal, Nav, Navbar } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import Auth from "../auth/Auth";
-import { axiosInstance, headers } from "../axios/axios-config";
+import { axiosInstance } from "../axios/axios-config";
 import toast from "react-hot-toast";
 import MainContext from "../context/Mcontext.context";
 import { openLoginModal } from "../redux/authModalSlice";
@@ -25,12 +25,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
     const logoutHandler = useCallback(() => {
 
         // Auth.logout()
-        axiosInstance.get("auth/sign-out", {
-            headers: {
-                ...headers,
-                ...(Auth.token() && { Authorization: `Bearer ${Auth.token()}` })
-            }
-        }).then((res) => {
+        axiosInstance.get("auth/sign-out").then((res) => {
             if (res) {
                 Auth.logout()
                 navigate('/')
