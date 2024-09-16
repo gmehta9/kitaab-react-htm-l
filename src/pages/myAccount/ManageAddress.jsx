@@ -82,7 +82,9 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
             return response.json();
         }).then(function (myJson) {
             setStateList(myJson)
-            ProfileAddressHandler(myJson)
+            if (Auth.isUserAuthenticated()) {
+                ProfileAddressHandler(myJson)
+            }
         })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
