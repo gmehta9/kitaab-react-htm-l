@@ -103,6 +103,8 @@ $border-bottom-color_3: #e8f1f3;
     .chat-history {
         padding: 20px;
         border-bottom: 2px solid #fff;
+        overflow: auto;
+        height: 400px;
 
         ul {
             padding: 0;
