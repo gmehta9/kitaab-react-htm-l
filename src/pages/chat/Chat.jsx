@@ -1,5 +1,7 @@
-function Chat() {
+import { useState } from "react";
 
+const Chat = () => {
+    const [channel, setChannel] = useState()
     return (
         <>
             <div className="chat">
@@ -19,25 +21,36 @@ function Chat() {
                 </div>
                 <div className="chat-history">
                     <ul className="m-b-0">
+
+                        {/* left side message */}
                         <li className="clearfix">
-                            <div className="message-data text-right">
-                                <span className="message-data-time">10:10 AM, Today</span>
+                            <div className="message-data text-right position-relative">
+                                <span className="message-user-name">
+                                    Gmehta right dfdffd gfdgdf
+                                </span>
+                                <span className="h6 position-absolute message-time right-time">
+                                    10:12 AM, Today
+                                </span>
                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
                             </div>
                             <div className="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
                         </li>
+
+                        {/* right side message */}
                         <li className="clearfix">
-                            <div className="message-data">
-                                <span className="message-data-time">10:12 AM, Today</span>
+                            <div className="message-data position-relative">
+
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                <span className="message-user-name">
+                                    Gmehta dee mehta
+                                </span>
+                                <span className="h6 position-absolute message-time left-time">
+                                    10:12 AM, Today
+                                </span>
                             </div>
                             <div className="message my-message">Are we meeting today?</div>
                         </li>
-                        <li className="clearfix">
-                            <div className="message-data">
-                                <span className="message-data-time">10:15 AM, Today</span>
-                            </div>
-                            <div className="message my-message">Project has been already finished and I have results to show you.</div>
-                        </li>
+
                     </ul>
                 </div>
                 <div className="chat-message clearfix">

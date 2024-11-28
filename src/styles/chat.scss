@@ -106,6 +106,22 @@ $border-bottom-color_3: #e8f1f3;
         overflow: auto;
         height: 400px;
 
+        .message-time {
+            font-size: 12px;
+        }
+
+        .left-time {
+            bottom: -15px;
+            width: 95px;
+            left: 40px;
+        }
+
+        .right-time {
+            bottom: -15px;
+            width: 95px;
+            right: 40px;
+        }
+
         ul {
             padding: 0;
 
@@ -128,14 +144,22 @@ $border-bottom-color_3: #e8f1f3;
             }
         }
 
-        .message-data-time {
+        .message-user-name {
             color: $color_2;
             padding-left: 6px;
+            text-overflow: ellipsis;
+            /* IE, Safari (WebKit) */
+            overflow: hidden;
+            /* don't show excess chars */
+            white-space: nowrap;
+            /* force single line */
+            width: 120px;
+            display: inline-block
         }
 
         .message {
             color: $color_3;
-            padding: 18px 20px;
+            padding: 15px;
             line-height: 26px;
             font-size: 16px;
             border-radius: 7px;
