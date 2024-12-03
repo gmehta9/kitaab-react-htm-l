@@ -1,8 +1,9 @@
 import { Button, Container, Form, Modal, Row } from "react-bootstrap";
-import { Outlet } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 
 import '../../styles/chat.scss';
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { axiosInstance } from "../../axios/axios-config";
 
 const ChannelData = [
     {
@@ -10,12 +11,37 @@ const ChannelData = [
     }
 ]
 function ChatLayout() {
+    const { setIsContentLoading } = useOutletContext()
     const [showModal, setShowModal] = useState(false);
+    const [channelsList, setChannelsList] = useState()
     const [channels, setChannels] = useState(ChannelData);
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
 
+    const getChannelsListHandler = useCallback(async () => {
+        const params = {
+            page: 1,
+            size: 20,
+        };
+        let APIUrl = 'channel'
+        setIsContentLoading(true)
+        axiosInstance['get'](`${APIUrl}?${new URLSearchParams(params)}`).then((res) => {
+            if (res) {
+                setIsContentLoading(false)
+                setChannelsList(res.data.data)
+            }
+        }).catch((error) => {
+            console.log(error)
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        getChannelsListHandler()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     return (
         <>
             <Row>
@@ -29,7 +55,7 @@ function ChatLayout() {
                                     </div>
                                     <ul className="list-unstyled chat-list mt-2 mb-0">
 
-                                        {ChannelData.map((cd, index) =>
+                                        {channelsList && channelsList.map((cd, index) =>
                                             <li
                                                 key={index + 'id'}
                                                 className="clearfix"
@@ -39,7 +65,7 @@ function ChatLayout() {
                                                 }}>
                                                 <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
                                                 <div className="about">
-                                                    <div className="name">{cd.title}</div>
+                                                    <div className="name">{cd.name}</div>
                                                     <div className="status">
                                                         <i className="fa fa-circle offline"></i>
                                                         left 7 mins ago
