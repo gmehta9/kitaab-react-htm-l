@@ -5,16 +5,12 @@ import '../../styles/chat.scss';
 import { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 
-const ChannelData = [
-    {
-        title: 'Channel One'
-    }
-]
 function ChatLayout() {
     const { setIsContentLoading } = useOutletContext()
     const [showModal, setShowModal] = useState(false);
     const [channelsList, setChannelsList] = useState()
-    const [channels, setChannels] = useState(ChannelData);
+    const [channels, setChannels] = useState();
+    const [selectedChannel, setSelectedChannel] = useState();
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -76,14 +72,21 @@ function ChatLayout() {
 
                                     </ul>
                                 </div>
-                                <Outlet />
+                                {selectedChannel ?
+
+                                    <Outlet />
+                                    :
+                                    <div className="chat d-flex text-center align-items-center justify-content-center" style={{ minHeight: '400px' }}>
+                                        <span>Select Channel</span>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
 
                 </Container>
                 {/* <Footer /> */}
-            </Row>
+            </Row >
 
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Header closeButton >
@@ -93,7 +96,7 @@ function ChatLayout() {
                     <Form>
 
                         <div className="text-center">
-                            Request to join  {channels.title} channel.
+                            Request to join  {channels?.title} channel.
                         </div>
 
                         <div className="text-center mt-3">
