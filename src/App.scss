@@ -13,3 +13,7 @@ html {
     position: relative;
     min-height: 100%;
 }
+
+.modal-backdrop.show {
+    opacity: 0.9;
+}

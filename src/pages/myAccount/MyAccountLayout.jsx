@@ -1,6 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Footer from "../../components/Footer";
 import { useEffect, useState } from "react";
 import Auth from "../../auth/Auth";
 import Loader from "../../components/Loader";

@@ -3,7 +3,6 @@ import { Button, Col, Container, Row, Spinner, Table } from "react-bootstrap";
 // import Header from "../components/Header";
 // import toast from "react-hot-toast";
 import { useContext, useEffect, useState } from "react";
-import Footer from "../../components/Footer";
 import MainContext from "../../context/Mcontext.context";
 // import { axiosInstance, headers } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";

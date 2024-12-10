@@ -8,8 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData, setIsContentLoading }) {
     const navigate = useNavigate()
-    const userLogin = Auth.loggedInUser()
-    const { register, handleSubmit, setValue, watch, getValues, reset, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, setValue, watch, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
 

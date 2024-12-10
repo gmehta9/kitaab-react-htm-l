@@ -11,7 +11,7 @@ function ProfilePage() {
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
 
-    const { register, handleSubmit, watch, setValue, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, watch, setValue } = useForm({ mode: 'onChange' })
 
     const profileUpdateHandler = (data) => {
 

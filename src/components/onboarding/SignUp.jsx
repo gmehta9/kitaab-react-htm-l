@@ -21,7 +21,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
     const [city, setCity] = useState()
     const [state, setState] = useState()
     const selectInputRef = useRef()
-    const { register, handleSubmit, reset, resetField, setValue, clearErrors, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
         setIsContentLoading(true)

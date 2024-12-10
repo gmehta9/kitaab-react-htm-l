@@ -1,4 +1,4 @@
-# Node version - 16
+# Node version - 18
 # Bootstrap 5.1
 
 <!-- kitaabJunction   for build -->

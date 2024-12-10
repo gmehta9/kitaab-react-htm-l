@@ -4,13 +4,15 @@ import { Outlet, useOutletContext } from "react-router-dom";
 import '../../styles/chat.scss';
 import { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
+import toast from "react-hot-toast";
 
 function ChatLayout() {
     const { setIsContentLoading } = useOutletContext()
     const [showModal, setShowModal] = useState(false);
     const [channelsList, setChannelsList] = useState()
-    const [channels, setChannels] = useState();
     const [selectedChannel, setSelectedChannel] = useState();
+    const [isChannelReadyTochat, setIsChannelReadyTochat] = useState();
+
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
@@ -24,8 +26,8 @@ function ChatLayout() {
         setIsContentLoading(true)
         axiosInstance['get'](`${APIUrl}?${new URLSearchParams(params)}`).then((res) => {
             if (res) {
-                setIsContentLoading(false)
-                setChannelsList(res.data.data)
+                joinChannelListget(res.data.data)
+
             }
         }).catch((error) => {
             console.log(error)
@@ -34,10 +36,73 @@ function ChatLayout() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const generateColorFromId = (id) => {
+        // Convert the ID to a number (assuming it's a string)
+        const idNumber = parseInt(id, 10);
+
+        // Generate RGB values based on the ID
+        const r = (idNumber * 456) % 256; // Red component
+        const g = (idNumber * 789) % 256; // Green component
+        const b = (idNumber * 123) % 256; // Blue component
+
+        return `rgb(${r}, ${g}, ${b})`;
+    };
+    const joinChannelRequestHandler = useCallback(async () => {
+
+
+        let APIUrl = `channel/${selectedChannel.id}/join`
+        setIsContentLoading(true)
+        axiosInstance['put'](`${APIUrl}`).then((res) => {
+            if (res) {
+                toast.success('Channel join request has been sent to the admin. Please wait for approval.')
+                setIsContentLoading(false)
+                handleClose()
+            }
+        }).catch((error) => {
+            console.log(error)
+            setIsContentLoading(false)
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedChannel]);
+
+    // userChannel
+
+    const joinChannelListget = (chList) => {
+
+        let APIUrl = `userChannel`
+        setIsContentLoading(true)
+        axiosInstance['get'](`${APIUrl}`).then((res) => {
+            if (res) {
+                const channelJoinlist = res.data; // This is the array of channels you joined
+                const updatedChList = chList.map((ch) => {
+                    // Check if the channel exists in channelJoinlist
+                    const joinedChannel = channelJoinlist.find(joinedCh => joinedCh.channel_id === ch.id); // Assuming each channel has a unique 'id'
+                    // If it exists, add the status from channelJoinlist to the channel object
+                    if (joinedChannel) {
+                        return {
+                            ...ch,
+                            status: joinedChannel.status // Assuming 'status' is the property you want to add
+                        };
+                    }
+
+                    // If it doesn't exist, return the channel as is
+                    return ch;
+                });
+
+                setChannelsList(updatedChList);
+                setIsContentLoading(false);
+            }
+        }).catch((error) => {
+            console.log(error)
+        });
+    };
+
     useEffect(() => {
         getChannelsListHandler()
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
     return (
         <>
             <Row>
@@ -54,12 +119,25 @@ function ChatLayout() {
                                         {channelsList && channelsList.map((cd, index) =>
                                             <li
                                                 key={index + 'id'}
-                                                className="clearfix"
+                                                className="clearfix d-flex align-items-center "
                                                 onClick={() => {
-                                                    handleShow()
-                                                    setChannels(cd)
+                                                    if (cd.status === 'active') {
+                                                        setIsChannelReadyTochat()
+                                                    } else {
+                                                        handleShow()
+                                                        setSelectedChannel(cd)
+                                                    }
                                                 }}>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" />
+                                                <span
+                                                    className="d-flex justify-content-center align-items-center rounded-circle"
+                                                    style={{
+                                                        width: '50px',
+                                                        height: '50px',
+                                                        backgroundColor: `${generateColorFromId(cd.id)}` // Random background color
+                                                    }}>
+                                                    <span className="text-white">{cd.name.charAt(0)}</span> {/* Display the first letter of the channel name */}
+                                                </span>
+                                                {/* <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" /> */}
                                                 <div className="about">
                                                     <div className="name">{cd.name}</div>
                                                     <div className="status">
@@ -72,12 +150,16 @@ function ChatLayout() {
 
                                     </ul>
                                 </div>
-                                {selectedChannel ?
+                                {isChannelReadyTochat ?
 
-                                    <Outlet />
+                                    <Outlet context={{ selectedChannel }} />
                                     :
-                                    <div className="chat d-flex text-center align-items-center justify-content-center" style={{ minHeight: '400px' }}>
-                                        <span>Select Channel</span>
+                                    <div
+                                        className="chat d-flex text-center align-items-center justify-content-center"
+                                        style={{ minHeight: '500px' }}>
+                                        <span>
+                                            Select Channel
+                                        </span>
                                     </div>
                                 }
                             </div>
@@ -86,27 +168,55 @@ function ChatLayout() {
 
                 </Container>
                 {/* <Footer /> */}
-            </Row >
+            </Row>
 
-            <Modal show={showModal} onHide={handleClose}>
-                <Modal.Header closeButton >
-                    <Modal.Title>Join a Channel</Modal.Title>
+            <Modal
+                centered
+                show={showModal}
+                onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Join Channel</Modal.Title>
+                    <Button
+                        variant="close"
+                        className="p-0"
+                        onClick={handleClose}>
+                        <i className='bx bx-x h2 mb-0'></i>
+                    </Button>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
 
                         <div className="text-center">
-                            Request to join  {channels?.title} channel.
+                            {selectedChannel?.status === 'pending'
+                                ? 'Your request to join the channel has already been submitted. Please wait for approval.'
+                                : `Request to join ${selectedChannel?.name} channel.`}
+                        </div>
+
+                        {selectedChannel?.status !== 'pending' && (
+                            <div className="text-center mt-3">
+                                <Button
+                                    variant="primary"
+                                    className="mx-auto"
+                                    onClick={joinChannelRequestHandler}
+                                    type="button">
+                                    Join
+                                </Button>
+                            </div>
+                        )}
+                        {/* <div className="text-center">
+                            Request to join  {selectedChannel?.name} channel.
                         </div>
 
                         <div className="text-center mt-3">
                             <Button
                                 variant="primary"
                                 className="mx-auto"
-                                type="submit">
+                                onClick={joinChannelRequestHandler}
+                                type="button">
                                 Join
                             </Button>
                         </div>
+                        */}
                     </Form>
                 </Modal.Body>
             </Modal>
