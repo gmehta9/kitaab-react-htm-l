@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
+import moment from "moment";
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
@@ -138,7 +139,7 @@ const Chat = () => {
                                 <div className="message-data text-right position-relative">
                                     <span className="message-user-name">{msg.message}</span>
                                     <span className="h6 position-absolute message-time right-time">
-                                        {msg.time}
+                                        {moment(msg.created_at).format('HH:MM A')}
                                     </span>
                                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
                                 </div>
