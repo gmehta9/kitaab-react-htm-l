@@ -122,11 +122,13 @@ function ChatLayout() {
                                                 className="clearfix d-flex align-items-center "
                                                 onClick={() => {
                                                     if (cd.status === 'active') {
-                                                        setIsChannelReadyTochat()
+                                                        setIsChannelReadyTochat(true)
                                                     } else {
+                                                        setIsChannelReadyTochat(false)
                                                         handleShow()
-                                                        setSelectedChannel(cd)
                                                     }
+                                                    setSelectedChannel(cd)
+
                                                 }}>
                                                 <span
                                                     className="d-flex justify-content-center align-items-center rounded-circle"

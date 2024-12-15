@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
-import { useFetcher, useOutletContext } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 const Chat = () => {
     const [messages, setMessages] = useState([]);
@@ -8,6 +8,7 @@ const Chat = () => {
     const [inputValue, setInputValue] = useState("");
     const chatEndRef = useRef(null);
     const { selectedChannel } = useOutletContext()
+
     const sendMessage = async () => {
         if (!inputValue.trim()) return; // Prevent sending empty messages
 
@@ -16,9 +17,9 @@ const Chat = () => {
             message: inputValue,
         };
 
-        let APIUrl = `channel/${selectedChannel.id}/join`
+        let APIUrl = `channel/${selectedChannel.id}/messages`
 
-        axiosInstance['POST'](`${APIUrl}`, newMessage).then((res) => {
+        axiosInstance['post'](`${APIUrl}`, newMessage).then((res) => {
             if (res) {
                 // Append the new message to the chat
                 setMessages((prevMessages) => [
@@ -35,13 +36,11 @@ const Chat = () => {
 
 
     const loadChannelChat = (page = 1) => {
-
         let APIUrl = `channel/${selectedChannel.id}/messages?page=${page}&size=50`
-
         axiosInstance['get'](`${APIUrl}`, newMessage).then((res) => {
             if (res) {
                 console.log(res);
-
+                setMessages(res.data.data)
             }
         }).catch((error) => {
             console.log(error)
@@ -133,10 +132,11 @@ const Chat = () => {
                             </div>
                             <div className="message my-message">Are we meeting today?</div>
                         </li>
+
                         {messages.map((msg, index) => (
                             <li key={index} className="clearfix">
                                 <div className="message-data text-right position-relative">
-                                    <span className="message-user-name">{msg.user}</span>
+                                    <span className="message-user-name">{msg.message}</span>
                                     <span className="h6 position-absolute message-time right-time">
                                         {msg.time}
                                     </span>
@@ -158,7 +158,10 @@ const Chat = () => {
                             onKeyPress={handleKeyPress}
                             placeholder="Enter text here..." />
                         <div className="input-group-prepend">
-                            <button type="button" className="btn p-0 btn-primary send-btn border-0">
+                            <button
+                                type="button"
+                                onClick={sendMessage}
+                                className="btn p-0 btn-primary send-btn border-0">
                                 <span className="p-3">
                                     <i className='bx h4 mb-0 bx-send'></i>
                                 </span>
