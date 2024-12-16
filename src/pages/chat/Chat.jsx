@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
+import Auth from "../../auth/Auth";
 
 const Chat = () => {
+
+    const loggedUser = Auth.loggedInUser()
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState(0);
     const [inputValue, setInputValue] = useState("");
@@ -25,7 +28,7 @@ const Chat = () => {
                 // Append the new message to the chat
                 setMessages((prevMessages) => [
                     ...prevMessages,
-                    { user: "You", text: inputValue, time: new Date().toLocaleTimeString() },
+                    { ...res.data, user: { name: loggedUser.name } },
                 ]);
                 setNewMessage(newMessage + 1)
                 setInputValue(""); // Clear the input field
@@ -35,6 +38,7 @@ const Chat = () => {
         });
     };
 
+    console.log(loggedUser);
 
     const loadChannelChat = (page = 1) => {
         let APIUrl = `channel/${selectedChannel.id}/messages?page=${page}&size=50`
@@ -69,7 +73,9 @@ const Chat = () => {
     useEffect(() => {
         // Scroll to the bottom of the chat when messages change
         if (newMessage) {
-            chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            setTimeout(() => {
+                chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            }, 500);
         }
     }, [newMessage]);
 
@@ -81,21 +87,20 @@ const Chat = () => {
     return (
         <>
             <div className="chat" >
-                <div className="chat-header clearfix">
+                <div className="chat-header clearfix" style={{ borderColor: generateColorFromId(selectedChannel.id) }}>
                     <div className="row">
-                        <div className="col-lg-6">
+                        <div className="col-lg-6 d-flex align-items-center">
                             <span
                                 className="d-flex justify-content-center align-items-center rounded-circle"
                                 style={{
                                     width: '50px',
                                     height: '50px',
-                                    backgroundColor: `${generateColorFromId(1)}` // Random background color
-                                    // Math.floor(Math.random() * 16777215).toString(16)
+                                    backgroundColor: `${generateColorFromId(selectedChannel.id)}`
                                 }}>
-                                <span className="text-white">{'c'}</span> {/* Display the first letter of the channel name */}
+                                <span className="text-white">{'c'}</span>
                             </span>
-                            <div className="chat-about">
-                                <h6 className="m-b-0">Channel Name</h6>
+                            <div className="chat-about ">
+                                <h6 className="mb-0">{selectedChannel.name}</h6>
 
                             </div>
                         </div>
@@ -104,50 +109,39 @@ const Chat = () => {
                 </div>
                 <div className="chat-history">
                     <ul className="m-b-0">
-
-                        {/* left side message */}
-                        <li className="clearfix">
-                            <div className="message-data text-right position-relative">
-                                <span className="message-user-name">
-                                    Gmehta right dfdffd gfdgdf
-                                </span>
-                                <span className="h6 position-absolute message-time right-time">
-                                    10:12 AM, Today
-                                </span>
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                            </div>
-                            <div className="message other-message float-right"> Hi Aiden, how are you? How is the project coming along? </div>
-                        </li>
-
-                        {/* right side message */}
-                        <li className="clearfix">
-                            <div className="message-data position-relative">
-
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                <span className="message-user-name">
-                                    Gmehta dee mehta
-                                </span>
-                                <span className="h6 position-absolute message-time left-time">
-                                    10:12 AM, Today
-                                </span>
-                            </div>
-                            <div className="message my-message">Are we meeting today?</div>
-                        </li>
-
                         {messages.map((msg, index) => (
-                            <li key={index} className="clearfix">
-                                <div className="message-data text-right position-relative">
-                                    <span className="message-user-name">{msg.message}</span>
-                                    <span className="h6 position-absolute message-time right-time">
-                                        {moment(msg.created_at).format('HH:MM A')}
-                                    </span>
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                </div>
-                                <div className="message other-message float-right">{msg.text}</div>
-                            </li>
+                            <>
+                                {msg.user_id === loggedUser.id ?
+                                    <li key={index} className="clearfix">
+                                        <div className="message-data text-right position-relative">
+                                            <span className="message-user-name">{msg.user?.name}</span>
+                                            <span className="h6 position-absolute message-time right-time">
+                                                {moment(msg.created_at).format('HH:MM A')}
+                                            </span>
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                        </div>
+                                        <div className="message other-message float-right">{msg.message}</div>
+                                    </li>
+                                    :
+                                    // other user meesaage UI
+                                    <li className="clearfix">
+                                        <div className="message-data position-relative">
+
+                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                            <span className="message-user-name">
+                                                {msg.user.name}
+                                            </span>
+                                            <span className="h6 position-absolute message-time left-time">
+                                                {moment(msg.created_at).format('HH:MM A')}
+                                            </span>
+                                        </div>
+                                        <div className="message my-message">{msg.message}</div>
+                                    </li>
+                                }
+                            </>
                         ))}
-                        <div ref={chatEndRef} />
                     </ul>
+                    <div ref={chatEndRef} />
                 </div>
                 <div className="chat-message clearfix">
                     <div className="input-group mb-0">
@@ -155,6 +149,7 @@ const Chat = () => {
                             type="text"
                             className="form-control"
                             style={{ minHeight: '60px' }}
+                            value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyPress={handleKeyPress}
                             placeholder="Enter text here..." />

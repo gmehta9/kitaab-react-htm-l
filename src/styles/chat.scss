@@ -107,17 +107,17 @@ $border-bottom-color_3: #e8f1f3;
         height: 400px;
 
         .message-time {
-            font-size: 12px;
+            font-size: 10px;
         }
 
         .left-time {
-            bottom: -15px;
+            bottom: -7px;
             width: 95px;
             left: 40px;
         }
 
         .right-time {
-            bottom: -15px;
+            bottom: -7px;
             width: 95px;
             right: 40px;
         }
@@ -159,9 +159,9 @@ $border-bottom-color_3: #e8f1f3;
 
         .message {
             color: $color_3;
-            padding: 15px;
+            padding: 7px 10px;
             line-height: 26px;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 7px;
             display: inline-block;
             position: relative;
@@ -186,7 +186,7 @@ $border-bottom-color_3: #e8f1f3;
 
             &:after {
                 bottom: 100%;
-                left: 30px;
+                left: 20px;
                 border: solid transparent;
                 content: " ";
                 height: 0;
@@ -205,7 +205,8 @@ $border-bottom-color_3: #e8f1f3;
 
             &:after {
                 border-bottom-color: $border-bottom-color_3;
-                left: 93%;
+                left: unset;
+                right: 10px;
             }
         }
     }
