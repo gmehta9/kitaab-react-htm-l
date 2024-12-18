@@ -11,7 +11,6 @@ import Resizer from "react-image-file-resizer";
 import Auth from "../../auth/Auth";
 import { MEDIA_URL } from "../../helper/Utils";
 import { apiUrl, axiosInstance } from "../../axios/axios-config";
-import { base64ToFile } from "../../helper/Helper";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()

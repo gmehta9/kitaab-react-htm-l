@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
@@ -7,11 +7,13 @@ import Auth from "../../auth/Auth";
 const Chat = () => {
 
     const loggedUser = Auth.loggedInUser()
-    const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState(0);
+    const [chatList, setChatList] = useState([]);
+    const [messageScroll, setMessageScroll] = useState(0);
     const [inputValue, setInputValue] = useState("");
     const chatEndRef = useRef(null);
     const { selectedChannel } = useOutletContext()
+
+    const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if user scrolled up
 
     const sendMessage = async () => {
         if (!inputValue.trim()) return; // Prevent sending empty messages
@@ -25,12 +27,14 @@ const Chat = () => {
 
         axiosInstance['post'](`${APIUrl}`, newMessage).then((res) => {
             if (res) {
+                console.log('newMessagenewMessagenewMessage', newMessage);
                 // Append the new message to the chat
-                setMessages((prevMessages) => [
+                setChatList((prevMessages) => [
                     ...prevMessages,
                     { ...res.data, user: { name: loggedUser.name } },
                 ]);
-                setNewMessage(newMessage + 1)
+
+                setMessageScroll(messageScroll + 1)
                 setInputValue(""); // Clear the input field
             }
         }).catch((error) => {
@@ -38,14 +42,13 @@ const Chat = () => {
         });
     };
 
-    console.log(loggedUser);
-
     const loadChannelChat = (page = 1) => {
         let APIUrl = `channel/${selectedChannel.id}/messages?page=${page}&size=50`
-        axiosInstance['get'](`${APIUrl}`, newMessage).then((res) => {
+        axiosInstance['get'](`${APIUrl}`).then((res) => {
             if (res) {
-                console.log(res);
-                setMessages(res.data.data)
+                setChatList(res.data.data.reverse())
+                setTimeout(() => { chatBoxScrollHandler() }, 500)
+                // setMessageScroll(messageScroll + 1)
             }
         }).catch((error) => {
             console.log(error)
@@ -70,20 +73,51 @@ const Chat = () => {
         return `rgb(${r}, ${g}, ${b})`;
     };
 
-    useEffect(() => {
-        // Scroll to the bottom of the chat when messages change
-        if (newMessage) {
-            setTimeout(() => {
-                chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            }, 500);
+    const chatBoxScrollHandler = () => {
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollTo({
+                top: chatEndRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
         }
-    }, [newMessage]);
+    }
+
+    const scrollToBottom = () => {
+        setIsScrolledUp(false);
+        chatBoxScrollHandler();
+    };
+
+    const handleScroll = () => {
+        if (chatEndRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = chatEndRef.current;
+            // Check if the user has scrolled up
+            if (scrollTop + clientHeight < scrollHeight) {
+                setIsScrolledUp(true);
+            } else {
+                setIsScrolledUp(false);
+            }
+        }
+    };
+
 
     useEffect(() => {
         if (selectedChannel?.id) {
             loadChannelChat()
         }
     }, [selectedChannel])
+
+    useEffect(() => {
+        const chatHistoryElement = chatEndRef.current;
+        if (chatHistoryElement) {
+            chatHistoryElement.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (chatHistoryElement) {
+                chatHistoryElement.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, []);
+
     return (
         <>
             <div className="chat" >
@@ -107,41 +141,50 @@ const Chat = () => {
 
                     </div>
                 </div>
-                <div className="chat-history">
-                    <ul className="m-b-0">
-                        {messages.map((msg, index) => (
-                            <>
-                                {msg.user_id === loggedUser.id ?
-                                    <li key={index} className="clearfix">
-                                        <div className="message-data text-right position-relative">
-                                            <span className="message-user-name">{msg.user?.name}</span>
-                                            <span className="h6 position-absolute message-time right-time">
-                                                {moment(msg.created_at).format('HH:MM A')}
-                                            </span>
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                        </div>
-                                        <div className="message other-message float-right">{msg.message}</div>
-                                    </li>
-                                    :
-                                    // other user meesaage UI
-                                    <li className="clearfix">
-                                        <div className="message-data position-relative">
+                <div className="position-relative">
 
-                                            <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                            <span className="message-user-name">
-                                                {msg.user.name}
-                                            </span>
-                                            <span className="h6 position-absolute message-time left-time">
-                                                {moment(msg.created_at).format('HH:MM A')}
-                                            </span>
-                                        </div>
-                                        <div className="message my-message">{msg.message}</div>
-                                    </li>
-                                }
-                            </>
-                        ))}
-                    </ul>
-                    <div ref={chatEndRef} />
+
+                    <div className="chat-history " ref={chatEndRef}>
+                        <ul className="m-b-0 ">
+                            {chatList.map((msg, index) => (
+                                <React.Fragment key={index + 'chat'}>
+                                    {msg.user_id === loggedUser.id ?
+                                        <li key={index} className="clearfix">
+                                            <div className="message-data text-right position-relative">
+                                                <span className="message-user-name">{msg.user?.name}</span>
+                                                <span className="h6 position-absolute message-time right-time">
+                                                    {moment(msg.created_at).format('hh:mm a')}
+                                                </span>
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                            </div>
+                                            <div className="message other-message float-right">{msg.message}</div>
+                                        </li>
+                                        :
+                                        // other user meesaage UI
+                                        <li key={index} className="clearfix">
+                                            <div className="message-data position-relative">
+
+                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                                <span className="message-user-name">
+                                                    {msg.user.name}
+                                                </span>
+                                                <span className="h6 position-absolute message-time left-time">
+                                                    {moment(msg.created_at).format('HH:MM A')}
+                                                </span>
+                                            </div>
+                                            <div className="message my-message">{msg.message}</div>
+                                        </li>
+                                    }
+                                </React.Fragment>
+                            ))}
+                        </ul>
+
+                    </div>
+                    {isScrolledUp && (
+                        <button onClick={scrollToBottom} className=" btn btn-dark bottom-0 down-btn position-absolute">
+                            <i className='bx bxs-down-arrow-circle'></i>
+                        </button>
+                    )}
                 </div>
                 <div className="chat-message clearfix">
                     <div className="input-group mb-0">

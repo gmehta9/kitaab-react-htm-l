@@ -73,16 +73,26 @@ function ChatLayout() {
         setIsContentLoading(true)
         axiosInstance['get'](`${APIUrl}`).then((res) => {
             if (res) {
+                let anyActiveChannel = false;
+
                 const channelJoinlist = res.data; // This is the array of channels you joined
                 const updatedChList = chList.map((ch) => {
                     // Check if the channel exists in channelJoinlist
                     const joinedChannel = channelJoinlist.find(joinedCh => joinedCh.channel_id === ch.id); // Assuming each channel has a unique 'id'
+
                     // If it exists, add the status from channelJoinlist to the channel object
                     if (joinedChannel) {
-                        return {
+                        const updateChannel = {
                             ...ch,
                             status: joinedChannel.status // Assuming 'status' is the property you want to add
-                        };
+                        }
+
+                        if (!anyActiveChannel && joinedChannel.status === 'active') {
+                            anyActiveChannel = true
+                            setIsChannelReadyTochat(true)
+                            setSelectedChannel(updateChannel)
+                        }
+                        return updateChannel;
                     }
 
                     // If it doesn't exist, return the channel as is

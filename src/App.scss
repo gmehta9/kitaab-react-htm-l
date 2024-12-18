@@ -17,3 +17,12 @@ html {
 .modal-backdrop.show {
     opacity: 0.9;
 }
+
+.down-btn {
+    bottom: 0;
+    right: 20px;
+    font-size: 15px;
+    display: flex;
+    padding: 5px;
+    align-items: center;
+}
