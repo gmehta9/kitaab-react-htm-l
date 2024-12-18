@@ -91,7 +91,7 @@ const Chat = () => {
         if (chatEndRef.current) {
             const { scrollTop, scrollHeight, clientHeight } = chatEndRef.current;
             // Check if the user has scrolled up
-            if (scrollTop + clientHeight < scrollHeight) {
+            if ((scrollTop + clientHeight + 300) < scrollHeight) {
                 setIsScrolledUp(true);
             } else {
                 setIsScrolledUp(false);
