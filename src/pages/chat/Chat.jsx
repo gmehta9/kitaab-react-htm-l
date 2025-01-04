@@ -1,27 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
-import { axiosInstance } from "../../axios/axios-config";
+import { apiUrl, axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
 import Auth from "../../auth/Auth";
+import axios from "axios";
 
 const Chat = () => {
 
     const loggedUser = Auth.loggedInUser()
     const [chatList, setChatList] = useState([]);
     const [messageScroll, setMessageScroll] = useState(0);
+    const [selectedFile, setSelectedFile] = useState();
     const [inputValue, setInputValue] = useState("");
     const chatEndRef = useRef(null);
     const { selectedChannel } = useOutletContext()
 
     const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if user scrolled up
 
-    const sendMessage = async () => {
-        if (!inputValue.trim()) return; // Prevent sending empty messages
+    const sendMessage = async (fileUrl, filetype = 'text') => {
+        if (!inputValue.trim() && !fileUrl) return; // Prevent sending empty messages
 
         const newMessage = {
-            type: "text",
-            message: inputValue,
+            type: filetype,
+            message: fileUrl || inputValue,
         };
+
+        if (selectedFile) {
+            const uploadedFileUrl = await FileUploadhandler(selectedFile, "file");
+            if (uploadedFileUrl) {
+                newMessage.message = uploadedFileUrl
+            }
+        }
 
         let APIUrl = `channel/${selectedChannel.id}/messages`
 
@@ -99,6 +108,49 @@ const Chat = () => {
         }
     };
 
+    const handleFileChange = (file) => {
+        if (file) {
+            setSelectedFile()
+
+            if (!validateFile(file)) {
+                return;
+            }
+
+        }
+    }
+
+    const FileUploadhandler = async (file, uploadKeyName) => {
+
+        const formData = new FormData()
+
+        formData.append('type', uploadKeyName)
+        formData.append('file', file)
+
+        return axios.post(apiUrl + 'upload-image', formData).then((res) => {
+            console.log(res);
+            return res.data.image
+            // upload_profile_image
+        }).catch((error) => {
+
+        });
+    }
+
+    const validateFile = (file) => {
+        const allowedTypes = ["image/jpg", "image/png", "image/jpeg", "application/pdf"];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (!allowedTypes.includes(file.type)) {
+            alert("Invalid file type. Only JPG, PNG, JPEG, and PDF are allowed.");
+            return false;
+        }
+
+        if (file.size > maxSize) {
+            alert("File size exceeds the maximum limit of 5MB.");
+            return false;
+        }
+
+        return true;
+    };
 
     useEffect(() => {
         if (selectedChannel?.id) {
@@ -188,6 +240,19 @@ const Chat = () => {
                 </div>
                 <div className="chat-message clearfix">
                     <div className="input-group mb-0">
+                        <div className="align-content-center">
+                            <input
+                                type="file"
+                                accept="image/jpg, image/png, image/jpeg, application/pdf"
+                                name="fileattached"
+                                className="d-none"
+                                id="fileattached"
+                                onChange={handleFileChange}
+                            />
+                            <label htmlFor="fileattached" className="hand mr-2 mb-0">
+                                <i className='bx h4 bx-link'></i>
+                            </label>
+                        </div>
                         <input
                             type="text"
                             className="form-control"
@@ -197,6 +262,7 @@ const Chat = () => {
                             onKeyPress={handleKeyPress}
                             placeholder="Enter text here..." />
                         <div className="input-group-prepend">
+
                             <button
                                 type="button"
                                 onClick={sendMessage}
