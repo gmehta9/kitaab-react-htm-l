@@ -9,7 +9,7 @@ const Chat = () => {
 
     const loggedUser = Auth.loggedInUser()
     const [chatList, setChatList] = useState([]);
-    const [messageScroll, setMessageScroll] = useState(0);
+    // const [messageScroll, setMessageScroll] = useState(0);
     const [selectedFile, setSelectedFile] = useState();
     const [inputValue, setInputValue] = useState("");
     const chatEndRef = useRef(null);
@@ -17,22 +17,23 @@ const Chat = () => {
 
     const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if user scrolled up
 
-    const sendMessage = async (fileUrl, filetype = 'text') => {
-        if (!inputValue.trim() && !fileUrl) return; // Prevent sending empty messages
+    const sendMessage = async (filetype = 'text') => {
+        if (!inputValue.trim() && !selectedFile) return; // Prevent sending empty messages
 
         const newMessage = {
-            type: filetype,
-            message: fileUrl || inputValue,
+            type: 'text',
+            message: inputValue,
         };
-
         if (selectedFile) {
             const uploadedFileUrl = await FileUploadhandler(selectedFile, "file");
             if (uploadedFileUrl) {
-                newMessage.message = uploadedFileUrl
+                newMessage.message = uploadedFileUrl;
+                newMessage.type = 'file';
             }
         }
 
         let APIUrl = `channel/${selectedChannel.id}/messages`
+        console.log(newMessage);
 
         axiosInstance['post'](`${APIUrl}`, newMessage).then((res) => {
             if (res) {
@@ -43,7 +44,7 @@ const Chat = () => {
                     { ...res.data, user: { name: loggedUser.name } },
                 ]);
 
-                setMessageScroll(messageScroll + 1)
+                setTimeout(() => { chatBoxScrollHandler() }, 100)
                 setInputValue(""); // Clear the input field
             }
         }).catch((error) => {
@@ -108,7 +109,8 @@ const Chat = () => {
         }
     };
 
-    const handleFileChange = (file) => {
+    const handleFileChange = (fileObject) => {
+        const file = fileObject.target.files[0]
         if (file) {
             setSelectedFile()
 
@@ -137,20 +139,29 @@ const Chat = () => {
 
     const validateFile = (file) => {
         const allowedTypes = ["image/jpg", "image/png", "image/jpeg", "application/pdf"];
-        const maxSize = 5 * 1024 * 1024; // 5MB
+        const maxSize = 1 * 1024 * 1024; // 1MB
+        console.log(file);
 
         if (!allowedTypes.includes(file.type)) {
             alert("Invalid file type. Only JPG, PNG, JPEG, and PDF are allowed.");
             return false;
         }
+        console.log(maxSize);
 
         if (file.size > maxSize) {
-            alert("File size exceeds the maximum limit of 5MB.");
+            alert("File size exceeds the maximum limit of 1MB.");
             return false;
         }
 
         return true;
     };
+
+    const messageDateTimeGet = (datetime) => {
+        return moment(datetime).isSame(moment(), 'day')
+            ? `Today ${moment(datetime).format('hh:mm a')}`
+            : moment(datetime).format('DD/MM/YYYY hh:mm a')
+    }
+
 
     useEffect(() => {
         if (selectedChannel?.id) {
@@ -201,19 +212,21 @@ const Chat = () => {
                             {chatList.map((msg, index) => (
                                 <React.Fragment key={index + 'chat'}>
                                     {msg.user_id === loggedUser.id ?
-                                        <li key={index} className="clearfix">
+                                        <li key={index} className="mb-2 text-right">
+                                            <div className="message other-message">{msg.message}</div>
                                             <div className="message-data text-right position-relative">
-                                                <span className="message-user-name">{msg.user?.name}</span>
+                                                <span className="message-user-name font-weight-bold">{msg.user?.name}</span>
                                                 <span className="h6 position-absolute message-time right-time">
-                                                    {moment(msg.created_at).format('hh:mm a')}
+                                                    {messageDateTimeGet(msg.created_at)}
                                                 </span>
                                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
                                             </div>
-                                            <div className="message other-message float-right">{msg.message}</div>
+
                                         </li>
                                         :
                                         // other user meesaage UI
                                         <li key={index} className="clearfix">
+                                            <div className="message my-message">{msg.message}</div>
                                             <div className="message-data position-relative">
 
                                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
@@ -221,10 +234,10 @@ const Chat = () => {
                                                     {msg.user.name}
                                                 </span>
                                                 <span className="h6 position-absolute message-time left-time">
-                                                    {moment(msg.created_at).format('HH:MM A')}
+                                                    {messageDateTimeGet(msg.created_at)}
                                                 </span>
                                             </div>
-                                            <div className="message my-message">{msg.message}</div>
+
                                         </li>
                                     }
                                 </React.Fragment>

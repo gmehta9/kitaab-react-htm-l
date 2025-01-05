@@ -112,13 +112,13 @@ $border-bottom-color_3: #e8f1f3;
 
         .left-time {
             bottom: -7px;
-            width: 95px;
+            width: 110px;
             left: 40px;
         }
 
         .right-time {
             bottom: -7px;
-            width: 95px;
+            width: 110px;
             right: 40px;
         }
 
@@ -140,7 +140,7 @@ $border-bottom-color_3: #e8f1f3;
 
             img {
                 border-radius: 40px;
-                width: 40px;
+                width: 35px;
             }
         }
 
@@ -148,12 +148,13 @@ $border-bottom-color_3: #e8f1f3;
             color: $color_2;
             padding-left: 6px;
             text-overflow: ellipsis;
-            /* IE, Safari (WebKit) */
+            font-weight: 700;
             overflow: hidden;
             /* don't show excess chars */
             white-space: nowrap;
             /* force single line */
             width: 120px;
+            font-size: 12px;
             display: inline-block
         }
 
@@ -165,15 +166,17 @@ $border-bottom-color_3: #e8f1f3;
             border-radius: 7px;
             display: inline-block;
             position: relative;
+            margin-bottom: 15px;
 
             &:after {
-                bottom: 100%;
+                bottom: -20px;
                 left: 7%;
                 border: solid transparent;
                 content: " ";
                 height: 0;
                 width: 0;
                 position: absolute;
+                transform: rotate(180deg);
                 pointer-events: none;
                 border-bottom-color: $border-bottom-color_1;
                 border-width: 10px;
@@ -185,7 +188,7 @@ $border-bottom-color_3: #e8f1f3;
             background: #efefef;
 
             &:after {
-                bottom: 100%;
+                bottom: -20px;
                 left: 20px;
                 border: solid transparent;
                 content: " ";
