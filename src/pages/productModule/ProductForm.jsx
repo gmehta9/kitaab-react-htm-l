@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import axios from "axios";
 import toast from "react-hot-toast";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
@@ -9,8 +8,8 @@ import { Col, Row } from "react-bootstrap";
 import Resizer from "react-image-file-resizer";
 
 import Auth from "../../auth/Auth";
-import { MEDIA_URL } from "../../helper/Utils";
-import { apiUrl, axiosInstance } from "../../axios/axios-config";
+import { FileUploadhandler, MEDIA_URL, validateFile } from "../../helper/Utils";
+import { axiosInstance } from "../../axios/axios-config";
 
 function ProductForm() {
     const { setIsContentLoading } = useOutletContext()
@@ -65,21 +64,21 @@ function ProductForm() {
             );
         });
 
-    const FileUploadhandler = async (file, uploadKeyName) => {
+    // const FileUploadhandler = async (file, uploadKeyName) => {
 
-        const formData = new FormData()
+    //     const formData = new FormData()
 
-        formData.append('type', uploadKeyName)
-        formData.append('file', file)
+    //     formData.append('type', uploadKeyName)
+    //     formData.append('file', file)
 
-        return axios.post(apiUrl + 'upload-image', formData).then((res) => {
-            console.log(res);
-            return res.data.image
-            // upload_profile_image
-        }).catch((error) => {
-            setIsContentLoading(false)
-        });
-    }
+    //     return axios.post(apiUrl + 'upload-image', formData).then((res) => {
+    //         console.log(res);
+    //         return res.data.image
+    //         // upload_profile_image
+    //     }).catch((error) => {
+    //         setIsContentLoading(false)
+    //     });
+    // }
 
     const productFormHandler = async (data) => {
         setIsContentLoading(true)
@@ -173,6 +172,9 @@ function ProductForm() {
 
     const imageChangeHandler = async (file) => {
 
+        if (!validateFile(file, [])) {
+            return;
+        }
         const image = await resizeFile(file[0]);
         setImageFile(image)
         const reader = new FileReader();

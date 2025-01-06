@@ -255,6 +255,26 @@ $border-bottom-color_3: #e8f1f3;
     }
 }
 
+.file-select-main {
+    bottom: 50px;
+}
+
+.chat-file-image {
+    img {
+        width: 10rem;
+        height: 10rem;
+        object-fit: cover;
+    }
+
+}
+
+.image-preview-chat {
+    img {
+        width: 3rem;
+        height: 5rem;
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .chat-app {
         .people-list {

@@ -28,7 +28,7 @@ const ContactPage = lazy(() => import('./pages/innerpages/Contact'));
 
 function App() {
 
-  const router = createHashRouter([
+  const router = createBrowserRouter([
     {
       path: '',
       element: <PagesLayout />,
