@@ -24,6 +24,7 @@ const Chat = () => {
     // const [messageScroll, setMessageScroll] = useState(0);
     const [selectedFile, setSelectedFile] = useState();
     const [selectFileImageView, setSelectFileImageView] = useState();
+    const [newMessage, setNewMessage] = useState();
     const [isMsgSending, setIsMsgSending] = useState();
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoadMore, setIsLoadMore] = useState(false);
@@ -36,7 +37,7 @@ const Chat = () => {
     const sendMessage = async () => {
         if (!inputValue.trim() && !selectedFile) return; // Prevent sending empty messages
 
-        const newMessage = {
+        const newMsg = {
             type: 'text',
             message: inputValue,
         };
@@ -44,12 +45,12 @@ const Chat = () => {
         if (selectedFile) {
             const uploadedFileUrl = await FileUploadhandler(selectedFile, "file");
             if (uploadedFileUrl) {
-                newMessage.message = uploadedFileUrl;
-                newMessage.type = selectedFile.type.startsWith('image/') ? 'image' : 'file';
+                newMsg.message = uploadedFileUrl;
+                newMsg.type = selectedFile.type.startsWith('image/') ? 'image' : 'file';
             }
         }
         let APIUrl = `channel/${selectedChannel.id}/messages`
-        axiosInstance['post'](`${APIUrl}`, newMessage).then((res) => {
+        axiosInstance['post'](`${APIUrl}`, newMsg).then((res) => {
             if (res) {
 
                 // Append the new message to the chat
@@ -62,12 +63,12 @@ const Chat = () => {
                 setInputValue(""); // Clear the input field
                 setIsMsgSending(false)
                 clearSelectFile()
-                const pusherChannel = pusher.subscribe(`channel-${selectedChannel.id}`);
-                pusherChannel.trigger('client-new-message', {
-                    newMessage,
+                setNewMessage({
+                    newMsg,
                     user: { name: loggedUser.name },
                     created_at: new Date().toISOString(),
-                });
+                })
+
             }
         }).catch((error) => {
             setIsMsgSending(false)
@@ -234,8 +235,11 @@ const Chat = () => {
 
                 // setChatList((prevMessages) => [...prevMessages, data]);
             });
+            if (newMessage) {
+                pusherChannel.trigger('client-new-message', newMessage);
+            }
         }
-    }, [selectedChannel])
+    }, [selectedChannel, newMessage])
 
 
 
