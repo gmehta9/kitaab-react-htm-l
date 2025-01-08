@@ -10,14 +10,13 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Pusher from "pusher-js";
 
+const pusher = new Pusher('b8b88cde94e5cd3d31f7', {
+    // key: "75a9b0daeaeb0a75ba6b",
+    cluster: 'ap2',
+    encrypted: true,
+});
+
 const Chat = () => {
-
-    const pusher = new Pusher('1913596', {
-        key: "75a9b0daeaeb0a75ba6b",
-        cluster: 'ap2',
-        encrypted: true,
-    });
-
 
     const loggedUser = Auth.loggedInUser()
     const [chatList, setChatList] = useState([]);
@@ -228,7 +227,6 @@ const Chat = () => {
 
     useEffect(() => {
         if (selectedChannel?.id) {
-            loadChannelChat()
             const pusherChannel = pusher.subscribe(`channel-${selectedChannel.id}`);
             pusherChannel.bind('client-new-message', (data) => {
                 console.log(data);
@@ -236,6 +234,8 @@ const Chat = () => {
                 // setChatList((prevMessages) => [...prevMessages, data]);
             });
             if (newMessage) {
+                console.log('newMessage==>', newMessage);
+
                 pusherChannel.trigger('client-new-message', newMessage);
             }
         }
@@ -244,6 +244,9 @@ const Chat = () => {
 
 
     useEffect(() => {
+        if (selectedChannel?.id) {
+            loadChannelChat()
+        }
         return () => {
             pusher.unsubscribe(`channel-${selectedChannel.id}`);
         };
@@ -285,8 +288,6 @@ const Chat = () => {
                     </div>
                 </div>
                 <div className="position-relative">
-
-
 
                     <div className="chat-history position-relative" ref={chatEndRef}>
                         <ul className="m-b-0 ">
