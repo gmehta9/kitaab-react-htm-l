@@ -9,12 +9,14 @@ import { FileUploadhandler, MEDIA_URL, validateFile } from "../../helper/Utils";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Pusher from "pusher-js";
-
-const pusher = new Pusher('b8b88cde94e5cd3d31f7', {
-    // key: "75a9b0daeaeb0a75ba6b",
+Pusher.logToConsole = true;
+const pusher = new Pusher('75a9b0daeaeb0a75ba6b', {
+    // key: gagan.xeemu@gmail.com "75a9b0daeaeb0a75ba6b , gmehta.dev@gmail.com b8b88cde94e5cd3d31f7",
     cluster: 'ap2',
     encrypted: true,
 });
+
+
 
 const Chat = () => {
 
