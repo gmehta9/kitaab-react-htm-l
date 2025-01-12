@@ -91,16 +91,6 @@ function ProfilePage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [stateList, watch('state')]);
 
-    // useEffect(() => {
-    //     if (userLogin) {
-    //         setValue('name', userLogin?.name)
-    //         setValue('phone_number', userLogin?.phone_number)
-    //         setValue('email', userLogin?.email)
-    //         setValue('city', userLogin?.city)
-    //         setValue('state', userLogin?.state)
-    //     }
-    // }, [setValue, userLogin])
-
     return (
         <>
             <Form autoComplete="false" onSubmit={handleSubmit(profileUpdateHandler)}>

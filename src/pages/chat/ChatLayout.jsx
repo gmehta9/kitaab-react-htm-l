@@ -1,12 +1,14 @@
 import { Button, Container, Form, Modal, Row } from "react-bootstrap";
-import { Outlet, useOutletContext } from "react-router-dom";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 
 import '../../styles/chat.scss';
 import { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
+import Auth from "../../auth/Auth";
 
 function ChatLayout() {
+    const navigate = useNavigate()
     const { setIsContentLoading } = useOutletContext()
     const [showModal, setShowModal] = useState(false);
     const [channelsList, setChannelsList] = useState()
@@ -109,7 +111,9 @@ function ChatLayout() {
 
     useEffect(() => {
         getChannelsListHandler()
-
+        if (!Auth.isUserAuthenticated()) {
+            navigate('/')
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -152,10 +156,10 @@ function ChatLayout() {
                                                 {/* <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" /> */}
                                                 <div className="about">
                                                     <div className="name">{cd.name}</div>
-                                                    <div className="status">
+                                                    {/* <div className="status">
                                                         <i className="fa fa-circle offline"></i>
                                                         left 7 mins ago
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </li>
                                         )}

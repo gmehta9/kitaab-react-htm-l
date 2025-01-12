@@ -9,14 +9,12 @@ import { FileUploadhandler, MEDIA_URL, validateFile } from "../../helper/Utils";
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Pusher from "pusher-js";
-Pusher.logToConsole = true;
+// Pusher.logToConsole = true;
 const pusher = new Pusher('75a9b0daeaeb0a75ba6b', {
     // key: gagan.xeemu@gmail.com "75a9b0daeaeb0a75ba6b , gmehta.dev@gmail.com b8b88cde94e5cd3d31f7",
     cluster: 'ap2',
     encrypted: true,
 });
-
-
 
 const Chat = () => {
 
@@ -25,7 +23,7 @@ const Chat = () => {
     // const [messageScroll, setMessageScroll] = useState(0);
     const [selectedFile, setSelectedFile] = useState();
     const [selectFileImageView, setSelectFileImageView] = useState();
-    const [newMessage, setNewMessage] = useState();
+    // const [newMessage, setNewMessage] = useState();
     const [isMsgSending, setIsMsgSending] = useState();
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoadMore, setIsLoadMore] = useState(false);
@@ -64,11 +62,11 @@ const Chat = () => {
                 setInputValue(""); // Clear the input field
                 setIsMsgSending(false)
                 clearSelectFile()
-                setNewMessage({
-                    newMsg,
-                    user: { name: loggedUser.name },
-                    created_at: new Date().toISOString(),
-                })
+                // setNewMessage({
+                //     newMsg,
+                //     user: { name: loggedUser.name },
+                //     created_at: new Date().toISOString(),
+                // })
 
             }
         }).catch((error) => {
@@ -231,17 +229,21 @@ const Chat = () => {
         if (selectedChannel?.id) {
             const pusherChannel = pusher.subscribe(`channel-${selectedChannel.id}`);
             pusherChannel.bind('client-new-message', (data) => {
-                console.log(data);
-
-                // setChatList((prevMessages) => [...prevMessages, data]);
+                if (data.user_id !== loggedUser.id && selectedChannel.id === +data.channel_id) {
+                    // setChatList((prevMessages) => [...prevMessages, { ...data, user: { name: data.name } }]);
+                    // setTimeout(() => { chatBoxScrollHandler() }, 100)
+                    setChatList((prevMessages) => {
+                        const isDuplicate = prevMessages.some(msg => msg.id === data.id);
+                        if (!isDuplicate) {
+                            return [...prevMessages, { ...data, user: { name: data.name } }];
+                        }
+                        return prevMessages;
+                    });
+                    setTimeout(() => { chatBoxScrollHandler() }, 100);
+                }
             });
-            if (newMessage) {
-                console.log('newMessage==>', newMessage);
-
-                pusherChannel.trigger('client-new-message', newMessage);
-            }
         }
-    }, [selectedChannel, newMessage])
+    }, [selectedChannel])
 
 
 
@@ -323,7 +325,7 @@ const Chat = () => {
                                         </li>
                                         :
                                         // other user meesaage UI
-                                        <li key={index} className="clearfix">
+                                        <li key={index} className="clearfix client-msg">
                                             {messageUi(msg)}
                                             <div className="message-data position-relative">
 

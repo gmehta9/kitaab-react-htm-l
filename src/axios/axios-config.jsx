@@ -35,9 +35,8 @@ const onResponseError = (error) => {
     Auth.logout()
 
     setTimeout(() => {
-      // window.location.href = process.env.REACT_APP_RR || '/#/'
-      // window.location.reload();
-    }, 1000);
+      window.location.href = process.env.REACT_APP_RR
+    }, 300);
 
   }
 
