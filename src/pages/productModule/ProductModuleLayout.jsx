@@ -114,14 +114,9 @@ function ProductModuleLayout() {
 
                 </Container>
             }
-
-
             <Container>
                 <Outlet context={{ setIsContentLoading }} />
             </Container>
-
-
-            {/* <Footer /> */}
         </div>
     )
 }
