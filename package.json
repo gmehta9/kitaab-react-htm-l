@@ -2,8 +2,8 @@
   "name": "kitaabjunction",
   "version": "0.1.0",
   "private": true,
-  "start_url": "/kitaab-portal/kitaabJunction-web/",
-  "homepage": ".",
+  "start_url": "https://kitaabjunction.com/",
+  "homepage": "https://kitaabjunction.com/",
   "dependencies": {
     "@fancyapps/ui": "^5.0.36",
     "@reduxjs/toolkit": "^2.2.3",

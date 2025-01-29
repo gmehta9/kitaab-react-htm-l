@@ -7,8 +7,10 @@ import HomePage from './pages/Home';
 import MyAccountLayoutPage from './pages/myAccount/MyAccountLayout';
 import Loader from './components/Loader';
 
+import ProductModuleLayout from './pages/productModule/ProductModuleLayout';
+
 const ProfilePage = lazy(() => import('./pages/myAccount/ProfilePage'));
-const ProductModuleLayout = lazy(() => import('./pages/productModule/ProductModuleLayout'));
+
 const ProductByList = lazy(() => import('./pages/productModule/ProductByList'));
 const ProductByID = lazy(() => import('./pages/productModule/ProductByID'));
 const ChatLayout = lazy(() => import('./pages/chat/ChatLayout'));

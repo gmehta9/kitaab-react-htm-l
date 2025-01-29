@@ -36,7 +36,7 @@ function ProductByID() {
     });
 
     useEffect(() => {
-        if (productDetail?.created_by_user.id === Auth.loggedInUser()?.id) {
+        if (productDetail?.created_by_user?.id === Auth.loggedInUser()?.id) {
             setIsEditAble(true)
         }
         document.title = 'Book Detail | Kitaab Juction';

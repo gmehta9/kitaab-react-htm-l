@@ -153,9 +153,7 @@ function ProductByList() {
             // myJson.forEach(itm => {
             //     cityies = [...cityies, ...itm.cities]
             // })
-
             setStateList(myJson)
-            // setCityList(cityies)
         })
     }, [])
 
