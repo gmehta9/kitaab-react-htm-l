@@ -71,9 +71,6 @@ function ProductByList() {
 
         axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
             if (response) {
-
-                console.log('response?.data?.data', response?.data?.data);
-
                 let useData = response?.data?.data
                 if (location?.state === 'Sell/Share' && response?.data?.data.length > 0) {
 
@@ -110,7 +107,6 @@ function ProductByList() {
     }, []);
 
     const serachtext = debounce((event, type) => {
-        console.log(event, type);
         if (type === 'state') {
             setSearchByState(event)
         }
@@ -153,7 +149,6 @@ function ProductByList() {
         }).then(function (response) {
             return response.json();
         }).then(function (myJson) {
-            console.log(myJson);
             // let cityies = []
             // myJson.forEach(itm => {
             //     cityies = [...cityies, ...itm.cities]

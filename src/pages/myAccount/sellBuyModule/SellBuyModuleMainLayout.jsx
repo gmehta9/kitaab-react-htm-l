@@ -36,7 +36,6 @@ function SellBuyModuleMainLayout() {
             if (res) {
 
                 const { data } = res.data
-                console.log(apiSlug);
                 if (apiSlug === 'order-history') {
                     setOrderList(data)
                 } else if (apiSlug === 'sell-history') {

@@ -110,10 +110,11 @@ function ChatLayout() {
     };
 
     useEffect(() => {
-        getChannelsListHandler()
         if (!Auth.isUserAuthenticated()) {
             navigate('/')
+            return
         }
+        getChannelsListHandler()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 

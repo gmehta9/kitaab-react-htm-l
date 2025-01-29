@@ -17,7 +17,6 @@ function ProductModuleLayout() {
     // const [searchedContentList, setSearchedContentList] = useState([])
 
     const serachtext = debounce((event) => {
-        console.log(event);
         setSearchText(event)
     }, 500)
 

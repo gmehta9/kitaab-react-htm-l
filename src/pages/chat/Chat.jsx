@@ -73,7 +73,6 @@ const Chat = () => {
             setIsMsgSending(false)
             setSelectFileImageView()
             setSelectedFile()
-            console.log(error)
         });
     };
 
@@ -193,7 +192,8 @@ const Chat = () => {
     const handleFileChange = (fileObject) => {
         const file = fileObject.target.files[0]
         if (file) {
-            if (!validateFile(file, 'application/pdf')) {
+            if (!validateFile(file, ['application/pdf'])) {
+                clearSelectFile()
                 return;
             }
 

@@ -17,7 +17,6 @@ export const MainProvider = ({ children }) => {
         setIsCartLoading(true)
         axiosInstance['get']('cart').then((res) => {
             if (res) {
-                console.log(res);
                 setIsCartLoading(false)
                 const upList = res.data.map((itm) => {
                     itm.isReadyForOrder = true

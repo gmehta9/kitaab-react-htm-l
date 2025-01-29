@@ -42,7 +42,6 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
         });
         return () => window.removeEventListener("scroll", () => { })
     }, [])
-    console.log();
     useEffect(() => {
         window.scrollTo(0, 0)
     }, [location.pathname])

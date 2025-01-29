@@ -94,7 +94,6 @@ function ProductForm() {
             if (!responseImg) {
                 return
             }
-            console.log('responseImg.image', responseImg);
             body = { ...data, image: responseImg }
         }
 
@@ -125,7 +124,6 @@ function ProductForm() {
 
         axiosInstance.get(`${APIUrl}`).then((response) => {
             if (response) {
-                console.log(response);
                 setValue('title', response?.data?.title)
                 setValue('category_id', response?.data?.category_id)
                 setValue('sale_price', removeDecimal(response?.data?.sale_price))

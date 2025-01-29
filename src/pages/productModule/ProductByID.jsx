@@ -25,7 +25,6 @@ function ProductByID() {
 
         axiosInstance.get(`${APIUrl}`).then((response) => {
             if (response) {
-                console.log('response?.data?.data', response?.data);
                 setProductDetail(response?.data)
                 setContentLoading(false)
 
@@ -48,7 +47,6 @@ function ProductByID() {
         getProductByIdHandler()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location?.state?.productId])
-    console.log(location);
 
     return (
         <>

@@ -3,8 +3,6 @@ import { MEDIA_URL, replaceLogo } from "../../../helper/Utils";
 import { useEffect } from "react";
 
 function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
-    console.log(data);
-
     useEffect(() => {
         document.title = 'Sell Order | Kitaab Juction';
     }, [])

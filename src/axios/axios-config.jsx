@@ -35,7 +35,7 @@ const onResponseError = (error) => {
     Auth.logout()
 
     setTimeout(() => {
-      window.location.href = process.env.REACT_APP_RR
+      window.location.href = 'https://kitaabjunction.com/'
     }, 300);
 
   }
