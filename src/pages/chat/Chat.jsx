@@ -192,7 +192,19 @@ const Chat = () => {
     const handleFileChange = (fileObject) => {
         const file = fileObject.target.files[0]
         if (file) {
-            if (!validateFile(file, ['application/pdf'])) {
+
+            const allowedTypes = [
+                "application/pdf",
+                "application/msword", // .doc
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+                "application/vnd.ms-excel", // .xls
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+                "application/vnd.ms-powerpoint", // .ppt
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+                "text/plain", // .txt
+            ];
+
+            if (!validateFile(file, allowedTypes)) {
                 clearSelectFile()
                 return;
             }
@@ -244,8 +256,6 @@ const Chat = () => {
             });
         }
     }, [selectedChannel])
-
-
 
     useEffect(() => {
         if (selectedChannel?.id) {
