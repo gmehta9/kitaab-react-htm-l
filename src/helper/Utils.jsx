@@ -42,3 +42,15 @@ export const validateFile = (file, newAllowedTypes = []) => {
     }
     return true;
 };
+
+export function getInitials(name) {
+    const nameParts = name.split(' ');
+
+    if (nameParts.length === 1) {
+        // If only one part, return the first letter
+        return nameParts[0][0].toUpperCase();
+    } else {
+        // If multiple parts, return the first letter of each of the first two parts
+        return nameParts[0][0].toUpperCase() + nameParts[1][0].toUpperCase();
+    }
+}

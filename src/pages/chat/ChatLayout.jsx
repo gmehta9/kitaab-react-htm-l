@@ -13,6 +13,7 @@ function ChatLayout() {
     const [showModal, setShowModal] = useState(false);
     const [channelsList, setChannelsList] = useState()
     const [selectedChannel, setSelectedChannel] = useState();
+    const [searchValue, setSearchValue] = useState();
     const [isChannelReadyTochat, setIsChannelReadyTochat] = useState();
 
 
@@ -130,41 +131,54 @@ function ChatLayout() {
                                         Channels
                                     </div>
                                     <ul className="list-unstyled chat-list mt-2 mb-0">
+                                        <input
+                                            name=""
+                                            type="search"
+                                            placeholder="Search Channel"
+                                            className="form-control mb-3"
+                                            onChange={(e) => setSearchValue(e.target.value)}
+                                            id="search" />
+                                        {channelsList && channelsList.map((cd, index) => {
 
-                                        {channelsList && channelsList.map((cd, index) =>
-                                            <li
-                                                key={index + 'id'}
-                                                className="clearfix d-flex align-items-center "
-                                                onClick={() => {
-                                                    if (cd.status === 'active') {
-                                                        setIsChannelReadyTochat(true)
-                                                    } else {
-                                                        setIsChannelReadyTochat(false)
-                                                        handleShow()
-                                                    }
-                                                    setSelectedChannel(cd)
+                                            return ((!searchValue || new RegExp(`${searchValue}`, 'i').test(cd.name)) ?
+                                                <li
+                                                    key={index + 'id'}
+                                                    className={`clearfix d-flex align-items-center pl-0 
+                                                        ${selectedChannel.id === cd.id ? 'active' : ''}`}
+                                                    onClick={() => {
+                                                        if (cd.status === 'active') {
+                                                            setIsChannelReadyTochat(true)
+                                                        } else {
+                                                            setIsChannelReadyTochat(false)
+                                                            handleShow()
+                                                        }
+                                                        setSelectedChannel(cd)
 
-                                                }}>
-                                                <span
-                                                    className="d-flex justify-content-center align-items-center rounded-circle"
-                                                    style={{
-                                                        width: '50px',
-                                                        height: '50px',
-                                                        backgroundColor: `${generateColorFromId(cd.id)}` // Random background color
                                                     }}>
-                                                    <span className="text-white">{cd.name.charAt(0)}</span> {/* Display the first letter of the channel name */}
-                                                </span>
-                                                {/* <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" /> */}
-                                                <div className="about">
-                                                    <div className="name">{cd.name}</div>
-                                                    {/* <div className="status">
+                                                    <span
+                                                        className="d-flex justify-content-center align-items-center rounded-circle"
+                                                        style={{
+                                                            width: '50px',
+                                                            height: '50px',
+                                                            backgroundColor: `${generateColorFromId(cd.id)}` // Random background color
+                                                        }}>
+                                                        <span className="text-white">{cd.name.charAt(0)}</span> {/* Display the first letter of the channel name */}
+                                                    </span>
+                                                    {/* <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar" /> */}
+                                                    <div className="about">
+                                                        <div className="name">{cd.name}</div>
+                                                        {/* <div className="status">
                                                         <i className="fa fa-circle offline"></i>
                                                         left 7 mins ago
-                                                    </div> */}
-                                                </div>
-                                            </li>
-                                        )}
-
+                                                        </div> */}
+                                                    </div>
+                                                </li>
+                                                :
+                                                (index === 0 &&
+                                                    <div className="bg-light text-center mt-3">No channel Found!</div>
+                                                )
+                                            )
+                                        })}
                                     </ul>
                                 </div>
                                 {isChannelReadyTochat ?

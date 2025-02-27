@@ -4,7 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import moment from "moment";
 import Auth from "../../auth/Auth";
 
-import { FileUploadhandler, MEDIA_URL, validateFile } from "../../helper/Utils";
+import { FileUploadhandler, getInitials, MEDIA_URL, validateFile } from "../../helper/Utils";
 
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
@@ -109,10 +109,10 @@ const Chat = () => {
     const messageUi = (msg) => {
         let mui;
         if (msg.type === 'text') {
-            mui = <div className="message other-message">{msg.message}</div>;
+            mui = <div className="message ">{msg.message}</div>;
         } else if (msg.type === 'file') {
             mui = (
-                <div className="message other-message chat-file-msg">
+                <div className="message chat-file-msg">
                     <a
                         target="_blank"
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
@@ -124,7 +124,7 @@ const Chat = () => {
             );
         } else if (msg.type === 'image') {
             mui = (
-                <div className="message other-message chat-file-image">
+                <div className="message chat-file-image">
                     <button type="button"
                         onClick={() => imagePreview(MEDIA_URL + 'chatFiles/' + msg.message, 'image', '')}
                         className="border-0 bg-transparent">
@@ -153,7 +153,7 @@ const Chat = () => {
 
     const generateColorFromId = (id) => {
         // Convert the ID to a number (assuming it's a string)
-        const idNumber = parseInt(id, 10);
+        const idNumber = parseInt(id, 15);
 
         // Generate RGB values based on the ID
         const r = (idNumber * 456) % 256; // Red component
@@ -322,25 +322,47 @@ const Chat = () => {
                             {chatList.map((msg, index) => (
                                 <React.Fragment key={index + 'chat'}>
                                     {msg.user_id === loggedUser.id ?
-                                        <li key={index} className="mb-2 text-right">
+                                        <li key={index} className="text-right my-message">
                                             {messageUi(msg)}
                                             <div className="message-data text-right position-relative">
-                                                <span className="message-user-name font-weight-bold">{msg.user?.name}</span>
+                                                <span className="message-user-name font-weight-bold mb-2">{msg.user?.name}</span>
                                                 <span className="h6 position-absolute message-time right-time">
                                                     {messageDateTimeGet(msg.created_at)}
                                                 </span>
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
+                                                <span
+                                                    className="d-flex justify-content-center align-items-center rounded-circle chat-avatar-own"
+                                                    style={{
+                                                        width: '30px',
+                                                        height: '30px',
+                                                        backgroundColor: `${generateColorFromId(msg?.user?.id)}` // Random background color
+                                                    }}>
+
+                                                    <span className="text-white small d-flex text-center align-items-center">{
+                                                        getInitials(msg?.user?.name)
+                                                        // msg?.user?.name.charAt(0)
+                                                    }</span>
+                                                </span>
+
                                             </div>
 
                                         </li>
                                         :
                                         // other user meesaage UI
-                                        <li key={index} className="clearfix client-msg">
+                                        <li key={index} className="clearfix client-msg other-user-message">
                                             {messageUi(msg)}
                                             <div className="message-data position-relative">
 
-                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar" />
-                                                <span className="message-user-name">
+                                                <span
+                                                    className="d-flex justify-content-center align-items-center rounded-circle chat-avatar-other"
+                                                    style={{
+                                                        width: '30px',
+                                                        height: '30px',
+                                                        backgroundColor: `${generateColorFromId(msg?.user?.id)}` // Random background color
+                                                    }}>
+                                                    <span className="text-white small d-flex lh-1 align-items-center">{getInitials(msg?.user?.name)}</span>
+                                                </span>
+
+                                                <span className="message-user-name mb-2">
                                                     {msg.user.name}
                                                 </span>
                                                 <span className="h6 position-absolute message-time left-time">

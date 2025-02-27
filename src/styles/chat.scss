@@ -25,7 +25,7 @@ $border-bottom-color_3: #e8f1f3;
         position: absolute;
         left: 0;
         top: 0;
-        padding: 20px;
+        padding: 20px 15px;
         z-index: 7;
     }
 
@@ -138,15 +138,22 @@ $border-bottom-color_3: #e8f1f3;
         .message-data {
             margin-bottom: 15px;
 
-            img {
-                border-radius: 40px;
-                width: 35px;
+            .chat-avatar-own {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+
+            .chat-avatar-other {
+                position: absolute;
+                left: 0;
+                top: 0;
             }
         }
 
+
         .message-user-name {
             color: $color_2;
-            padding-left: 6px;
             text-overflow: ellipsis;
             font-weight: 700;
             overflow: hidden;
@@ -159,7 +166,8 @@ $border-bottom-color_3: #e8f1f3;
         }
 
         .message {
-            color: $color_3;
+            color: #fff;
+            background: #007445;
             padding: 7px 10px;
             line-height: 26px;
             font-size: 14px;
@@ -167,10 +175,11 @@ $border-bottom-color_3: #e8f1f3;
             display: inline-block;
             position: relative;
             margin-bottom: 15px;
+            min-width: 50px;
 
             &:after {
                 bottom: -20px;
-                left: 7%;
+                right: 8%;
                 border: solid transparent;
                 content: " ";
                 height: 0;
@@ -178,38 +187,33 @@ $border-bottom-color_3: #e8f1f3;
                 position: absolute;
                 transform: rotate(180deg);
                 pointer-events: none;
-                border-bottom-color: $border-bottom-color_1;
+                border-bottom-color: #007445;
                 border-width: 10px;
                 margin-left: -10px;
             }
         }
+
 
         .my-message {
-            background: #efefef;
-
-            &:after {
-                bottom: -20px;
-                left: 20px;
-                border: solid transparent;
-                content: " ";
-                height: 0;
-                width: 0;
-                position: absolute;
-                pointer-events: none;
-                border-bottom-color: $border-bottom-color_2;
-                border-width: 10px;
-                margin-left: -10px;
+            .message-user-name {
+                padding-right: 40px;
             }
         }
 
-        .other-message {
-            background: #e8f1f3;
-            text-align: right;
+        .other-user-message {
+            .message-user-name {
+                padding-left: 40px;
+            }
 
-            &:after {
-                border-bottom-color: $border-bottom-color_3;
-                left: unset;
-                right: 10px;
+            .message {
+                background: #c7dac8;
+                color: #222324;
+
+                &:after {
+                    border-bottom-color: #c7dac8;
+                    left: 20px;
+                    right: unset;
+                }
             }
         }
     }
