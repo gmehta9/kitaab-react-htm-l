@@ -105,14 +105,21 @@ const Chat = () => {
             sendMessage();
         }
     };
+    const DeleteButton = (msg) => <button type="button" style={{ left: '-25px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-0 border-0 bg-transparent">
+        <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
+    </button>;
 
-    const messageUi = (msg) => {
+    const messageUi = (msg, isDeleteMsg) => {
         let mui;
         if (msg.type === 'text') {
-            mui = <div className="message ">{msg.message}</div>;
+            mui = <div className="chat-message">
+                {isDeleteMsg && DeleteButton(msg)}
+                {msg.message}
+            </div>;
         } else if (msg.type === 'file') {
             mui = (
-                <div className="message chat-file-msg">
+                <div className="chat-message chat-file-msg">
+                    {isDeleteMsg && DeleteButton(msg)}
                     <a
                         target="_blank"
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
@@ -124,7 +131,8 @@ const Chat = () => {
             );
         } else if (msg.type === 'image') {
             mui = (
-                <div className="message chat-file-image">
+                <div className="chat-message chat-file-image">
+                    {isDeleteMsg && DeleteButton(msg)}
                     <button type="button"
                         onClick={() => imagePreview(MEDIA_URL + 'chatFiles/' + msg.message, 'image', '')}
                         className="border-0 bg-transparent">
@@ -149,6 +157,23 @@ const Chat = () => {
                 hideScrollbar: false,
             }
         );
+    }
+
+    const mesgDelethandler = (msg) => {
+
+        if (window.confirm("Are you sure you want to delete this message?")) {
+            let APIUrl = `channel/${selectedChannel.id}/messages/${msg.id}/delete`
+            axiosInstance['delete'](`${APIUrl}`).then((res) => {
+                if (res) {
+                    setChatList((prevMessages) => {
+                        const updatedMessages = prevMessages.filter((message) => message.id !== msg.id);
+                        return updatedMessages;
+                    });
+                }
+            }).catch((error) => {
+                console.log(error)
+            });
+        }
     }
 
     const generateColorFromId = (id) => {
@@ -322,10 +347,12 @@ const Chat = () => {
                             {chatList.map((msg, index) => (
                                 <React.Fragment key={index + 'chat'}>
                                     {msg.user_id === loggedUser.id ?
-                                        <li key={index} className="text-right my-message">
-                                            {messageUi(msg)}
+                                        <li key={index} className="text-right my-message position-relative">
+
+                                            {messageUi(msg, 'deleteMessage')}
                                             <div className="message-data text-right position-relative">
-                                                <span className="message-user-name font-weight-bold mb-2">{msg.user?.name}</span>
+                                                <span className="message-user-name font-weight-bold mb-2 ">
+                                                    {msg.user?.name}</span>
                                                 <span className="h6 position-absolute message-time right-time">
                                                     {messageDateTimeGet(msg.created_at)}
                                                 </span>

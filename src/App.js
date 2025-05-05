@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter, createHashRouter } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.scss';
 import React, { lazy, Suspense } from 'react';
 import { Toaster } from 'react-hot-toast';
