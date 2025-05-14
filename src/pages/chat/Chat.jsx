@@ -9,6 +9,8 @@ import { FileUploadhandler, getInitials, MEDIA_URL, validateFile } from "../../h
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import Pusher from "pusher-js";
+import toast from "react-hot-toast";
+import { ReplyIcon } from "../../components/ReplyIcon";
 // Pusher.logToConsole = true;
 const pusher = new Pusher('75a9b0daeaeb0a75ba6b', {
     // key: gagan.xeemu@gmail.com "75a9b0daeaeb0a75ba6b , gmehta.dev@gmail.com b8b88cde94e5cd3d31f7",
@@ -28,6 +30,7 @@ const Chat = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [replyMsgSelected, setreplyMsgSelected] = useState("");
     const chatEndRef = useRef(null);
     const { selectedChannel } = useOutletContext()
 
@@ -105,21 +108,28 @@ const Chat = () => {
             sendMessage();
         }
     };
-    const DeleteButton = (msg) => <button type="button" style={{ left: '-25px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-0 border-0 bg-transparent">
-        <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
-    </button>;
+    const DeleteButton = (msg) => (
+        <button type="button" style={{ left: '-45px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-50 border-0 bg-transparent">
+            <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
+        </button>)
+    const ReplyButton = (msg) => (
+        <button type="button" style={{ left: '-25px' }} onClick={() => setreplyMsgSelected(msg)} className="btn-msg-rply position-absolute top-50 border-0 bg-transparent">
+            <ReplyIcon />
+        </button>)
 
     const messageUi = (msg, isDeleteMsg) => {
         let mui;
         if (msg.type === 'text') {
             mui = <div className="chat-message">
                 {isDeleteMsg && DeleteButton(msg)}
+                {ReplyButton(msg)}
                 {msg.message}
             </div>;
         } else if (msg.type === 'file') {
             mui = (
                 <div className="chat-message chat-file-msg">
                     {isDeleteMsg && DeleteButton(msg)}
+
                     <a
                         target="_blank"
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
@@ -162,13 +172,14 @@ const Chat = () => {
     const mesgDelethandler = (msg) => {
 
         if (window.confirm("Are you sure you want to delete this message?")) {
-            let APIUrl = `channel/${selectedChannel.id}/messages/${msg.id}/delete`
+            let APIUrl = `channel/${selectedChannel.id}/message/${msg.id}/delete`
             axiosInstance['delete'](`${APIUrl}`).then((res) => {
                 if (res) {
                     setChatList((prevMessages) => {
                         const updatedMessages = prevMessages.filter((message) => message.id !== msg.id);
                         return updatedMessages;
                     });
+                    toast.success("Message deleted successfully")
                 }
             }).catch((error) => {
                 console.log(error)

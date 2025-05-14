@@ -196,6 +196,22 @@ $border-bottom-color_3: #e8f1f3;
             .btn-msg-delete {
                 display: none;
                 transition: ease-in-out 0.3s;
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+
+            .btn-msg-rply {
+                font-size: 20px;
+                color: darkgreen;
+                font-weight: 700;
+
+                &:focus {
+                    outline: none;
+                }
+
+                &:hover {
+                    color: #007445;
+                }
             }
 
             &:hover {
