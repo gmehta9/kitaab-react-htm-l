@@ -143,7 +143,7 @@ function ChatLayout() {
                                             return ((!searchValue || new RegExp(`${searchValue}`, 'i').test(cd.name)) ?
                                                 <li
                                                     key={index + 'id'}
-                                                    className={`clearfix d-flex align-items-center pl-0 
+                                                    className={`clearfix d-flex align-items-center pl-1 
                                                         ${selectedChannel.id === cd.id ? 'active' : ''}`}
                                                     onClick={() => {
                                                         if (cd.status === 'active') {

@@ -30,7 +30,7 @@ const Chat = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoadMore, setIsLoadMore] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [replyMsgSelected, setreplyMsgSelected] = useState("");
+    const [replyMsgSelected, setReplyMsgSelected] = useState("");
     const chatEndRef = useRef(null);
     const { selectedChannel } = useOutletContext()
 
@@ -43,6 +43,10 @@ const Chat = () => {
             type: 'text',
             message: inputValue,
         };
+        if (replyMsgSelected) {
+            newMsg.reply_to_message_id = replyMsgSelected?.id;
+        }
+
         setIsMsgSending(true)
         if (selectedFile) {
             const uploadedFileUrl = await FileUploadhandler(selectedFile, "file");
@@ -58,13 +62,18 @@ const Chat = () => {
                 // Append the new message to the chat
                 setChatList((prevMessages) => [
                     ...prevMessages,
-                    { ...res.data, user: { name: loggedUser.name } },
+                    {
+                        ...res.data.message,
+                        reply_to: res.data.reply_to,
+                        user: { name: loggedUser.name }
+                    },
                 ]);
 
                 setTimeout(() => { chatBoxScrollHandler() }, 100)
                 setInputValue(""); // Clear the input field
                 setIsMsgSending(false)
                 clearSelectFile()
+                setReplyMsgSelected(undefined)
                 // setNewMessage({
                 //     newMsg,
                 //     user: { name: loggedUser.name },
@@ -112,24 +121,79 @@ const Chat = () => {
         <button type="button" style={{ left: '-45px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-50 border-0 bg-transparent">
             <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
         </button>)
-    const ReplyButton = (msg) => (
-        <button type="button" style={{ left: '-25px' }} onClick={() => setreplyMsgSelected(msg)} className="btn-msg-rply position-absolute top-50 border-0 bg-transparent">
+    const ReplyButton = (msg, whoseMsg) => (
+        <button
+            type="button"
+            title="reply message"
+            style={whoseMsg === 'mymsg' ? {
+                left: '-25px',
+                WebkitTransform: 'scaleX(-1)',
+                transform: 'scaleX(-1)'
+            } : { right: '-25px' }}
+            onClick={() => setReplyMsgSelected(msg)}
+            className="btn-msg-rply position-absolute top-50 border-0 bg-transparent">
             <ReplyIcon />
         </button>)
 
-    const messageUi = (msg, isDeleteMsg) => {
+    const replyUi = (rplyMsg, whoseMsg) => {
+        return <div
+            style={
+                whoseMsg === 'mymsg' ? {
+                    background: '#c7dac8',
+                    color: '#000',
+                    fontSize: '12px',
+                    marginLeft: '-8px',
+                    lineHeight: '20px'
+                } : {
+                    background: '#007445',
+                    color: '#fff',
+                    fontSize: '12px',
+                    marginRight: '-8px',
+                    lineHeight: '20px'
+                }}
+            className="rounded px-2 text-left d-flex flex-column">
+            <div className="font-weight-bold">
+                {rplyMsg?.user?.name}
+            </div>
+            {rplyMsg.type === 'file' &&
+                <>
+                    <i style={{ fontSize: '50px' }} className="bx bxs-file" />
+                </>
+            }
+            {rplyMsg.type === 'image' &&
+                <>
+                    <img style={{
+                        width: '70px',
+                        height: '70px',
+                    }} src={MEDIA_URL + 'chatFiles/' + rplyMsg.message} alt="chat-file-image" />
+                </>
+            }
+            {rplyMsg.type === 'text' &&
+                <>
+                    {rplyMsg?.message}
+                </>
+            }
+
+        </div>
+    }
+
+    const messageUi = (msg, whoseMsg) => {
         let mui;
         if (msg.type === 'text') {
-            mui = <div className="chat-message">
-                {isDeleteMsg && DeleteButton(msg)}
-                {ReplyButton(msg)}
-                {msg.message}
-            </div>;
+            mui = (
+                <div className="chat-message">
+                    {msg.reply_to && replyUi(msg.reply_to, whoseMsg)}
+                    {ReplyButton(msg, whoseMsg)}
+                    {whoseMsg === 'mymsg' && DeleteButton(msg)}
+                    {msg.message}
+                </div>
+            );
         } else if (msg.type === 'file') {
             mui = (
                 <div className="chat-message chat-file-msg">
-                    {isDeleteMsg && DeleteButton(msg)}
-
+                    {msg.reply_to && replyUi(msg.reply_to, whoseMsg)}
+                    {ReplyButton(msg, whoseMsg)}
+                    {whoseMsg === 'mymsg' && DeleteButton(msg)}
                     <a
                         target="_blank"
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
@@ -142,7 +206,9 @@ const Chat = () => {
         } else if (msg.type === 'image') {
             mui = (
                 <div className="chat-message chat-file-image">
-                    {isDeleteMsg && DeleteButton(msg)}
+                    {msg.reply_to && replyUi(msg.reply_to, whoseMsg)}
+                    {ReplyButton(msg, whoseMsg)}
+                    {whoseMsg === 'mymsg' && DeleteButton(msg)}
                     <button type="button"
                         onClick={() => imagePreview(MEDIA_URL + 'chatFiles/' + msg.message, 'image', '')}
                         className="border-0 bg-transparent">
@@ -316,7 +382,7 @@ const Chat = () => {
 
     return (
         <>
-            <div className="chat" >
+            <div className="chat position-relative" >
                 <div className="chat-header clearfix" style={{ borderColor: generateColorFromId(selectedChannel.id) }}>
                     <div className="row">
                         <div className="col-lg-6 d-flex align-items-center">
@@ -359,8 +425,7 @@ const Chat = () => {
                                 <React.Fragment key={index + 'chat'}>
                                     {msg.user_id === loggedUser.id ?
                                         <li key={index} className="text-right my-message position-relative">
-
-                                            {messageUi(msg, 'deleteMessage')}
+                                            {messageUi(msg, 'mymsg')}
                                             <div className="message-data text-right position-relative">
                                                 <span className="message-user-name font-weight-bold mb-2 ">
                                                     {msg.user?.name}</span>
@@ -387,7 +452,7 @@ const Chat = () => {
                                         :
                                         // other user meesaage UI
                                         <li key={index} className="clearfix client-msg other-user-message">
-                                            {messageUi(msg)}
+                                            {messageUi(msg, 'othermsg')}
                                             <div className="message-data position-relative">
 
                                                 <span
@@ -415,30 +480,58 @@ const Chat = () => {
                         </ul>
 
                     </div>
-                    {selectedFile &&
-                        <div className="position-absolute  file-select-main w-100 bg-white p-2 border-1 border bottom-0 left-0 pl-4 pr-5">
-                            <button
-                                type="button"
-                                onClick={clearSelectFile}
-                                className="position-absolute right-0">
-                                <i className='bx bx-x' />
-                            </button>
+                    {(selectedFile || replyMsgSelected) &&
 
-                            <div className="d-flex">
-                                {selectFileImageView ?
-                                    <div className="image-preview-chat">
-                                        <img src={selectFileImageView} alt="select file" />
+                        <div
+                            style={{ width: '95%', maxHeight: '65px' }}
+                            className="position-absolute file-select-main bg-white p-2 pt-3 shadow rounded border-1 border bottom-0 right-0 mr-4 translate-middle-x pl-4 pr-5 overflow-hidden">
+                            {selectedFile && <>
+                                <button
+                                    type="button"
+                                    onClick={clearSelectFile}
+                                    style={{ height: '20px' }}
+                                    className="position-absolute btn btn-danger w-auto p-0 right-0 mr-3">
+                                    <i className='bx bx-x' />
+                                </button>
+
+                                <div className="d-flex">
+
+                                    {selectFileImageView ?
+                                        <div className="image-preview-chat">
+                                            <img src={selectFileImageView} alt="select file" />
+                                        </div>
+                                        :
+                                        <i style={{ fontSize: '30px' }} className='bx bxs-file-pdf' />
+                                    }
+                                    <div className="file-name">
+                                        {selectedFile.name}
                                     </div>
-                                    :
-                                    <i style={{ fontSize: '100px' }} className='bx bxs-file-pdf' />
-                                }
-                                <div className="file-name">
-                                    {selectedFile.name}
                                 </div>
-                            </div>
 
+                            </>
+                            }
+
+                            {replyMsgSelected && <>
+                                <button
+                                    type="button"
+                                    style={{ height: '20px' }}
+                                    onClick={() => setReplyMsgSelected(undefined)}
+                                    className="position-absolute btn btn-danger w-auto p-0 right-0 mr-3">
+                                    <i className='bx bx-x' />
+                                </button>
+
+                                <div className="d-flex flex-column position-relative">
+                                    <div
+                                        className="position-absolute left-0 top-0 font-weight-bold"
+                                        style={{ marginTop: '-15px', fontSize: '12px' }}>
+                                        Reply to:
+                                    </div>
+                                    <div className="file-name">
+                                        {replyMsgSelected.message}
+                                    </div>
+                                </div>
+                            </>}
                         </div>
-
                     }
                     {isScrolledUp && (
                         <button onClick={scrollToBottom} className=" btn btn-dark bottom-0 down-btn position-absolute">
