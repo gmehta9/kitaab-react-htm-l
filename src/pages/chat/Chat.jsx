@@ -199,7 +199,7 @@ const Chat = () => {
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
                         rel="noopener noreferrer"
                     >
-                        <i style={{ fontSize: '50px' }} className="bx bxs-file-pdf" />
+                        <i style={{ fontSize: '50px' }} className="bx bxs-file" />
                     </a>
                 </div>
             );
@@ -213,7 +213,10 @@ const Chat = () => {
                         onClick={() => imagePreview(MEDIA_URL + 'chatFiles/' + msg.message, 'image', '')}
                         className="border-0 bg-transparent">
 
-                        <img src={MEDIA_URL + 'chatFiles/' + msg.message} alt="chat-file-image" />
+                        <img src={MEDIA_URL + 'chatFiles/' + msg.message} style={{
+                            width: '60px',
+                            height: '60px'
+                        }} alt="chat-file-image" />
                     </button>
                 </div>
             );
@@ -304,6 +307,7 @@ const Chat = () => {
                 "application/vnd.ms-powerpoint", // .ppt
                 "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
                 "text/plain", // .txt
+                "application/zip", // .zip
             ];
 
             if (!validateFile(file, allowedTypes)) {
@@ -501,7 +505,7 @@ const Chat = () => {
                                             <img src={selectFileImageView} alt="select file" />
                                         </div>
                                         :
-                                        <i style={{ fontSize: '30px' }} className='bx bxs-file-pdf' />
+                                        <i style={{ fontSize: '30px' }} className='bx bxs-file' />
                                     }
                                     <div className="file-name">
                                         {selectedFile.name}
@@ -544,7 +548,7 @@ const Chat = () => {
                         <div className="align-content-center">
                             <input
                                 type="file"
-                                accept="image/jpg, image/png, image/jpeg, application/pdf"
+                                accept="image/jpg, image/png, image/jpeg, application/*, application/zip"
                                 name="fileattached"
                                 className="d-none"
                                 id="fileattached"
