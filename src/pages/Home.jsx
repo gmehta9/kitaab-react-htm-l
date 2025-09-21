@@ -4,46 +4,9 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../axios/axios-config";
-import { MEDIA_URL, debounce, replaceLogo } from "../helper/Utils";
+import { debounce, replaceLogo } from "../helper/Utils";
+import images from "../assets/images";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
-
-// const books = [
-//     {
-//         id: 1,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-1.jpg',
-//         price: '10'
-//     },
-//     {
-//         id: 2,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-2.jpg',
-//         price: '99'
-//     },
-//     {
-//         id: 3,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-3.jpg',
-//         price: '199'
-//     },
-//     {
-//         id: 4,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-4.jpg',
-//         price: '349'
-//     },
-//     {
-//         id: 5,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-5.jpg',
-//         price: '250'
-//     }
-// ]
 
 function HomePage() {
     const navigate = useNavigate()
@@ -153,13 +116,6 @@ function HomePage() {
                 <Col lg={9} className="text-center mt-4">
                     <span className="h3 find-book-heading ">Find the books that you are looking for</span>
                     <InputGroup className="mb-3 mt-3 bg-white p-2 rounded">
-                        {/* <Form.Control
-                            className="border-0 rounded"
-                            placeholder="Search Books....."
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                            onChange={serachtext}
-                        /> */}
                         <AsyncTypeahead
                             filterBy={() => true}
                             id="async-example"
@@ -179,7 +135,7 @@ function HomePage() {
                                     <img
                                         onError={replaceLogo}
                                         alt={option.title}
-                                        src={MEDIA_URL + 'product/' + option.image}
+                                        src={images.product + option.image}
                                         style={{
                                             height: '24px',
                                             marginRight: '10px',
@@ -200,7 +156,7 @@ function HomePage() {
                             className="ml-2 px-4 align-items-center d-flex">
                             <Image
                                 className="mr-2"
-                                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}search-icon-white.svg`}
+                                src={images.searchIconWhite}
                             />
                             Find Book
                         </Button>
@@ -227,9 +183,6 @@ function HomePage() {
                             <button type="button"
                                 onClick={() => {
                                     setSelectCatID(cl?.id)
-                                    // navigate('/product', {
-                                    //     state: { name: cl?.name, catID: cl?.id }
-                                    // })
                                 }}
                                 className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${selectCatID === cl?.id ? ' text-primary border-bottom' : 'border-0'}`}
                                 key={index + 'cl'}>

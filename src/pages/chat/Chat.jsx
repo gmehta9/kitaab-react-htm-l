@@ -119,7 +119,7 @@ const Chat = () => {
     };
     const DeleteButton = (msg) => (
         <button type="button" style={{ left: '-45px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-50 border-0 bg-transparent">
-            <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
+            <Image src={images.deleteMsg} alt="" />
         </button>)
     const ReplyButton = (msg, whoseMsg) => (
         <button

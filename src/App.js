@@ -143,7 +143,7 @@ function App() {
 
   ]
     // ,
-    //  { basename: ['live', 'local'].includes(process.env.REACT_APP_ENV) ? "" : "/kitaab-portal/api-gateway-hub/", }
+    //  { basename: ['live', 'local'].includes(import.meta.env.VITE_ENV) ? "" : "/kitaab-portal/api-gateway-hub/", }
   );
 
   return (

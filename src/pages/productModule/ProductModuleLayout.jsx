@@ -95,7 +95,7 @@ function ProductModuleLayout() {
                                     id="basic-addon2"
                                     className="ml-2 align-items-center d-flex">
                                     <Image
-                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}search-icon-white.svg`}
+                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}search-icon-white.svg`}
                                     />
                                 </Button>
                                 {/* <DropdownButton

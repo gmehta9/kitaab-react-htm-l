@@ -384,13 +384,13 @@ function ProductForm() {
                                     <img src={`${imageView}`} className="image-preview" alt="" />
                                     :
                                     <span className="placeholder bg-transparent">
-                                        <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}upload-placeholder.png`} className="opacity-50" alt="" />
+                                        <img src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}upload-placeholder.png`} className="opacity-50" alt="" />
                                     </span>
                                 }
                                 {/* <span className="placeholder bg-transparent d-block">
-                                    <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}upload-placeholder.png`} alt="" />
+                                    <img src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}upload-placeholder.png`} alt="" />
                                 </span> */}
-                                {/* <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}book.webp`} alt="" /> */}
+                                {/* <img src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}book.webp`} alt="" /> */}
 
                             </label>
                         </div>

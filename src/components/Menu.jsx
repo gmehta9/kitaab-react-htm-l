@@ -65,7 +65,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             setMenuShow(false)
                         }}>
                         <Image
-                            src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}KJ-Logo-(1).png`}
+                            src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}KJ-Logo-(1).png`}
                             className="logo" />
                     </Navbar.Brand>
                 }
@@ -159,7 +159,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             <Image
                                 width="35"
                                 alt="cart kitaab Jun"
-                                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}cart-icon.png`}
+                                src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}cart-icon.png`}
                             />
                         </span>
                     </Nav.Link>
@@ -169,7 +169,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             onClick={() => handleLoginClick()}
                             className="btn btn-primary text-white px-3 ml-3 align-self-lg-center login">
                             <Image
-                                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}user-icon.svg`}
+                                src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}user-icon.svg`}
                             />  Login
                         </Button>
                         :
@@ -177,7 +177,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             <Dropdown.Toggle variant="" className="dropdown-section-btn2 ml-4" drop={'start'}>
                                 <Image
                                     className="rounded-circle"
-                                    src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}default-avatar.jpg`}
+                                    src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}default-avatar.jpg`}
                                 />
                             </Dropdown.Toggle>
 
@@ -230,7 +230,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                         right: '0'
                     }}
                     className="btn " onClick={() => setCominingSoon(!comingSoon)} >✖</button>
-                <Image className="w-100" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}coming-soon.jpg`} />
+                <Image className="w-100" src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}coming-soon.jpg`} />
             </Modal>
         </>
     )

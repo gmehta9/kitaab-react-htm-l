@@ -285,8 +285,8 @@ $secondry: #868686;
             +.radio-label {
                 &:before {
                     box-shadow: inset 0 0 0 4px $primary;
-                    border-color: darken($primary, 25%);
-                    background: darken($primary, 25%);
+                    border-color: #014a2e;
+                    background: #014a2e;
                 }
             }
         }

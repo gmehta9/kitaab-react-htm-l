@@ -52,14 +52,14 @@ function ProductItemUI({ items, className, isEditAble }) {
                 {/* <Button
                     type="button"
                     className="product-icon left position-absolute d-flex">
-                    <Image className="w-100 align-self-center" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}shopping-cart-icon.svg`} />
+                    <Image className="w-100 align-self-center" src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}shopping-cart-icon.svg`} />
                 </Button> */}
 
                 {/* Book Share Button */}
                 {/* <Button
                     type="button"
                     className="product-icon right position-absolute d-flex">
-                    <Image className="w-100 align-self-center" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}share-product.svg`} />
+                    <Image className="w-100 align-self-center" src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}share-product.svg`} />
                 </Button> */}
                 <Image
                     onError={replaceLogo}

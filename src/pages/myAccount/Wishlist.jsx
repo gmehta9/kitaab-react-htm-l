@@ -177,7 +177,7 @@ function Wishlist() {
                                     </span>
                                     <span onClick={() => deletitemHandler(wl)}>
                                         <Image
-                                            src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_icon.svg`}
+                                            src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}delete_icon.svg`}
                                         />
                                     </span>
                                 </div>

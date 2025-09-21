@@ -8,7 +8,7 @@ function Footer() {
             <Image
                 className="mr-2 "
                 width={241}
-                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}Kitaab-Junction-footer.png`}
+                src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}Kitaab-Junction-footer.png`}
             />
             <Container>
                 <Row className="mt-4">
@@ -38,7 +38,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}facebook.svg`}
+                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}facebook.svg`}
                                     />
                                 </a>
                             </span>
@@ -47,7 +47,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}linkedin.svg`}
+                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}linkedin.svg`}
                                     />
                                 </a>
                             </span>
@@ -56,7 +56,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'30'}
-                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}instagram.svg`}
+                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}instagram.svg`}
                                     />
                                 </a>
                             </span>
@@ -65,7 +65,7 @@ function Footer() {
                                     <Image
                                         className="mr-2"
                                         width={'40'}
-                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}twitter.svg`}
+                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}twitter.svg`}
                                     />
                                 </a>
                             </span>

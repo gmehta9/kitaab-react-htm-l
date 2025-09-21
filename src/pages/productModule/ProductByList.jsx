@@ -6,6 +6,7 @@ import { axiosInstance } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import { debounce } from "../../helper/Utils";
 import Select from 'react-select'
+import images from "../../assets/images";
 // const CategoriesList = ["All", "School", "Professional Courses", "Regular Courses", "Fiction", "Non - Fiction", "Competitive Exams", "Others"]
 
 
@@ -226,7 +227,7 @@ function ProductByList() {
                                 onClick={() => setCatListShow(!catListShow)}
                                 className="d-flex justify-content-between w-100 pl-0 "
                                 type="button">Categories
-                                <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
+                                <Image className={`dropdown-icon align-self-center ${catListShow ? 'rotate-drop' : ''}`} src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
                             </Button>
 
                             {catListShow &&
@@ -256,7 +257,7 @@ function ProductByList() {
                             {/* <Button
                     variant=""
                     className="d-flex justify-content-between w-100 pl-0"
-                    type="button">Author <Image className="dropdown-icon align-self-center" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
+                    type="button">Author <Image className="dropdown-icon align-self-center" src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}dropdown-arrow.svg`} />
                 </Button> */}
 
                             {/* <ul className="pl-0 list-unstyled">
@@ -286,13 +287,10 @@ function ProductByList() {
 
                     </div>
                     {productList?.length === 0 &&
-                        <Row>
-                            <div
-                                style={{ height: '300px' }}
-                                className="text-center w-100 pt-5 h2 font-weight-bold">
-                                <Image width="250" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}no-product.png`} />
-                            </div>
-                        </Row>
+                        <img
+                            style={{ maxWidth: '300px', margin: 'auto' }}
+                            src={images.noProduct} alt="No products found"
+                            className="text-center w-100 pt-5 h2 font-weight-bold" />
                     }
                     <Row md={"4"} sm={"2"} xs={"2"} >
 
@@ -302,8 +300,8 @@ function ProductByList() {
                             </React.Fragment>
                         )}
                     </Row>
-                </Col>
-            </Row>
+                </Col >
+            </Row >
         </>
     )
 }

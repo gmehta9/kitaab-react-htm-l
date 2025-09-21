@@ -232,7 +232,7 @@ function CartPage() {
                                                     onClick={() => cartDeleteHandle(catData)}
                                                     className="btn p-0 border-0 bg-transparent">
                                                     <img
-                                                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_icon.svg`}
+                                                        src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}delete_icon.svg`}
                                                         alt=""
                                                     />
                                                 </button>

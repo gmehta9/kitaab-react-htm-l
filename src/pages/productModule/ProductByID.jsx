@@ -80,7 +80,7 @@ function ProductByID() {
                                 onError={replaceLogo}
                                 src={MEDIA_URL + 'product/' + productDetail?.image}
                             // MEDIA_URL + 'product/' +
-                            // src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}product-img/main-image.jpg`} 
+                            // src={`${import.meta.env.VITE_MEDIA_LOCAL_URL}product-img/main-image.jpg`}
                             />
 
                         </Col>
