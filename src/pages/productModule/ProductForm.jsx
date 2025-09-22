@@ -170,7 +170,7 @@ function ProductForm() {
 
     const imageChangeHandler = async (file) => {
 
-        if (!validateFile(file, [])) {
+        if (!validateFile(file[0], [])) {
             return;
         }
         const image = await resizeFile(file[0]);
