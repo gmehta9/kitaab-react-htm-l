@@ -15,23 +15,24 @@ function PagesLayout() {
     return (
         <>
             <Provider store={store}>
-
-                <Header
-                    isContentLoading={isContentLoading}
-                    setIsContentLoading={setIsContentLoading}
-                    isUserLoggedIn={isUserLoggedIn}
-                    setIsUserLoggedIn={setIsUserLoggedIn}
-                />
-                {isContentLoading &&
-                    <Loader />
-                }
-                <Container fluid >
-                    <Outlet context={{
-                        isContentLoading,
-                        setIsContentLoading,
-                    }} />
-                </Container>
-                <Footer />
+                <div className="d-flex flex-column min-vh-100">
+                    <Header
+                        isContentLoading={isContentLoading}
+                        setIsContentLoading={setIsContentLoading}
+                        isUserLoggedIn={isUserLoggedIn}
+                        setIsUserLoggedIn={setIsUserLoggedIn}
+                    />
+                    {isContentLoading &&
+                        <Loader />
+                    }
+                    <Container fluid className="flex-grow-1">
+                        <Outlet context={{
+                            isContentLoading,
+                            setIsContentLoading,
+                        }} />
+                    </Container>
+                    <Footer />
+                </div>
             </Provider>
         </>
     )

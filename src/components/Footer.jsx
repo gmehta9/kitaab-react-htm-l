@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Footer() {
 
     return (
-        <div className="footer-section py-5 w-100 text-center">
+        <div className="footer-section py-3 w-100 text-center mt-auto">
             <Image
                 className="mr-2 "
                 width={241}
@@ -37,7 +37,7 @@ function Footer() {
                                 <a href="https://www.facebook.com/mykitaabjunction" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
-                                        width={'30'}
+                                        width={'20'}
                                         src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}facebook.svg`}
                                     />
                                 </a>
@@ -46,7 +46,7 @@ function Footer() {
                                 <a href="https://www.linkedin.com/in/kitaab-junction-5913622b6?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B%2FsACibXvQKuYhsyH%2BXNeAg%3D%3D" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
-                                        width={'30'}
+                                        width={'20'}
                                         src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}linkedin.svg`}
                                     />
                                 </a>
@@ -55,7 +55,7 @@ function Footer() {
                                 <a href="https://www.instagram.com/junctionkitaab/" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
-                                        width={'30'}
+                                        width={'20'}
                                         src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}instagram.svg`}
                                     />
                                 </a>
@@ -64,7 +64,7 @@ function Footer() {
                                 <a href="https://twitter.com/KitaabJ" target="_blank" rel="noreferrer">
                                     <Image
                                         className="mr-2"
-                                        width={'40'}
+                                        width={'20'}
                                         src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}twitter.svg`}
                                     />
                                 </a>

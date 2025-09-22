@@ -89,7 +89,16 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                         }}
                         className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'Sell/Share' ? 'text-primary' : ''}`}>Sell/Share</Nav.Link>
                     <Nav.Link
-                        onClick={() => setCominingSoon(true)}
+                        onClick={() => {
+                            setMenuShow(false);
+                            if (!isUserLoggedIn) {
+                                handleLoginClick()
+                            } else {
+                                navigate('/chat', {
+                                    state: 'Sell/Share'
+                                })
+                            }
+                        }}
                         className="mr-lg-5 mb-0 h4 align-self-lg-center">Community</Nav.Link>
                     <Nav.Link
                         onClick={() => setCominingSoon(true)}

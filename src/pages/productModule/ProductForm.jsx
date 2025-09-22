@@ -375,7 +375,7 @@ function ProductForm() {
                             <input
                                 {...register('file')}
                                 type="file"
-                                accept="image/jpg,image/png,image/jpeg"
+                                accept="image/jpg,image/png,image/*"
                                 className="d-none"
                                 id="imageUpload" />
                             <label htmlFor="imageUpload" className="product-upload-frame my-2 position-relative">

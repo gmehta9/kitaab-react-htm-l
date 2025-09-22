@@ -5,7 +5,6 @@ import moment from "moment";
 import Auth from "../../auth/Auth";
 
 import { FileUploadhandler, getInitials, MEDIA_URL, validateFile } from "../../helper/Utils";
-import { getFileIconClass } from "../../helper/FileIcons";
 
 import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
@@ -160,7 +159,7 @@ const Chat = () => {
             </div>
             {rplyMsg.type === 'file' &&
                 <>
-                    <i style={{ fontSize: '50px', color: '#fff' }} className={getFileIconClass(rplyMsg.message)} />
+                    <i style={{ fontSize: '50px' }} className="bx bxs-file" />
                 </>
             }
             {rplyMsg.type === 'image' &&
@@ -199,17 +198,16 @@ const Chat = () => {
                     {whoseMsg === 'mymsg' && DeleteButton(msg)}
                     <a
                         target="_blank"
-                        title={msg.message}
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
                         rel="noopener noreferrer"
                     >
-                        <i style={{ fontSize: '50px', color: '#fff' }} className={getFileIconClass(msg.message)} />
+                        <i style={{ fontSize: '50px' }} className="bx bxs-file" />
                     </a>
                 </div>
             );
         } else if (msg.type === 'image') {
             mui = (
-                <div className="chat-message chat-file-msg">
+                <div className="chat-message chat-file-image">
                     {msg.reply_to && replyUi(msg.reply_to, whoseMsg)}
                     {ReplyButton(msg, whoseMsg)}
                     {whoseMsg === 'mymsg' && DeleteButton(msg)}
@@ -397,14 +395,15 @@ const Chat = () => {
                             <span
                                 className="d-flex justify-content-center align-items-center rounded-circle"
                                 style={{
-                                    width: '30px',
-                                    height: '30px',
+                                    width: '50px',
+                                    height: '50px',
                                     backgroundColor: `${generateColorFromId(selectedChannel.id)}`
                                 }}>
                                 <span className="text-white">{'c'}</span>
                             </span>
-                            <div className="chat-about">
+                            <div className="chat-about ">
                                 <h6 className="mb-0">{selectedChannel.name}</h6>
+
                             </div>
                         </div>
 
@@ -458,7 +457,7 @@ const Chat = () => {
                                         </li>
                                         :
                                         // other user meesaage UI
-                                        <li key={index} className="clearfix client-msg other-user-message position-relative">
+                                        <li key={index} className="clearfix client-msg other-user-message">
                                             {messageUi(msg, 'othermsg')}
                                             <div className="message-data position-relative">
 
@@ -508,7 +507,7 @@ const Chat = () => {
                                             <img src={selectFileImageView} alt="select file" />
                                         </div>
                                         :
-                                        <i style={{ fontSize: '30px' }} className={getFileIconClass(selectedFile.name)} />
+                                        <i style={{ fontSize: '30px' }} className='bx bxs-file' />
                                     }
                                     <div className="file-name">
                                         {selectedFile.name}

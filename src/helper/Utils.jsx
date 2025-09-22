@@ -30,7 +30,7 @@ export const FileUploadhandler = async (file, uploadKeyName) => {
 
 export const validateFile = (file, newAllowedTypes = []) => {
     const allowedTypes = ["image/jpg", "image/png", "image/jpeg", ...newAllowedTypes];
-    const maxSize = 1 * 1024 * 1024; // 1MB
+    const maxSize = 5 * 1024 * 1024; // 1MB
     if (!allowedTypes.includes(file.type)) {
         const msg = newAllowedTypes.length === 0 ? ' and JPEG' : ', JPEG, MS Doc, Txt, PPT and PDF'
         alert(`Invalid file type. Only JPG, PNG${msg} are allowed.`);
