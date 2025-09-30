@@ -58,7 +58,7 @@ const Chat = () => {
                 clearSelectFile()
             }
         }
-        let APIUrl = `channel/${selectedChannel.id}/messages`
+        let APIUrl = `channel/${selectedChannel?.id}/messages`
         axiosInstance['post'](`${APIUrl}`, newMsg).then((res) => {
             if (res) {
 
@@ -92,7 +92,7 @@ const Chat = () => {
     };
 
     const loadChannelChat = (page = currentPage, loadMore) => {
-        let APIUrl = `channel/${selectedChannel.id}/messages?page=${page}&size=20`
+        let APIUrl = `channel/${selectedChannel?.id}/messages?page=${page}&size=20`
         axiosInstance['get'](`${APIUrl}`).then((res) => {
             if (res) {
                 const reversedChats = [...res.data.data].reverse();
@@ -245,7 +245,7 @@ const Chat = () => {
     const mesgDelethandler = (msg) => {
 
         if (window.confirm("Are you sure you want to delete this message?")) {
-            let APIUrl = `channel/${selectedChannel.id}/message/${msg.id}/delete`
+            let APIUrl = `channel/${selectedChannel?.id}/message/${msg?.id}/delete`
             axiosInstance['delete'](`${APIUrl}`).then((res) => {
                 if (res) {
                     setChatList((prevMessages) => {
@@ -349,13 +349,13 @@ const Chat = () => {
 
     useEffect(() => {
         if (selectedChannel?.id) {
-            const pusherChannel = pusher.subscribe(`channel-${selectedChannel.id}`);
+            const pusherChannel = pusher.subscribe(`channel-${selectedChannel?.id}`);
             pusherChannel.bind('client-new-message', (data) => {
-                if (data.user_id !== loggedUser.id && selectedChannel.id === +data.channel_id) {
+                if (data.user_id !== loggedUser.id && selectedChannel?.id === +data.channel_id) {
                     // setChatList((prevMessages) => [...prevMessages, { ...data, user: { name: data.name } }]);
                     // setTimeout(() => { chatBoxScrollHandler() }, 100)
                     setChatList((prevMessages) => {
-                        const isDuplicate = prevMessages.some(msg => msg.id === data.id);
+                        const isDuplicate = prevMessages.some(msg => msg.id === data?.id);
                         if (!isDuplicate) {
                             return [...prevMessages, { ...data, user: { name: data.name } }];
                         }
@@ -372,9 +372,9 @@ const Chat = () => {
             loadChannelChat()
         }
         return () => {
-            pusher.unsubscribe(`channel-${selectedChannel.id}`);
+            pusher.unsubscribe(`channel-${selectedChannel?.id}`);
         };
-    }, [selectedChannel.id]);
+    }, [selectedChannel?.id]);
 
     useEffect(() => {
         const chatHistoryElement = chatEndRef.current;
@@ -391,7 +391,7 @@ const Chat = () => {
     return (
         <>
             <div className="chat position-relative" >
-                <div className="chat-header clearfix" style={{ borderColor: generateColorFromId(selectedChannel.id) }}>
+                <div className="chat-header clearfix" style={{ borderColor: generateColorFromId(selectedChannel?.id) }}>
                     <div className="row">
                         <div className="col-lg-6 d-flex align-items-center">
                             <span
@@ -399,12 +399,12 @@ const Chat = () => {
                                 style={{
                                     width: '30px',
                                     height: '30px',
-                                    backgroundColor: `${generateColorFromId(selectedChannel.id)}`
+                                    backgroundColor: `${generateColorFromId(selectedChannel?.id)}`
                                 }}>
                                 <span className="text-white">{'c'}</span>
                             </span>
                             <div className="chat-about">
-                                <h6 className="mb-0">{selectedChannel.name}</h6>
+                                <h6 className="mb-0">{selectedChannel?.name}</h6>
                             </div>
                         </div>
 

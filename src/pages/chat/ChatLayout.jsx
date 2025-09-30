@@ -144,7 +144,7 @@ function ChatLayout() {
                                                 <li
                                                     key={index + 'id'}
                                                     className={`clearfix d-flex align-items-center pl-1 
-                                                        ${selectedChannel.id === cd.id ? 'active' : ''}`}
+                                                        ${selectedChannel?.id === cd.id ? 'active' : ''}`}
                                                     onClick={() => {
                                                         if (cd.status === 'active') {
                                                             setIsChannelReadyTochat(true)
