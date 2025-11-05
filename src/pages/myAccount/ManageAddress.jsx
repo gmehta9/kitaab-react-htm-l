@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData, setIsContentLoading }) {
     const navigate = useNavigate()
-    const { register, handleSubmit, setValue, watch, getValues, formState: { errors } } = useForm({ mode: 'onChange' })
+    const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({ mode: 'onChange' })
     const [stateList, setStateList] = useState([]);
     const [cityList, setCityList] = useState([]);
 
@@ -29,7 +29,6 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
         setIsContentLoading(true)
         axiosInstance['post']('order', {
             ...data,
-            shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
             'cart_ids': order,
 
         }).then((res) => {
@@ -63,10 +62,10 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                 setValue('shipping_email', user?.email)
                 setValue('shipping_city', user?.city)
                 setValue('shipping_state', user?.state)
-                setValue('shipping_address', user?.address)
+                setValue('shipping_address', user?.organization)
                 setValue('shipping_pin_code', user?.pin_code)
             }
-        }).catch((error) => {
+        }).catch(() => {
         });
     }
 
@@ -126,49 +125,16 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                     <Form autoComplete="false" onSubmit={handleSubmit(orderPlacesHandler)}>
                         <Modal.Body className="border-0 px-5">
 
-                            <Row>
-                                <Col xs="6">
-                                    <div className="order-type text-center">
-                                        <input
-                                            id="self"
-                                            className="d-none"
-                                            type="radio"
-                                            name="shipping_order_type"
-                                            value={'self_pickup'}
-                                            {...register('shipping_order_type', {
-                                                required: 'Field required.'
-                                            })} />
-                                        <label
-                                            htmlFor="self"
-                                            className={`rounded-3 text-left border w-75 link  ${errors?.shipping_order_type && 'border-danger'}`}>
-                                            Self Pickup
-                                        </label>
+                            <Row className="mb-4">
+                                <Col xs="12">
+                                    <div className="alert alert-info">
+                                        <ol className="mb-0 pl-3">
+                                            <li>A delivery charge of Rs. 20/ book to be paid, if you are buying the book.</li>
+                                            <li>A delivery charge of Rs. 40/ book to be paid, if you are borrowing the book.</li>
+                                        </ol>
+                                        <p className="mb-0 mt-2"><strong>Note:</strong> Book will be delivered at the security gate of your organization/ school.</p>
                                     </div>
                                 </Col>
-                                <Col xs="6">
-                                    <div className="order-type text-center">
-                                        <input
-                                            id="paid"
-                                            className="d-none"
-                                            type="radio"
-                                            name="shipping_order_type"
-                                            value={'paid_delivery'}
-                                            {...register('shipping_order_type', {
-                                                required: 'Field required.'
-                                            })} />
-                                        <label
-                                            htmlFor="paid"
-                                            className={`rounded-3 text-left border w-75 ${errors?.shipping_order_type && 'border-danger'}`}>
-                                            Paid Delivery <span className="small">(only in Delhi-NCR)</span>
-                                        </label>
-                                    </div>
-                                </Col>
-                                <Col xs="12" className="position-relative pb-3">
-                                    {errors?.shipping_order_type &&
-                                        <span className="text-danger small position-absolute">
-                                            {errors?.shipping_order_type?.message}
-                                        </span>
-                                    }</Col>
                             </Row>
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
@@ -233,14 +199,14 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                             </Row>
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>Address</Form.Label>
+                                <Form.Label>Organization/ School</Form.Label>
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
                                     {...register('shipping_address', {
-                                        required: 'Please enter your address.'
+                                        required: 'Please enter your organization/school.'
                                     })}
-                                    placeholder="Enter your address."
+                                    placeholder="Enter your organization/school."
                                     autoFocus
                                 />
                                 {errors?.shipping_address &&
@@ -308,7 +274,6 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             pattern="[0-9]*"
                                             inputMode="numeric"
                                             {...register('shipping_pin_code', {
-                                                required: 'Please enter your pin code.',
                                                 maxLength: {
                                                     value: 6,
                                                     message: 'Enter a valid pin code'
