@@ -25,11 +25,35 @@ const onResponse = (response) => {
 
 const onResponseError = (error) => {
   console.log(error);
+  const data = error?.response?.data || {};
 
-  // toast.error(error?.response?.data?.message || 'Something went wrong!')
-  toast.error(error?.response?.data?.message || 'Something went wrong!', {
-    duration: 2000
-  })
+  // If validation errors exist, show only those messages (no field names).
+  if (data.errors && typeof data.errors === 'object') {
+    const details = Object.values(data.errors)
+      .flatMap(v => Array.isArray(v) ? v : [v])
+      .join('\n'); // each message on its own line
+
+    const toastId = `api-err-${error?.response?.status || 'unknown'}-${Date.now()}`;
+
+    toast.error(details || 'Something went wrong!', {
+      duration: 3500,
+      id: toastId,
+      style: { whiteSpace: 'pre-wrap' }, // preserve newlines
+      // close this specific toast when clicked
+      onClick: () => toast.dismiss(toastId),
+    });
+  } else {
+    const message = data.message || 'Something went wrong!';
+    const toastId = `api-err-${error?.response?.status || 'unknown'}-${Date.now()}`;
+
+    toast.error(message, {
+      duration: 3500,
+      id: toastId,
+      style: { whiteSpace: 'pre-wrap' },
+      onClick: () => toast.dismiss(toastId),
+    });
+  }
+
   if (error?.response?.status === 401) {
 
     Auth.logout()

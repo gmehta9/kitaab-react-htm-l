@@ -52,7 +52,8 @@ function ProfilePage() {
                 setValue('email', user?.email)
                 setValue('city', user?.city.toLowerCase())
                 setValue('state', user?.state.toLowerCase())
-                setValue('address', user?.address)
+                // REMOVED: Address field as per requirement
+                // setValue('address', user?.address)
                 setValue('pin_code', user?.pin_code)
             }
             setIsContentLoading(false)
@@ -172,7 +173,8 @@ function ProfilePage() {
                             </Col>
                         </Row>
 
-                        <Row className="border-bottom pb-4 mb-4">
+                        {/* REMOVED: Address field section as per requirement */}
+                        {/* <Row className="border-bottom pb-4 mb-4">
                             <Col lg={12} className="font-weight-bolder mb-3">
                                 Address
                             </Col>
@@ -250,7 +252,7 @@ function ProfilePage() {
                                     />
                                 </InputGroup>
                             </Col>
-                        </Row>
+                        </Row> */}
 
 
                         <Row className="pb-4 mb-4">

@@ -372,3 +372,36 @@ $border-bottom-color_3: #e8f1f3;
         }
     }
 }
+
+// Full height on large screens (992px and above)
+@media only screen and (min-width: 992px) {
+    .chat-container-full-height {
+        height: calc(100vh - 180px) !important; // Full viewport height minus header + footer
+        min-height: auto !important; // Override minHeight on large screens
+
+        .chat-app {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-history {
+            height: calc(100vh - 380px); // Adjust based on your header/footer/chat-header height
+            overflow-y: auto;
+        }
+    }
+}
+
+// Keep small screens working as before (use minHeight only)
+@media only screen and (max-width: 991px) {
+    .chat-container-full-height {
+        height: auto !important; // Use auto height on small screens
+        min-height: 30rem; // Keep the original minHeight
+    }
+}

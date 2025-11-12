@@ -49,7 +49,8 @@ function BuyOrdersList({ orderList, contentLoading, pagination, setModalShow, se
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)
-                                    setModalType('order')
+                                    // MODIFIED: Changed from 'order' to 'buy' to properly distinguish buyer view
+                                    setModalType('buy')
                                     setModalData(ord)
                                 }}
                                     type="button"

@@ -126,7 +126,8 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                     <Form autoComplete="false" onSubmit={handleSubmit(orderPlacesHandler)}>
                         <Modal.Body className="border-0 px-5">
 
-                            <Row>
+                            {/* REMOVED: Self Pickup and Paid Delivery radio buttons as per requirement */}
+                            {/* <Row>
                                 <Col xs="6">
                                     <div className="order-type text-center">
                                         <input
@@ -169,7 +170,26 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             {errors?.shipping_order_type?.message}
                                         </span>
                                     }</Col>
+                            </Row> */}
+
+                            {/* NEW: Delivery charges information */}
+                            <Row className="mb-4">
+                                <Col xs="12">
+                                    <div className="delivery-info-box border rounded p-3 bg-light">
+                                        <h6 className="font-weight-bold mb-3">Delivery Information:</h6>
+                                        <ul className="mb-2">
+                                            <li className="mb-2">A delivery charge of <strong>Rs. 20/ book</strong> to be paid, if you are <strong>buying</strong> the book.</li>
+                                            <li className="mb-2">A delivery charge of <strong>Rs. 40/ book</strong> to be paid, if you are <strong>borrowing</strong> the book.</li>
+                                        </ul>
+                                        <p className="mb-0 small text-muted">
+                                            <strong>Note:</strong> Book will be delivered at the security gate of your organization/ school.
+                                        </p>
+                                    </div>
+                                </Col>
                             </Row>
+
+                            {/* Hidden field to maintain API compatibility - default value set to 'paid_delivery' */}
+                            <input type="hidden" value="paid_delivery" {...register('shipping_order_type')} />
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
                                 <Form.Label>Name</Form.Label>
@@ -308,7 +328,8 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                             pattern="[0-9]*"
                                             inputMode="numeric"
                                             {...register('shipping_pin_code', {
-                                                required: 'Please enter your pin code.',
+                                                // MODIFIED: Pin Code is now non-mandatory as per requirement
+                                                // required: 'Please enter your pin code.',
                                                 maxLength: {
                                                     value: 6,
                                                     message: 'Enter a valid pin code'
@@ -318,7 +339,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                                                     message: 'Invalid pin code.'
                                                 }
                                             })}
-                                            placeholder="Enter your pin code."
+                                            placeholder="Enter your pin code (Optional)"
                                             autoFocus
                                         />
                                         {errors?.shipping_pin_code &&

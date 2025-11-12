@@ -122,7 +122,13 @@ function ChatLayout() {
     return (
         <>
             <Row>
-                <Container fluid style={{ minHeight: '30rem' }} className="inner-pages row border-top mx-auto">
+                <Container
+                    fluid
+                    style={{
+                        minHeight: '30rem', // Fallback for small screens
+                        height: 'calc(100vh - 180px)' // Full height on large screens (minus header + footer)
+                    }}
+                    className="inner-pages row border-top mx-auto chat-container-full-height">
                     <div className="row clearfix w-100">
                         <div className="col-lg-12">
                             <div className="card chat-app">

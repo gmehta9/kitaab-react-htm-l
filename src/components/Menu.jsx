@@ -95,11 +95,11 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 handleLoginClick()
                             } else {
                                 navigate('/chat', {
-                                    state: 'Sell/Share'
+                                    state: 'chat'
                                 })
                             }
                         }}
-                        className="mr-lg-5 mb-0 h4 align-self-lg-center">Community</Nav.Link>
+                        className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'chat' ? 'text-primary' : ''}`}>Community</Nav.Link>
                     <Nav.Link
                         onClick={() => setCominingSoon(true)}
                         className="mr-lg-5 mb-0 h4 align-self-lg-center">Library</Nav.Link>

@@ -47,7 +47,8 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)
-                                    setModalType('order')
+                                    // MODIFIED: Changed from 'order' to 'sell' to properly distinguish seller view
+                                    setModalType('sell')
                                     setModalData(ord)
                                 }}
                                     type="button"
