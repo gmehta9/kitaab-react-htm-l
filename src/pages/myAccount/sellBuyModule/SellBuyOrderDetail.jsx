@@ -1,6 +1,7 @@
 import { Image, Modal, Table } from "react-bootstrap";
 import { MEDIA_URL, replaceLogo } from "../../../helper/Utils";
 import { useEffect } from "react";
+import '../../../styles/order-detail-modal.scss';
 
 function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
     useEffect(() => {
@@ -8,123 +9,132 @@ function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
     }, [])
 
     return (
-        <>
-            <Modal
-                show={modalShow}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter">
-                <div className="d-flex pt-4 pl-4 position-relative">
-                    <span className="h5 font-weight-bold mx-auto">Order Detail ( {data?.unique_id})</span>
-                    <span
-                        className="btn btn-dark p-1 lh-1 position-absolute"
-                        style={{
-                            right: '35px'
-                        }}
-                        onClick={() => setModalShow(undefined)}>X</span>
+        <Modal
+            show={modalShow}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            className="order-detail-modal"
+            centered>
+            <div className="modal-header-custom">
+                <div className="modal-title-custom">
+                    Order Details <span className="order-id">({data?.unique_id})</span>
                 </div>
-                <Modal.Body>
+                <button
+                    className="close-btn-custom"
+                    onClick={() => setModalShow(undefined)}>
+                    ×
+                </button>
+            </div>
 
-                    <div className="row px-3">
-                        {/* MODIFIED: Hide Customer info when viewing from seller's perspective (type === 'sell') */}
-                        {/* {type !== 'sell' && (
-                            <div className="col-md-6">
-                                <div className="curtomer-detail bg-dark text-white px-2 py-1 rounded mb-2">
-                                    Customer info
+            <Modal.Body>
+                <div className="row">
+                    {/* Customer Info - Show when viewing from buyer's perspective */}
+                    {/* {type !== 'sell' && data?.shipping_name && (
+                        <div className="col-md-6 mb-4">
+                            <div className="info-card">
+                                <div className="card-header-custom">
+                                    <i className="bi bi-person-circle"></i>
+                                    Customer Information
                                 </div>
-                                <div className="row">
-                                    <div className="col-3 small">Name:</div>
-                                    <div className="col small font-weight-bold text-capitalize">{data?.shipping_name}</div>
+                                <div className="info-row">
+                                    <span className="info-label">Name:</span>
+                                    <span className="info-value text-capitalize">{data?.shipping_name}</span>
                                 </div>
-                                <div className="row">
-                                    <div className="col-3 small">Email ID:</div>
-                                    <div className="col small font-weight-bold">{data?.shipping_email}</div>
+                                <div className="info-row">
+                                    <span className="info-label">Email:</span>
+                                    <span className="info-value">{data?.shipping_email}</span>
                                 </div>
-                                <div className="row">
-                                    <div className="col-3 small">Address:</div>
-                                    <div className="col small font-weight-bold">{data?.shipping_address}</div>
+                                <div className="info-row">
+                                    <span className="info-label">Address:</span>
+                                    <span className="info-value">{data?.shipping_address}</span>
                                 </div>
-                                <div className="row">
-                                    <div className="col-3 small">City:</div>
-                                    <div className="col small font-weight-bold text-capitalize">{data?.shipping_city}</div>
+                                <div className="info-row">
+                                    <span className="info-label">City:</span>
+                                    <span className="info-value text-capitalize">{data?.shipping_city}</span>
                                 </div>
-                            </div>
-                        )} */}
-
-                        {/* MODIFIED: Hide Seller details when viewing from buyer's perspective (type === 'buy') */}
-                        {/* {type !== 'buy' && (
-                            <div className="col-md-6">
-                                <div className="Seller-detail bg-dark text-white px-2 py-1 rounded mb-2">
-                                    Seller detail
-                                </div>
-                                <div className="row">
-                                    <div className="col-3 small">Name:</div>
-                                    <div className="col small font-weight-bold">{data?.product_owner_name}</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-3 small">Email ID:</div>
-                                    <div className="col small font-weight-bold">{data?.product_owner_email}</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-3 small">Address:</div>
-                                    <div className="col small font-weight-bold text-capitalize">{data?.product_owner_address}</div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-3 small">City:</div>
-                                    <div className="col small font-weight-bold text-capitalize">{data?.product_owner_city}</div>
-                                </div>
-                            </div>
-                        )} */}
-                    </div>
-
-                    <div className="row my-4 px-3">
-                        <div className="col-md-12">
-                            <div className="alert bg-info p-1 text-center " role="alert">
-                                <span className="font-weight-bold">Order Type:</span>    {data?.shipping_order_type === 'self_pickup' ? 'Self Pickup' : 'Paid Delivery'}
                             </div>
                         </div>
-                    </div>
+                    )} */}
 
+                    {/* Seller Info - Show when viewing from seller's perspective */}
+                    {/* {type !== 'buy' && data?.product_owner_name && (
+                        <div className="col-md-6 mb-4">
+                            <div className="info-card">
+                                <div className="card-header-custom">
+                                    <i className="bi bi-shop"></i>
+                                    Seller Information
+                                </div>
+                                <div className="info-row">
+                                    <span className="info-label">Name:</span>
+                                    <span className="info-value">{data?.product_owner_name}</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="info-label">Email:</span>
+                                    <span className="info-value">{data?.product_owner_email}</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="info-label">Address:</span>
+                                    <span className="info-value text-capitalize">{data?.product_owner_address}</span>
+                                </div>
+                                <div className="info-row">
+                                    <span className="info-label">City:</span>
+                                    <span className="info-value text-capitalize">{data?.product_owner_city}</span>
+                                </div>
+                            </div>
+                        </div>
+                    )} */}
+                </div>
 
-                    <div className="row table-responsive">
+                {/* Order Type Badge */}
+                <div className="order-type-badge">
+                    <span className="badge-label">Order Type:</span>
+                    <span className="badge-value">
+                        {data?.shipping_order_type === 'self_pickup' ? '📦 Self Pickup' : '🚚 Paid Delivery'}
+                    </span>
+                </div>
 
-                        <Table>
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Order Image</th>
-                                    <th>Order Title</th>
-                                    <th>Author</th>
-                                    <th>Transact Type</th>
-                                    <th>Price</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{data?.unique_id}</td>
-                                    <td>
-                                        <Image
-                                            onError={replaceLogo}
-                                            width={'50px'}
-                                            height={'70px'}
-                                            src={MEDIA_URL + 'product/' + data?.image}
-                                            className="thumbnail rounded" />
-                                    </td>
-                                    <td>{data?.title}</td>
-                                    <td>{data?.auther}</td>
-                                    <td>{data?.transact_type}</td>
-                                    <td>{data?.transact_type === 'sell' ? data?.sale_price || data?.price : '0'}</td>
-                                </tr>
-                            </tbody>
-                        </Table>
-                    </div>
-
-                </Modal.Body>
-                <Modal.Footer>
-                    {/* <Button onClick={props.onHide}>Close</Button> */}
-                </Modal.Footer>
-            </Modal>
-
-        </>
+                {/* Order Details Table */}
+                <div className="order-details-table table-responsive">
+                    <Table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>{data?.unique_id}</strong></td>
+                                <td>
+                                    <Image
+                                        onError={replaceLogo}
+                                        src={MEDIA_URL + 'product/' + data?.image}
+                                        className="product-image"
+                                        alt={data?.title}
+                                    />
+                                </td>
+                                <td><strong>{data?.title}</strong></td>
+                                <td>{data?.auther}</td>
+                                <td>
+                                    <span className={`transact-type-badge ${data?.transact_type}`}>
+                                        {data?.transact_type}
+                                    </span>
+                                </td>
+                                <td className="price-value">
+                                    {data?.transact_type === 'sell'
+                                        ? `₹ ${data?.sale_price || data?.price}/-`
+                                        : 'Free'}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table>
+                </div>
+            </Modal.Body>
+        </Modal>
     )
 }
 

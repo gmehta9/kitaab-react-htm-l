@@ -1,0 +1,310 @@
+$primary: #019D5F;
+$secondary: #868686;
+$text-dark: #333;
+$border-light: #e0e0e0;
+
+.order-history-container {
+    width: 100%;
+    overflow-x: visible;
+}
+
+.order-history-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+
+    &::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $secondary;
+        border-radius: 10px;
+
+        &:hover {
+            background: $primary;
+        }
+    }
+
+    .table {
+        margin-bottom: 0;
+        min-width: 700px;
+
+        thead {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+
+            th {
+                font-weight: 700;
+                color: $text-dark;
+                border-bottom: 2px solid $border-light;
+                padding: 16px 12px;
+                font-size: 0.875rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+        }
+
+        tbody {
+            tr {
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: rgba(1, 157, 95, 0.05);
+                }
+
+                td {
+                    padding: 14px 12px;
+                    vertical-align: middle;
+                    border-color: #f5f5f5;
+                    font-size: 0.9rem;
+                }
+
+                .order-number {
+                    font-weight: 600;
+                    color: $text-dark;
+                }
+
+                .order-id {
+                    font-weight: 600;
+                    color: $primary;
+                }
+
+                .order-title {
+                    max-width: 250px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .author-name {
+                    color: $secondary;
+                }
+            }
+
+            .empty-state-row {
+                td {
+                    padding: 40px 20px;
+                    text-align: center;
+                    color: $secondary;
+                    font-size: 1.1rem;
+                }
+            }
+        }
+
+        .btn {
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            }
+        }
+    }
+}
+
+// Pagination styling
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+// Mobile responsive styles
+@media (max-width: 768px) {
+    .order-history-table-wrapper {
+        border-radius: 8px;
+        margin-bottom: 15px;
+
+        .table {
+            min-width: 650px;
+            font-size: 0.85rem;
+
+            thead th {
+                padding: 12px 8px;
+                font-size: 0.75rem;
+            }
+
+            tbody td {
+                padding: 12px 8px;
+                font-size: 0.85rem;
+            }
+
+            .order-title {
+                max-width: 180px;
+            }
+
+            .btn {
+                padding: 4px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    }
+
+    .pagination-wrapper {
+        padding: 15px 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .order-history-table-wrapper {
+        margin: 0 -15px 15px -15px;
+        border-radius: 0;
+
+        .table {
+            min-width: 600px;
+            font-size: 0.8rem;
+
+            thead th {
+                padding: 10px 6px;
+                font-size: 0.7rem;
+            }
+
+            tbody td {
+                padding: 10px 6px;
+                font-size: 0.8rem;
+            }
+
+            .order-title {
+                max-width: 150px;
+            }
+
+            .btn {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
+
+// Mobile card view (optional alternative)
+.order-card-mobile {
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .order-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid $border-light;
+
+        .order-number-badge {
+            background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .order-id-text {
+            color: $primary;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+    }
+
+    .order-card-body {
+        .order-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            .label {
+                color: $secondary;
+                font-weight: 600;
+                font-size: 0.85rem;
+            }
+
+            .value {
+                color: $text-dark;
+                font-weight: 500;
+                font-size: 0.85rem;
+                text-align: right;
+            }
+        }
+    }
+
+    .order-card-footer {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid $border-light;
+
+        .btn {
+            width: 100%;
+            border-radius: 8px;
+            padding: 10px;
+            font-weight: 600;
+        }
+    }
+}
+
+// Show card view on very small screens (optional)
+@media (max-width: 480px) {
+    .order-history-table-wrapper {
+        display: block; // Keep table view but make it scrollable
+    }
+
+    .order-card-mobile {
+        // display: block; // Uncomment if you want to switch to card view on very small screens
+    }
+}
+
+// Scroll indicator for mobile
+.scroll-indicator {
+    display: none;
+    text-align: center;
+    padding: 10px;
+    color: $secondary;
+    font-size: 0.85rem;
+    animation: fadeInOut 2s ease-in-out infinite;
+
+    @keyframes fadeInOut {
+        0%, 100% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        display: block;
+    }
+}

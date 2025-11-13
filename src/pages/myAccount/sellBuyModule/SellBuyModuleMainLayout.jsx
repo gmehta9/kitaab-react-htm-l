@@ -7,6 +7,7 @@ import { PaginationControl } from "react-bootstrap-pagination-control";
 import SellBuyOrderDetail from "./SellBuyOrderDetail";
 import SellOrdersList from "./SellOrdersList";
 import BuyOrdersList from "./BuyOrdersList";
+import '../../../styles/order-history.scss';
 
 function SellBuyModuleMainLayout() {
 
@@ -163,17 +164,17 @@ function SellBuyModuleMainLayout() {
             }
 
             {(!contentLoading && pagination?.total > 15) &&
-                <PaginationControl
-                    page={pagination?.current_page}
-                    // between={4}
-                    total={pagination?.total}
-                    limit={pagination?.per_page}
-                    changePage={(page) => {
-                        setPagination({ ...pagination, current_page: page })
-                        getOrderHistoryHandlder(location.pathname === '/account/order-history' ? 'order-history' : 'sell-history', page)
-                    }}
-                // ellipsis={1}
-                />
+                <div className="pagination-wrapper">
+                    <PaginationControl
+                        page={pagination?.current_page}
+                        total={pagination?.total}
+                        limit={pagination?.per_page}
+                        changePage={(page) => {
+                            setPagination({ ...pagination, current_page: page })
+                            getOrderHistoryHandlder(location.pathname === '/account/order-history' ? 'order-history' : 'sell-history', page)
+                        }}
+                    />
+                </div>
             }
             <SellBuyOrderDetail
                 type={modalType}

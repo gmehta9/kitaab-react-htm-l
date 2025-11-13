@@ -53,6 +53,19 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [Auth.loggedInUser])
 
+    // Prevent body scroll when mobile menu is open
+    useEffect(() => {
+        if (menuShow && mobileMenu) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [menuShow, mobileMenu])
+
     return (
         <>
             <Navbar expand="lg" className={`bg-transparent fixed-top top-0 ${pageScroll}`}>
@@ -71,6 +84,11 @@ function Header({ setIsContentLoading, isUserLoggedIn, setIsUserLoggedIn }) {
                             <i className='bx bx-menu'></i>
                         }
                     </button>
+
+                    <div
+                        className={`mobile-menu-backdrop ${menuShow ? 'active' : ''}`}
+                        onClick={() => setMenuShow(false)}
+                    />
 
                     <Menu
                         isUserLoggedIn={isUserLoggedIn}

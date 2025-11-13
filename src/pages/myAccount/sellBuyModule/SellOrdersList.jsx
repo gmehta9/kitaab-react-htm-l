@@ -1,10 +1,16 @@
-import { Button, Spinner, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
+import TableRowSkeleton from "../../../components/skeletons/TableRowSkeleton";
+import '../../../styles/order-history.scss';
 
 function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, setModalType, setModalData }) {
 
     return (
-        <>
-            <Table striped bordered >
+        <div className="order-history-container">
+            <div className="scroll-indicator">
+                <i className="bi bi-arrow-left-right"></i> Scroll horizontally to view all columns
+            </div>
+            <div className="order-history-table-wrapper">
+                <Table striped bordered>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -18,43 +24,31 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
 
                 <tbody>
 
-                    {contentLoading &&
-                        <tr>
-                            <td colSpan={6} className="text-center">
-                                <Spinner
-                                    className="mx-auto"
-                                    animation="border"
-                                    variant="secondary" />
-                            </td>
-                        </tr>
-                    }
+                    {contentLoading && <TableRowSkeleton rows={5} columns={5} />}
 
                     {(!contentLoading && sellerList?.length === 0) &&
-                        <tr>
-                            <td colSpan={6} className="text-center">
-                                No sell order history.
+                        <tr className="empty-state-row">
+                            <td colSpan={5}>
+                                No sell order history found.
                             </td>
                         </tr>
                     }
 
                     {sellerList && sellerList.map((ord, index) =>
                         <tr key={index}>
-                            <td>{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
-                            <td>{ord.unique_id || ('ord-' + ord.id)}</td>
-                            <td>{ord.title}</td>
-                            <td>{ord?.auther}</td>
-                            {/* <td>{'--'}</td> */}
+                            <td className="order-number">{index + (pagination?.current_page - 1) * pagination?.per_page + 1}</td>
+                            <td className="order-id">{ord.unique_id || ('ord-' + ord.id)}</td>
+                            <td className="order-title" title={ord.title}>{ord.title}</td>
+                            <td className="author-name">{ord?.auther}</td>
                             <td>
                                 <Button onClick={() => {
                                     setModalShow(true)
-                                    // MODIFIED: Changed from 'order' to 'sell' to properly distinguish seller view
                                     setModalType('sell')
                                     setModalData(ord)
                                 }}
                                     type="button"
                                     variant="info"
-                                    size="sm"
-                                    className="pb-0">
+                                    size="sm">
                                     View Detail
                                 </Button>
                             </td>
@@ -64,7 +58,8 @@ function SellOrdersList({ sellerList, contentLoading, pagination, setModalShow, 
 
                 </tbody>
             </Table>
-        </>
+            </div>
+        </div>
     )
 }
 

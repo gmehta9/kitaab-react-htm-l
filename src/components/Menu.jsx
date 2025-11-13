@@ -58,16 +58,18 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
         <>
             <Navbar.Collapse id={meanuID} className={`align-items-start ${className}`}>
                 {meanuID &&
-                    <Navbar.Brand
-                        className="mobile-logo"
-                        onClick={() => {
-                            navigate('/')
-                            setMenuShow(false)
-                        }}>
-                        <Image
-                            src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}KJ-Logo-(1).png`}
-                            className="logo" />
-                    </Navbar.Brand>
+                    <>
+                        <Navbar.Brand
+                            className="mobile-logo"
+                            onClick={() => {
+                                navigate('/')
+                                setMenuShow(false)
+                            }}>
+                            <Image
+                                src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}KJ-Logo-(1).png`}
+                                className="logo" />
+                        </Navbar.Brand>
+                    </>
                 }
                 <Nav className="ml-auto menu-bar position-relative">
                     <Nav.Link
@@ -75,7 +77,10 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             navigate('/')
                             setMenuShow(false);
                         }}
-                        className="mr-lg-5 mb-0 h4 align-self-lg-center">Home</Nav.Link >
+                        className="mr-lg-5 mb-0 h4 align-self-lg-center">
+                        {meanuID && <i className='bx bx-home-alt menu-icon'></i>}
+                        <span>Home</span>
+                    </Nav.Link >
                     <Nav.Link
                         onClick={() => {
                             setMenuShow(false);
@@ -87,7 +92,10 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 })
                             }
                         }}
-                        className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'Sell/Share' ? 'text-primary' : ''}`}>Sell/Share</Nav.Link>
+                        className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'Sell/Share' ? 'text-primary' : ''}`}>
+                        {meanuID && <i className='bx bx-store menu-icon'></i>}
+                        <span>Sell/Share</span>
+                    </Nav.Link>
                     <Nav.Link
                         onClick={() => {
                             setMenuShow(false);
@@ -99,10 +107,19 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                                 })
                             }
                         }}
-                        className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'chat' ? 'text-primary' : ''}`}>Community</Nav.Link>
+                        className={`mr-lg-5 mb-0 h4 align-self-lg-center ${location?.state === 'chat' ? 'text-primary' : ''}`}>
+                        {meanuID && <i className='bx bx-message-rounded-dots menu-icon'></i>}
+                        <span>Community</span>
+                    </Nav.Link>
                     <Nav.Link
-                        onClick={() => setCominingSoon(true)}
-                        className="mr-lg-5 mb-0 h4 align-self-lg-center">Library</Nav.Link>
+                        onClick={() => {
+                            setCominingSoon(true)
+                            setMenuShow(false);
+                        }}
+                        className="mr-lg-5 mb-0 h4 align-self-lg-center">
+                        {meanuID && <i className='bx bx-library menu-icon'></i>}
+                        <span>Library</span>
+                    </Nav.Link>
                     {/* <Nav.Link
                                 onClick={() => alert('In progress')}
                                 className="mr-lg-5 mb-0 h4 align-self-lg-center">
@@ -110,6 +127,7 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
                             </Nav.Link> */}
                     <Dropdown className="position-relative mr-lg-5 mb-0 align-self-lg-center dowpdown-section" drop={'start'}>
                         <Dropdown.Toggle variant="" className="dowpdown-section-btn1  ml-4" drop={'start'}>
+                            {meanuID && <i className='bx bx-list-ul menu-icon'></i>}
                             <span className="h4">My List</span>
                         </Dropdown.Toggle>
 

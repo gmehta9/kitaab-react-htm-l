@@ -3,19 +3,123 @@
 @import url('./styles/fonts.scss');
 @import url('./styles/custom-css.scss');
 @import url('./styles/accordian.scss');
+@import url('./styles/filters.scss');
+@import url('./styles/product-card.scss');
+@import url('./styles/order-detail-modal.scss');
+@import url('./styles/order-history.scss');
+
+* {
+    box-sizing: border-box;
+}
 
 body {
     font-family: 'regular-font';
     min-height: 100%;
+    overflow-x: hidden;
 }
 
 html {
     position: relative;
     min-height: 100%;
+    scroll-behavior: smooth;
 }
 
+// Global smooth transitions
+a, button, input, select, textarea {
+    transition: all 0.3s ease;
+}
+
+// Enhanced modal backdrop
 .modal-backdrop.show {
-    opacity: 0.9;
+    opacity: 0.7;
+    backdrop-filter: blur(4px);
+}
+
+// Modal animations
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: none;
+}
+
+// Button hover effects
+.btn {
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Link hover effects
+a {
+    transition: color 0.3s ease;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+// Form input enhancements
+.form-control {
+    transition: all 0.3s ease;
+
+    &:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+}
+
+// Card hover effects
+.card {
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Smooth scrollbar
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+
+    &:hover {
+        background: #555;
+    }
+}
+
+// Page transition effects
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .down-btn {
@@ -25,4 +129,9 @@ html {
     display: flex;
     padding: 5px;
     align-items: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
 }

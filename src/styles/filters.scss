@@ -1,0 +1,327 @@
+$primary: #019D5F;
+$secondary: #868686;
+$border-light: #e0e0e0;
+
+.filter-sidebar {
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding-right: 10px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $secondary;
+        border-radius: 10px;
+
+        &:hover {
+            background: $primary;
+        }
+    }
+}
+
+.filter-section {
+    background: #fff;
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #333;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .form-control {
+        font-size: 0.875rem;
+        border-radius: 6px;
+        border: 1px solid $border-light;
+        transition: all 0.3s ease;
+
+        &:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 0.2rem rgba(1, 157, 95, 0.15);
+        }
+    }
+}
+
+.category-toggle {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:hover {
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        border-color: $primary;
+        color: $primary;
+    }
+
+    &:focus {
+        box-shadow: 0 0 0 0.2rem rgba(1, 157, 95, 0.15);
+    }
+
+    .dropdown-icon {
+        transition: transform 0.3s ease;
+    }
+
+    &.active .dropdown-icon {
+        transform: rotate(180deg);
+    }
+}
+
+.category-list {
+    background: #fff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    animation: slideDown 0.3s ease;
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    li {
+        padding: 8px 0;
+        border-bottom: 1px solid #f5f5f5;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        label {
+            margin-bottom: 0;
+            transition: all 0.2s ease;
+
+            &:hover:not(.disabled) {
+                color: $primary;
+                padding-left: 5px;
+            }
+        }
+    }
+}
+
+// Mobile responsive filters
+.mobile-filter-toggle {
+    display: none;
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    width: 100%;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: darken($primary, 10%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(1, 157, 95, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    i {
+        margin-right: 8px;
+    }
+}
+
+@media (max-width: 992px) {
+    .mobile-filter-toggle {
+        display: block;
+    }
+
+    .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 280px;
+        height: 100vh;
+        background: #fff;
+        z-index: 1050;
+        padding: 20px;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: left 0.3s ease;
+        overflow-y: auto;
+
+        &.show {
+            left: 0;
+        }
+    }
+
+    .filter-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1049;
+        display: none;
+
+        &.show {
+            display: block;
+        }
+    }
+}
+
+.filter-close-btn {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: $secondary;
+    cursor: pointer;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: $primary;
+    }
+
+    @media (max-width: 992px) {
+        display: block;
+    }
+}
+
+// Select dropdown styling
+.css-control {
+    .css__control {
+        border-radius: 6px;
+        border-color: $border-light;
+        transition: all 0.3s ease;
+
+        &:hover {
+            border-color: $primary;
+        }
+
+        &--is-focused {
+            border-color: $primary;
+            box-shadow: 0 0 0 0.2rem rgba(1, 157, 95, 0.15);
+        }
+    }
+
+    .css__option--is-selected {
+        background-color: $primary;
+    }
+
+    .css__option--is-focused {
+        background-color: rgba(1, 157, 95, 0.1);
+    }
+}
+
+// Product list header
+.product-list-header {
+    background: #fff;
+    border: 1px solid $border-light;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .search-filter-tag {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+
+        .filter-text {
+            font-weight: 600;
+            color: $primary;
+            margin: 0 8px;
+        }
+
+        .close-filter {
+            cursor: pointer;
+            background: $primary;
+            color: #fff;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            line-height: 1;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: darken($primary, 10%);
+                transform: rotate(90deg);
+            }
+        }
+    }
+}
+
+// Empty state enhancement
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+
+    img {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    .empty-text {
+        margin-top: 20px;
+        font-size: 1.25rem;
+        color: $secondary;
+        font-weight: 500;
+    }
+}

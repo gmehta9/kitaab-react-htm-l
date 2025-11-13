@@ -2,6 +2,10 @@ import { Col, Container, Image, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Footer() {
+    const startYear = 2023;
+    const currentYear = new Date().getFullYear();
+    const yearDisplay = startYear === currentYear ? `${startYear}` : `${startYear}–${currentYear}`;
+
 
     return (
         <div className="footer-section py-3 w-100 text-center mt-auto">
@@ -29,7 +33,7 @@ function Footer() {
                         </div>
                     </Col>
                     <Col xs={6} className="text-white text-left">
-                        Copyright © 2023 Kitaab Junction
+                        Copyright © {yearDisplay} Kitaab Junction
                     </Col>
                     <Col xs={6} className="d-flex justify-content-end">
                         <div className="d-flex ml-auto">

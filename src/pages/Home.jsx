@@ -2,6 +2,7 @@ import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
+import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
 import React, { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../axios/axios-config";
 import { MEDIA_URL, debounce, replaceLogo } from "../helper/Utils";
@@ -50,6 +51,7 @@ function HomePage() {
     const [categoriesList, setCategoriesList] = useState()
 
     const [productList, setProductList] = useState()
+    const [isProductLoading, setIsProductLoading] = useState(true)
     const [searchText, setSearchText] = useState()
     const [isSearchContentLoading, setIsSearchContentLoading] = useState(false)
     const [searchedContentList, setSearchedContentList] = useState([])
@@ -81,6 +83,7 @@ function HomePage() {
 
     const getProductByCat = async (p, catID) => {
         setIsContentLoading(true)
+        setIsProductLoading(true)
         const params = {
             page: p,
             size: 10,
@@ -95,9 +98,11 @@ function HomePage() {
             if (response) {
                 setProductList(response?.data?.data)
                 setIsContentLoading(false)
+                setIsProductLoading(false)
             }
         }).catch((error) => {
             setIsContentLoading(false)
+            setIsProductLoading(false)
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     };
@@ -213,33 +218,33 @@ function HomePage() {
                 <div className="heading h3 text-center mb-4">
                     Book By <span>Categories</span>
                 </div>
-                <div className="">
-                    <div className="p-0 row justify-content-center my-4">
-                        <button type="button"
-                            onClick={() => {
-                                setSelectCatID(undefined)
-                            }}
-                            className={` btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${!selectCatID ? ' text-primary border-bottom' : 'border-0'}`}>
-                            All
-                        </button>
-
-                        {categoriesList && categoriesList.map((cl, index) =>
-                            <button type="button"
+                <div className="category-container">
+                    <div className="category-scroll-wrapper">
+                        <div className="category-list">
+                            <button
+                                type="button"
                                 onClick={() => {
-                                    setSelectCatID(cl?.id)
-                                    // navigate('/product', {
-                                    //     state: { name: cl?.name, catID: cl?.id }
-                                    // })
+                                    setSelectCatID(undefined)
                                 }}
-                                className={`btn mx-2 rounded-0 bg-transparent px-0 mx-3 ${selectCatID === cl?.id ? ' text-primary border-bottom' : 'border-0'}`}
-                                key={index + 'cl'}>
-                                {cl?.name}
+                                className={`category-btn ${!selectCatID ? 'active' : ''}`}>
+                                All
                             </button>
-                        )}
 
+                            {categoriesList && categoriesList.map((cl, index) =>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectCatID(cl?.id)
+                                    }}
+                                    className={`category-btn ${selectCatID === cl?.id ? 'active' : ''}`}
+                                    key={index + 'cl'}>
+                                    {cl?.name}
+                                </button>
+                            )}
+                        </div>
                     </div>
                 </div>
-                {productList?.length === 0 &&
+                {(!isProductLoading && productList?.length === 0) &&
                     <div
                         style={{ height: '200px' }}
                         className="text-center pt-5 h2 fw-bold">
@@ -248,25 +253,29 @@ function HomePage() {
                 }
                 <Row lg={"5"} md={"4"} sm={"2"} xs={"2"} className="justify-content-center">
 
-                    {productList && productList.map((items, index) =>
+                    {isProductLoading && <ProductCardSkeleton cards={10} />}
+
+                    {!isProductLoading && productList && productList.map((items, index) =>
                         <React.Fragment key={index + 'prd'}>
-                            <ProductItemUI items={items} />
+                            <ProductItemUI items={items} className='px-2' />
                         </React.Fragment>
                     )}
 
                 </Row>
 
-                <Button
-                    onClick={() => navigate('/product', {
-                        state: {
-                            productId: selectCatID
-                        }
-                    })}
-                    variant="dark"
-                    disabled={productList?.length === 0}
-                    className="ml-2 px-4 align-items-center d-flex mx-auto mt-5">
-                    View More
-                </Button>
+                {!isProductLoading &&
+                    <Button
+                        onClick={() => navigate('/product', {
+                            state: {
+                                productId: selectCatID
+                            }
+                        })}
+                        variant="dark"
+                        disabled={productList?.length === 0}
+                        className="ml-2 px-4 align-items-center d-flex mx-auto mt-5">
+                        View More
+                    </Button>
+                }
             </Container>
         </>
     )

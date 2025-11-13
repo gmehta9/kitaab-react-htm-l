@@ -71,7 +71,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
     }
 
     useEffect(() => {
-        fetch('cityState.json', {
+        fetch('/cityState.json', {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

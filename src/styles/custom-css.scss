@@ -43,11 +43,11 @@ $secondry: #868686;
 
     .book-name {
         font-family: "medium-font";
-        text-overflow: ellipsis;
+        // text-overflow: ellipsis;
         /* IE, Safari (WebKit) */
-        overflow: hidden;
+        // overflow: hidden;
         /* don't show excess chars */
-        white-space: nowrap;
+        // white-space: nowrap;
     }
 
     .book-price {
@@ -582,5 +582,156 @@ $secondry: #868686;
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
+    }
+}
+
+// Category listing styles - Responsive design
+.category-container {
+    position: relative;
+    margin: 1.5rem 0;
+
+    .category-scroll-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #019D5F #f1f1f1;
+
+        // Hide scrollbar but keep functionality
+        &::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(1, 157, 95, 0.3);
+            border-radius: 10px;
+
+            &:hover {
+                background: rgba(1, 157, 95, 0.5);
+            }
+        }
+    }
+
+    .category-list {
+        display: flex;
+        gap: 0.5rem;
+        padding: 0.5rem 0.25rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        align-items: center;
+
+        .category-btn {
+            flex-shrink: 0;
+            padding: 0.4rem 1rem;
+            font-size: 0.875rem;
+            font-family: 'medium-font', sans-serif;
+            font-weight: 500;
+            color: #6B6B6B;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            line-height: 1.2;
+            min-height: 32px;
+
+            // Hover effect
+            &:hover {
+                color: #019D5F;
+                background: #fff;
+                border-color: #019D5F;
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(1, 157, 95, 0.15);
+            }
+
+            // Active state
+            &.active {
+                color: #fff;
+                background: #019D5F;
+                border-color: #019D5F;
+                box-shadow: 0 2px 8px rgba(1, 157, 95, 0.25);
+                font-weight: 600;
+            }
+
+            // Focus state for accessibility
+            &:focus {
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(1, 157, 95, 0.15);
+            }
+
+            // Active press effect
+            &:active {
+                transform: translateY(0);
+            }
+        }
+    }
+}
+
+// Tablet responsive (wrap less)
+@media (max-width: 992px) and (min-width: 769px) {
+    .category-container {
+        margin: 1rem 0;
+
+        .category-list {
+            gap: 0.45rem;
+            padding: 0.4rem 0.2rem;
+
+            .category-btn {
+                padding: 0.375rem 0.875rem;
+                font-size: 0.8125rem;
+                min-height: 30px;
+            }
+        }
+    }
+}
+
+// Mobile responsive (horizontal scroll)
+@media (max-width: 768px) {
+    .category-container {
+        margin: 1rem -15px;
+
+        .category-list {
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            gap: 0.4rem;
+            padding: 0.4rem;
+
+
+            .category-btn {
+                padding: 0.35rem 0.75rem;
+                font-size: 0.8125rem;
+                min-height: 30px;
+                border-radius: 18px;
+
+                &:hover {
+                    transform: none;
+                }
+
+                &:active {
+                    transform: scale(0.95);
+                }
+            }
+        }
+    }
+}
+
+// Small mobile devices
+@media (max-width: 480px) {
+    .category-container {
+        .category-list {
+            gap: 0.35rem;
+
+            .category-btn {
+                padding: 0.3rem 0.65rem;
+                font-size: 0.75rem;
+                min-height: 28px;
+                border-radius: 16px;
+            }
+        }
     }
 }

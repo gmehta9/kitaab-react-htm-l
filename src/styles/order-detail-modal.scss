@@ -1,0 +1,296 @@
+$primary: #019D5F;
+$secondary: #868686;
+$text-dark: #333;
+$text-muted: #6B6B6B;
+$border-light: #e0e0e0;
+
+.order-detail-modal {
+    .modal-content {
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+    }
+
+    .modal-header-custom {
+        background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+        color: #fff;
+        padding: 20px 30px;
+        border-bottom: none;
+        position: relative;
+
+        .modal-title-custom {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            text-align: center;
+            width: 100%;
+
+            .order-id {
+                opacity: 0.9;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+        }
+
+        .close-btn-custom {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: translateY(-50%) rotate(90deg);
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 30px;
+    }
+
+    .info-card {
+        background: #fff;
+        border: 1px solid $border-light;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header-custom {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: $text-dark;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            i {
+                font-size: 1.2rem;
+                color: $primary;
+            }
+        }
+
+        .info-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+            transition: all 0.2s ease;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                background-color: rgba(1, 157, 95, 0.02);
+                padding-left: 8px;
+            }
+
+            .info-label {
+                font-size: 0.875rem;
+                color: $text-muted;
+                font-weight: 600;
+                min-width: 100px;
+                flex-shrink: 0;
+            }
+
+            .info-value {
+                font-size: 0.875rem;
+                color: $text-dark;
+                font-weight: 500;
+                flex-grow: 1;
+                word-break: break-word;
+            }
+        }
+    }
+
+    .order-type-badge {
+        background: linear-gradient(135deg, #17a2b8 0%, darken(#17a2b8, 10%) 100%);
+        color: #fff;
+        padding: 16px 24px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+        margin: 20px 0;
+        animation: fadeIn 0.5s ease;
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge-label {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+
+        .badge-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    }
+
+    .order-details-table {
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-top: 20px;
+
+        .table {
+            margin-bottom: 0;
+
+            thead {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+
+                th {
+                    font-weight: 700;
+                    color: $text-dark;
+                    border-bottom: 2px solid $border-light;
+                    padding: 16px 12px;
+                    font-size: 0.875rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+            }
+
+            tbody {
+                tr {
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background-color: rgba(1, 157, 95, 0.05);
+                    }
+
+                    td {
+                        padding: 16px 12px;
+                        vertical-align: middle;
+                        border-color: #f5f5f5;
+                        font-size: 0.9rem;
+                    }
+                }
+
+                .product-image {
+                    width: 60px;
+                    height: 80px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        transform: scale(1.1);
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    }
+                }
+
+                .price-value {
+                    color: $primary;
+                    font-weight: 700;
+                    font-size: 1.1rem;
+                }
+
+                .transact-type-badge {
+                    display: inline-block;
+                    padding: 4px 12px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+
+                    &.sell {
+                        background: rgba(1, 157, 95, 0.1);
+                        color: $primary;
+                    }
+
+                    &.share {
+                        background: rgba(23, 162, 184, 0.1);
+                        color: #17a2b8;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .order-detail-modal {
+        .modal-header-custom {
+            padding: 16px 20px;
+
+            .modal-title-custom {
+                font-size: 1.2rem;
+
+                .order-id {
+                    font-size: 0.95rem;
+                }
+            }
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .info-card {
+            margin-bottom: 20px;
+
+            .info-row {
+                flex-direction: column;
+                gap: 4px;
+
+                .info-label {
+                    min-width: auto;
+                }
+            }
+        }
+
+        .order-details-table {
+            .table {
+                font-size: 0.8rem;
+
+                thead th,
+                tbody td {
+                    padding: 12px 8px;
+                }
+
+                .product-image {
+                    width: 50px;
+                    height: 70px;
+                }
+            }
+        }
+    }
+}
