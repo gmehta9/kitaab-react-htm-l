@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $primary: #019D5F;
 $dark-bg: #1a1d23;
 $darker-bg: #151719;
@@ -49,7 +51,7 @@ $menu-width: 320px;
         border-radius: 10px;
 
         &:hover {
-            background: lighten($primary, 10%);
+            background: color.adjust($primary, $lightness: 10%);
         }
     }
 
@@ -111,7 +113,7 @@ $menu-width: 320px;
 
             .menu-icon {
                 transform: scale(1.15);
-                color: lighten($primary, 15%);
+                color: color.adjust($primary, $lightness: 15%);
             }
 
             &::before {
@@ -132,7 +134,7 @@ $menu-width: 320px;
             padding-left: 28px;
 
             .menu-icon {
-                color: lighten($primary, 20%);
+                color: color.adjust($primary, $lightness: 20%);
             }
         }
     }
@@ -178,7 +180,7 @@ $menu-width: 320px;
 
                 .menu-icon {
                     transform: scale(1.15);
-                    color: lighten($primary, 15%);
+                    color: color.adjust($primary, $lightness: 15%);
                 }
             }
 
@@ -270,7 +272,7 @@ $menu-width: 320px;
 
             &:hover img {
                 transform: scale(1.08);
-                border-color: lighten($primary, 10%);
+                border-color: color.adjust($primary, $lightness: 10%);
                 box-shadow: 0 6px 20px rgba(1, 157, 95, 0.6);
             }
         }
@@ -386,7 +388,7 @@ $menu-width: 320px;
         font-size: 1.1rem;
         font-weight: 600;
         border-radius: 12px;
-        background: linear-gradient(135deg, $primary 0%, darken($primary, 10%) 100%);
+        background: linear-gradient(135deg, $primary 0%, color.adjust($primary, $lightness: -10%) 100%);
         border: none;
         box-shadow: 0 4px 12px rgba(1, 157, 95, 0.4);
         transition: all 0.3s ease;
@@ -486,11 +488,12 @@ $menu-width: 320px;
     height: 100vh;
     background: linear-gradient(180deg, $dark-bg 0%, $darker-bg 100%);
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+
     z-index: 1050;
 
     &.active {
         left: 0;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
     }
 }
 
