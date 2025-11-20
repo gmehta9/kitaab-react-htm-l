@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
 import moment from "moment";
@@ -36,6 +36,33 @@ const Chat = () => {
     const { selectedChannel } = useOutletContext()
 
     const [isScrolledUp, setIsScrolledUp] = useState(false); // Track if user scrolled up
+
+    // Scroll handlers
+    const chatBoxScrollHandler = useCallback(() => {
+        if (chatEndRef.current) {
+            chatEndRef.current.scrollTo({
+                top: chatEndRef.current.scrollHeight,
+                behavior: 'smooth',
+            });
+        }
+    }, []);
+
+    const scrollToBottom = useCallback(() => {
+        setIsScrolledUp(false);
+        chatBoxScrollHandler();
+    }, [chatBoxScrollHandler]);
+
+    const handleScroll = useCallback(() => {
+        if (chatEndRef.current) {
+            const { scrollTop, scrollHeight, clientHeight } = chatEndRef.current;
+            // Check if the user has scrolled up
+            if ((scrollTop + clientHeight + 300) < scrollHeight) {
+                setIsScrolledUp(true);
+            } else {
+                setIsScrolledUp(false);
+            }
+        }
+    }, []);
 
     const sendMessage = async () => {
         if (!inputValue.trim() && !selectedFile) return; // Prevent sending empty messages
@@ -84,22 +111,20 @@ const Chat = () => {
                 // })
 
             }
-        }).catch((error) => {
+        }).catch(() => {
             setIsMsgSending(false)
             setSelectFileImageView()
             setSelectedFile()
         });
     };
 
-    const loadChannelChat = (page = currentPage, loadMore) => {
+    const loadChannelChat = useCallback((page, loadMore) => {
         let APIUrl = `channel/${selectedChannel?.id}/messages?page=${page}&size=20`
         axiosInstance['get'](`${APIUrl}`).then((res) => {
             if (res) {
                 const reversedChats = [...res.data.data].reverse();
                 if (loadMore) {
-                    const newChatList = [...reversedChats, ...chatList,]
-                    setChatList(newChatList);
-                    // setChatList(prevChatList => [...prevChatList, ...reversedChats]);
+                    setChatList(prevChatList => [...reversedChats, ...prevChatList]);
                 } else {
                     setChatList(reversedChats);
                 }
@@ -113,62 +138,40 @@ const Chat = () => {
         }).catch((error) => {
             console.log(error)
         });
-    }
+    }, [selectedChannel?.id, chatBoxScrollHandler]);
 
-    const handleKeyPress = (event) => {
+    const handleKeyDown = (event) => {
         if (event.key === "Enter") {
             sendMessage();
         }
     };
     const DeleteButton = (msg) => (
-        <button type="button" style={{ left: '-45px' }} onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-50 border-0 bg-transparent">
+        <button type="button" onClick={() => mesgDelethandler(msg)} className="btn-msg-delete position-absolute top-50 border-0 bg-transparent">
             <img src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}delete_msg_.svg`} alt="" />
         </button>)
     const ReplyButton = (msg, whoseMsg) => (
         <button
             type="button"
             title="reply message"
-            style={whoseMsg === 'mymsg' ? {
-                left: '-25px',
-                WebkitTransform: 'scaleX(-1)',
-                transform: 'scaleX(-1)'
-            } : { right: '-25px' }}
             onClick={() => setReplyMsgSelected(msg)}
-            className="btn-msg-rply position-absolute top-50 border-0 bg-transparent">
+            className={`btn-msg-rply position-absolute top-50 border-0 bg-transparent ${whoseMsg === 'mymsg' ? 'btn-msg-rply-own' : 'btn-msg-rply-other'}`}>
             <ReplyIcon />
         </button>)
 
     const replyUi = (rplyMsg, whoseMsg) => {
         return <div
-            style={
-                whoseMsg === 'mymsg' ? {
-                    background: '#c7dac8',
-                    color: '#000',
-                    fontSize: '12px',
-                    marginLeft: '-8px',
-                    lineHeight: '20px'
-                } : {
-                    background: '#007445',
-                    color: '#fff',
-                    fontSize: '12px',
-                    marginRight: '-8px',
-                    lineHeight: '20px'
-                }}
-            className="rounded px-2 text-left d-flex flex-column">
+            className={`reply-message-container rounded px-2 text-left d-flex flex-column ${whoseMsg === 'mymsg' ? 'reply-own' : 'reply-other'}`}>
             <div className="font-weight-bold">
                 {rplyMsg?.user?.name}
             </div>
             {rplyMsg.type === 'file' &&
                 <>
-                    <i style={{ fontSize: '50px', color: '#fff' }} className={getFileIconClass(rplyMsg.message)} />
+                    <i className={`reply-file-icon ${getFileIconClass(rplyMsg.message)}`} />
                 </>
             }
             {rplyMsg.type === 'image' &&
                 <>
-                    <img style={{
-                        width: '70px',
-                        height: '70px',
-                    }} src={MEDIA_URL + 'chatFiles/' + rplyMsg.message} alt="chat-file-image" />
+                    <img className="reply-image-thumbnail" src={MEDIA_URL + 'chatFiles/' + rplyMsg.message} alt="chat-file-image" />
                 </>
             }
             {rplyMsg.type === 'text' &&
@@ -203,7 +206,7 @@ const Chat = () => {
                         href={MEDIA_URL + 'chatFiles/' + msg.message}
                         rel="noopener noreferrer"
                     >
-                        <i style={{ fontSize: '50px', color: '#fff' }} className={getFileIconClass(msg.message)} />
+                        <i className={`message-file-icon ${getFileIconClass(msg.message)}`} />
                     </a>
                 </div>
             );
@@ -217,10 +220,7 @@ const Chat = () => {
                         onClick={() => imagePreview(MEDIA_URL + 'chatFiles/' + msg.message, 'image', '')}
                         className="border-0 bg-transparent">
 
-                        <img src={MEDIA_URL + 'chatFiles/' + msg.message} style={{
-                            width: '60px',
-                            height: '60px'
-                        }} alt="chat-file-image" />
+                        <img src={MEDIA_URL + 'chatFiles/' + msg.message} className="chat-image-thumbnail" alt="chat-file-image" />
                     </button>
                 </div>
             );
@@ -270,32 +270,6 @@ const Chat = () => {
         const b = (idNumber * 123) % 256; // Blue component
 
         return `rgb(${r}, ${g}, ${b})`;
-    };
-
-    const chatBoxScrollHandler = () => {
-        if (chatEndRef.current) {
-            chatEndRef.current.scrollTo({
-                top: chatEndRef.current.scrollHeight,
-                behavior: 'smooth',
-            });
-        }
-    }
-
-    const scrollToBottom = () => {
-        setIsScrolledUp(false);
-        chatBoxScrollHandler();
-    };
-
-    const handleScroll = () => {
-        if (chatEndRef.current) {
-            const { scrollTop, scrollHeight, clientHeight } = chatEndRef.current;
-            // Check if the user has scrolled up
-            if ((scrollTop + clientHeight + 300) < scrollHeight) {
-                setIsScrolledUp(true);
-            } else {
-                setIsScrolledUp(false);
-            }
-        }
     };
 
     const handleFileChange = (fileObject) => {
@@ -365,16 +339,17 @@ const Chat = () => {
                 }
             });
         }
-    }, [selectedChannel])
+    }, [selectedChannel?.id, loggedUser.id, chatBoxScrollHandler])
 
     useEffect(() => {
         if (selectedChannel?.id) {
-            loadChannelChat()
+            setCurrentPage(1);
+            loadChannelChat(1);
         }
         return () => {
             pusher.unsubscribe(`channel-${selectedChannel?.id}`);
         };
-    }, [selectedChannel?.id]);
+    }, [selectedChannel?.id, loadChannelChat]);
 
     useEffect(() => {
         const chatHistoryElement = chatEndRef.current;
@@ -386,7 +361,7 @@ const Chat = () => {
                 chatHistoryElement.removeEventListener('scroll', handleScroll);
             }
         };
-    }, []);
+    }, [handleScroll]);
 
     return (
         <>
@@ -490,14 +465,12 @@ const Chat = () => {
                     {(selectedFile || replyMsgSelected) &&
 
                         <div
-                            style={{ width: '95%', maxHeight: '65px' }}
-                            className="position-absolute file-select-main bg-white p-2 pt-3 shadow rounded border-1 border bottom-0 right-0 mr-4 translate-middle-x pl-4 pr-5 overflow-hidden">
+                            className="file-select-main bg-white shadow rounded border-1 border overflow-hidden">
                             {selectedFile && <>
                                 <button
                                     type="button"
                                     onClick={clearSelectFile}
-                                    style={{ height: '20px' }}
-                                    className="position-absolute btn btn-danger w-auto p-0 right-0 mr-3">
+                                    className="file-preview-close-btn btn btn-danger">
                                     <i className='bx bx-x' />
                                 </button>
 
@@ -508,7 +481,7 @@ const Chat = () => {
                                             <img src={selectFileImageView} alt="select file" />
                                         </div>
                                         :
-                                        <i style={{ fontSize: '30px' }} className={getFileIconClass(selectedFile.name)} />
+                                        <i className={`preview-file-icon ${getFileIconClass(selectedFile.name)}`} />
                                     }
                                     <div className="file-name">
                                         {selectedFile.name}
@@ -521,16 +494,13 @@ const Chat = () => {
                             {replyMsgSelected && <>
                                 <button
                                     type="button"
-                                    style={{ height: '20px' }}
                                     onClick={() => setReplyMsgSelected(undefined)}
-                                    className="position-absolute btn btn-danger w-auto p-0 right-0 mr-3">
+                                    className="file-preview-close-btn btn btn-danger">
                                     <i className='bx bx-x' />
                                 </button>
 
                                 <div className="d-flex flex-column position-relative">
-                                    <div
-                                        className="position-absolute left-0 top-0 font-weight-bold"
-                                        style={{ marginTop: '-15px', fontSize: '12px' }}>
+                                    <div className="reply-to-label font-weight-bold">
                                         Reply to:
                                     </div>
                                     <div className="file-name">
@@ -547,8 +517,8 @@ const Chat = () => {
                     )}
                 </div>
                 <div className="chat-message clearfix">
-                    <div className="input-group mb-0">
-                        <div className="align-content-center">
+                    <div className="input-group mb-0 chat-input-wrapper">
+                        <div className="align-content-center chat-attach-btn">
                             <input
                                 type="file"
                                 accept="image/jpg, image/png, image/jpeg, application/*, application/zip"
@@ -557,18 +527,17 @@ const Chat = () => {
                                 id="fileattached"
                                 onChange={handleFileChange}
                             />
-                            <label htmlFor="fileattached" className="hand mr-2 mb-0">
-                                <i className='bx h4 bx-link'></i>
+                            <label htmlFor="fileattached" className="hand mb-0">
+                                <i className='bx bx-link chat-attach-icon'></i>
                             </label>
                         </div>
                         <input
                             type="text"
-                            className="form-control"
+                            className="form-control chat-input-field"
                             disabled={selectedFile}
-                            style={{ minHeight: '60px' }}
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
-                            onKeyPress={handleKeyPress}
+                            onKeyDown={handleKeyDown}
                             placeholder="Enter text here..." />
                         <div className="input-group-prepend">
 
@@ -578,13 +547,13 @@ const Chat = () => {
                                 onClick={sendMessage}
                                 className="btn p-0 btn-primary send-btn border-0">
 
-                                <span className="p-3">
+                                <span className="chat-send-btn-content">
                                     {isMsgSending ?
-                                        <div className="spinner-border" role="status">
+                                        <div className="spinner-border spinner-border-sm" role="status">
                                             <span className="sr-only">Loading...</span>
                                         </div>
                                         :
-                                        <i className='bx h4 mb-0 bx-send'></i>
+                                        <i className='bx bx-send chat-send-icon'></i>
                                     }
                                 </span>
                             </button>

@@ -26,6 +26,7 @@ const AboutPage = lazy(() => import('./pages/innerpages/About'));
 const InnerPageLayout = lazy(() => import('./pages/innerpages/InnerPageLayout'));
 const FAQPage = lazy(() => import('./pages/innerpages/FAQ'));
 const ContactPage = lazy(() => import('./pages/innerpages/Contact'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 
 function App() {
@@ -138,7 +139,7 @@ function App() {
 
     {
       path: "*",
-      element: '<NotFoundPage />',
+      element: <NotFoundPage />,
     }
 
   ]

@@ -192,7 +192,7 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
                             }
                         </Form.Group>
                         <Form.Group className="mb-4" controlId="organization">
-                            <Form.Label>Organization<sup className="text-danger small">*</sup></Form.Label>
+                            <Form.Label>Organization/School<sup className="text-danger small">*</sup></Form.Label>
                             <Form.Control
                                 autoComplete="false"
                                 name="organization"

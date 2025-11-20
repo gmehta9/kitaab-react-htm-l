@@ -15,62 +15,18 @@ function ChatLayout() {
     const [selectedChannel, setSelectedChannel] = useState();
     const [searchValue, setSearchValue] = useState();
     const [isChannelReadyTochat, setIsChannelReadyTochat] = useState();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 
-    const handleClose = () => setShowModal(false);
-    const handleShow = () => setShowModal(true);
+    const handleClose = useCallback(() => {
+        setShowModal(false);
+    }, [setShowModal]);
 
-    const getChannelsListHandler = useCallback(async () => {
-        const params = {
-            page: 1,
-            size: 20,
-        };
-        let APIUrl = 'channel'
-        setIsContentLoading(true)
-        axiosInstance['get'](`${APIUrl}?${new URLSearchParams(params)}`).then((res) => {
-            if (res) {
-                joinChannelListget(res.data.data)
+    const handleShow = useCallback(() => {
+        setShowModal(true);
+    }, [setShowModal]);
 
-            }
-        }).catch((error) => {
-            console.log(error)
-            setIsContentLoading(false)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    const generateColorFromId = (id) => {
-        // Convert the ID to a number (assuming it's a string)
-        const idNumber = parseInt(id, 10);
-
-        // Generate RGB values based on the ID
-        const r = (idNumber * 456) % 256; // Red component
-        const g = (idNumber * 789) % 256; // Green component
-        const b = (idNumber * 123) % 256; // Blue component
-
-        return `rgb(${r}, ${g}, ${b})`;
-    };
-    const joinChannelRequestHandler = useCallback(async () => {
-
-
-        let APIUrl = `channel/${selectedChannel.id}/join`
-        setIsContentLoading(true)
-        axiosInstance['put'](`${APIUrl}`).then((res) => {
-            if (res) {
-                toast.success('Channel join request has been sent to the admin. Please wait for approval.')
-                setIsContentLoading(false)
-                handleClose()
-            }
-        }).catch((error) => {
-            console.log(error)
-            setIsContentLoading(false)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedChannel]);
-
-    // userChannel
-
-    const joinChannelListget = (chList) => {
+    const joinChannelListget = useCallback((chList) => {
 
         let APIUrl = `userChannel`
         setIsContentLoading(true)
@@ -108,7 +64,53 @@ function ChatLayout() {
         }).catch((error) => {
             console.log(error)
         });
+    }, [setIsContentLoading]);
+
+    const getChannelsListHandler = useCallback(async () => {
+        const params = {
+            page: 1,
+            size: 20,
+        };
+        let APIUrl = 'channel'
+        setIsContentLoading(true)
+        axiosInstance['get'](`${APIUrl}?${new URLSearchParams(params)}`).then((res) => {
+            if (res) {
+                joinChannelListget(res.data.data)
+
+            }
+        }).catch((error) => {
+            console.log(error)
+            setIsContentLoading(false)
+        });
+    }, [setIsContentLoading, joinChannelListget]);
+
+    const generateColorFromId = (id) => {
+        // Convert the ID to a number (assuming it's a string)
+        const idNumber = parseInt(id, 10);
+
+        // Generate RGB values based on the ID
+        const r = (idNumber * 456) % 256; // Red component
+        const g = (idNumber * 789) % 256; // Green component
+        const b = (idNumber * 123) % 256; // Blue component
+
+        return `rgb(${r}, ${g}, ${b})`;
     };
+    const joinChannelRequestHandler = useCallback(async () => {
+
+
+        let APIUrl = `channel/${selectedChannel.id}/join`
+        setIsContentLoading(true)
+        axiosInstance['put'](`${APIUrl}`).then((res) => {
+            if (res) {
+                toast.success('Channel join request has been sent to the admin. Please wait for approval.')
+                setIsContentLoading(false)
+                handleClose()
+            }
+        }).catch((error) => {
+            console.log(error)
+            setIsContentLoading(false)
+        });
+    }, [selectedChannel, setIsContentLoading, handleClose]);
 
     useEffect(() => {
         if (!Auth.isUserAuthenticated()) {
@@ -116,8 +118,7 @@ function ChatLayout() {
             return
         }
         getChannelsListHandler()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [navigate, getChannelsListHandler])
 
     return (
         <>
@@ -132,9 +133,15 @@ function ChatLayout() {
                     <div className="row clearfix w-100">
                         <div className="col-lg-12">
                             <div className="card chat-app">
-                                <div id="plist" className="people-list">
-                                    <div className="input-group">
-                                        Channels
+                                <button
+                                    className="mobile-menu-toggle d-lg-none"
+                                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                                    type="button">
+                                    <i className={`bx ${isMobileMenuOpen ? 'bx-x' : 'bx-chat'}`}></i>
+                                </button>
+                                <div id="plist" className={`people-list ${isMobileMenuOpen ? 'open' : ''}`}>
+                                    <div className="input-group channel-list-header">
+                                        <h5 className="mb-0">Channels</h5>
                                     </div>
                                     <ul className="list-unstyled chat-list mt-2 mb-0">
                                         <input
@@ -149,7 +156,7 @@ function ChatLayout() {
                                             return ((!searchValue || new RegExp(`${searchValue}`, 'i').test(cd.name)) ?
                                                 <li
                                                     key={index + 'id'}
-                                                    className={`clearfix d-flex align-items-center pl-1 
+                                                    className={`clearfix d-flex align-items-center pl-1
                                                         ${selectedChannel?.id === cd.id ? 'active' : ''}`}
                                                     onClick={() => {
                                                         if (cd.status === 'active') {
@@ -159,6 +166,7 @@ function ChatLayout() {
                                                             handleShow()
                                                         }
                                                         setSelectedChannel(cd)
+                                                        setIsMobileMenuOpen(false)
 
                                                     }}>
                                                     <span
