@@ -253,7 +253,7 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
                             </Row>
 
                             <Form.Group className="mb-4" controlId="exampleForm.ControlInput1">
-                                <Form.Label>Address</Form.Label>
+                                <Form.Label>Organization/ School</Form.Label>
                                 <Form.Control
                                     type="text"
                                     autoComplete="false"
