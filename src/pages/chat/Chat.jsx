@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import { useOutletContext } from "react-router-dom";
-import moment from "moment";
 import Auth from "../../auth/Auth";
 
 import { FileUploadhandler, getInitials, MEDIA_URL, validateFile } from "../../helper/Utils";
@@ -315,9 +314,21 @@ const Chat = () => {
     }
 
     const messageDateTimeGet = (datetime) => {
-        return moment(datetime).isSame(moment(), 'day')
-            ? `Today ${moment(datetime).format('hh:mm a')}`
-            : moment(datetime).format('DD/MM/YYYY hh:mm a')
+        const date = new Date(datetime);
+        const today = new Date();
+        const isToday = date.toDateString() === today.toDateString();
+
+        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+        const timeStr = date.toLocaleTimeString('en-US', timeOptions).toLowerCase();
+
+        if (isToday) {
+            return `Today ${timeStr}`;
+        }
+
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year} ${timeStr}`;
     }
 
 

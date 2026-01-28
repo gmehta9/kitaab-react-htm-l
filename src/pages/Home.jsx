@@ -3,168 +3,184 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import ProductItemUI from "../components/ProductItemUI";
 import ProductCardSkeleton from "../components/skeletons/ProductCardSkeleton";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import { axiosInstance } from "../axios/axios-config";
-import { MEDIA_URL, debounce, replaceLogo } from "../helper/Utils";
+import { MEDIA_URL, replaceLogo } from "../helper/Utils";
 import { AsyncTypeahead } from "react-bootstrap-typeahead";
 
-// const books = [
-//     {
-//         id: 1,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-1.jpg',
-//         price: '10'
-//     },
-//     {
-//         id: 2,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-2.jpg',
-//         price: '99'
-//     },
-//     {
-//         id: 3,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-3.jpg',
-//         price: '199'
-//     },
-//     {
-//         id: 4,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-4.jpg',
-//         price: '349'
-//     },
-//     {
-//         id: 5,
-//         title: 'Vintage Grazie',
-//         author: 'Markrem Hoddel',
-//         cpver_image: './assets/images/book-5.jpg',
-//         price: '250'
-//     }
-// ]
-
 function HomePage() {
-    const navigate = useNavigate()
-    const [categoriesList, setCategoriesList] = useState()
+    const navigate = useNavigate();
+    const { setIsContentLoading } = useOutletContext();
 
-    const [productList, setProductList] = useState()
-    const [isProductLoading, setIsProductLoading] = useState(true)
-    const [searchText, setSearchText] = useState()
-    const [isSearchContentLoading, setIsSearchContentLoading] = useState(false)
-    const [searchedContentList, setSearchedContentList] = useState([])
+    const [categoriesList, setCategoriesList] = useState([]);
+    const [productList, setProductList] = useState([]);
+    const [isProductLoading, setIsProductLoading] = useState(true);
+    const [searchText, setSearchText] = useState('');
+    const [isSearchContentLoading, setIsSearchContentLoading] = useState(false);
+    const [searchedContentList, setSearchedContentList] = useState([]);
+    const [selectCatID, setSelectCatID] = useState(null);
 
-    const [selectCatID, setSelectCatID] = useState()
-    const { setIsContentLoading } = useOutletContext()
+    // Refs for cleanup and debounce
+    const isMounted = useRef(true);
+    const searchDebounceRef = useRef(null);
+    const initialLoadDone = useRef(false);
 
-    const getCategoriesListHandler = useCallback(async (p) => {
-        setIsContentLoading(true)
-
-        const params = {
-            page: p,
-            size: 50,
-        };
-
-        let APIUrl = 'category'
-
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
-            if (response) {
-                setCategoriesList(response?.data?.data)
-                setIsContentLoading(false)
+    // Memoized categories handler
+    const getCategoriesListHandler = useCallback(async () => {
+        try {
+            setIsContentLoading(true);
+            const response = await axiosInstance.get('category?page=1&size=50');
+            if (response && isMounted.current) {
+                setCategoriesList(response?.data?.data || []);
             }
-        }).catch((error) => {
-            setIsContentLoading(false)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        } catch (error) {
+            console.error('Failed to load categories');
+        } finally {
+            if (isMounted.current) {
+                setIsContentLoading(false);
+            }
+        }
+    }, [setIsContentLoading]);
+
+    // Memoized products by category handler
+    const getProductByCat = useCallback(async (catID) => {
+        try {
+            setIsContentLoading(true);
+            setIsProductLoading(true);
+
+            const params = new URLSearchParams({ page: 1, size: 10 });
+            if (catID) {
+                params.append('category[0]', catID);
+            }
+
+            const response = await axiosInstance.get(`product?${params}`);
+            if (response && isMounted.current) {
+                setProductList(response?.data?.data || []);
+            }
+        } catch (error) {
+            console.error('Failed to load products');
+        } finally {
+            if (isMounted.current) {
+                setIsContentLoading(false);
+                setIsProductLoading(false);
+            }
+        }
+    }, [setIsContentLoading]);
+
+    // Memoized search handler
+    const getProductListBySearchText = useCallback(async (text) => {
+        if (!text) return;
+
+        try {
+            setIsSearchContentLoading(true);
+            const params = new URLSearchParams({ page: 1, size: 20, searching: text });
+            const response = await axiosInstance.get(`product?${params}`);
+            if (response && isMounted.current) {
+                setSearchedContentList(response?.data?.data || []);
+            }
+        } catch (error) {
+            console.error('Search failed');
+        } finally {
+            if (isMounted.current) {
+                setIsSearchContentLoading(false);
+            }
+        }
     }, []);
 
+    // Debounced search handler using ref
+    const handleSearch = useCallback((text) => {
+        if (searchDebounceRef.current) {
+            clearTimeout(searchDebounceRef.current);
+        }
+        searchDebounceRef.current = setTimeout(() => {
+            setSearchText(text);
+        }, 500);
+    }, []);
 
-    const getProductByCat = async (p, catID) => {
-        setIsContentLoading(true)
-        setIsProductLoading(true)
-        const params = {
-            page: p,
-            size: 10,
-        };
-        let APIUrl = 'product'
+    // Initial load - categories and products (only once)
+    useEffect(() => {
+        isMounted.current = true;
+        document.title = 'Home | Kitaab Junction';
 
-        if (catID) {
-            params['category[0]'] = catID
+        if (!initialLoadDone.current) {
+            initialLoadDone.current = true;
+            getCategoriesListHandler();
+            getProductByCat(null);
         }
 
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
-            if (response) {
-                setProductList(response?.data?.data)
-                setIsContentLoading(false)
-                setIsProductLoading(false)
+        return () => {
+            isMounted.current = false;
+            if (searchDebounceRef.current) {
+                clearTimeout(searchDebounceRef.current);
             }
-        }).catch((error) => {
-            setIsContentLoading(false)
-            setIsProductLoading(false)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    };
-
-
-    const getProductListBySearchText = async (searchText) => {
-        setIsSearchContentLoading(true)
-        const params = {
-            page: 1,
-            size: 20,
         };
-        let APIUrl = 'product'
+    }, [getCategoriesListHandler, getProductByCat]);
 
-        if (searchText) {
-            params.searching = searchText
-        }
-
-        axiosInstance.get(`${APIUrl}?${new URLSearchParams(params)}`).then((response) => {
-            if (response) {
-                console.log(response?.data?.data);
-                setSearchedContentList(response?.data?.data)
-                setIsSearchContentLoading(false)
-            }
-        }).catch((error) => {
-            setIsSearchContentLoading(false)
-        });
-    };
-
-    const serachtext = debounce((event) => {
-        console.log(event);
-        setSearchText(event)
-    }, 500)
-
+    // Search effect - only when searchText changes
     useEffect(() => {
         if (searchText) {
-            getProductListBySearchText(searchText)
+            getProductListBySearchText(searchText);
         }
-    }, [searchText])
-    useEffect(() => {
-        getCategoriesListHandler(1)
-        document.title = `Home | Kitaab Juction`;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [searchText, getProductListBySearchText]);
 
+    // Category change effect - skip initial load
     useEffect(() => {
-        getProductByCat(1, selectCatID)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCatID])
+        if (initialLoadDone.current && selectCatID !== null) {
+            getProductByCat(selectCatID || null);
+        }
+    }, [selectCatID, getProductByCat]);
+
+    // Handle category selection
+    const handleCategoryClick = useCallback((catId) => {
+        setSelectCatID(catId);
+        if (catId === undefined) {
+            getProductByCat(null);
+        }
+    }, [getProductByCat]);
+
+    // Memoized search result renderer
+    const renderSearchResult = useCallback((option) => (
+        <span onClick={() => navigate('/product/product-detail', { state: { productId: option.id } })}>
+            <img
+                onError={replaceLogo}
+                alt={option.title}
+                loading="lazy"
+                src={MEDIA_URL + 'product/' + option.image}
+                style={{ height: '24px', marginRight: '10px', width: '24px' }}
+            />
+            <span>{option.title}</span>
+        </span>
+    ), [navigate]);
+
+    // Memoized category buttons
+    const categoryButtons = useMemo(() => (
+        <>
+            <button
+                type="button"
+                onClick={() => handleCategoryClick(undefined)}
+                className={`category-btn ${!selectCatID ? 'active' : ''}`}
+            >
+                All
+            </button>
+            {categoriesList.map((cl) => (
+                <button
+                    type="button"
+                    onClick={() => handleCategoryClick(cl.id)}
+                    className={`category-btn ${selectCatID === cl.id ? 'active' : ''}`}
+                    key={cl.id}
+                >
+                    {cl.name}
+                </button>
+            ))}
+        </>
+    ), [categoriesList, selectCatID, handleCategoryClick]);
 
     return (
         <>
             <Row className="banner-row justify-content-center align-items-center mb-5">
                 <Col lg={9} className="text-center mt-4">
-                    <span className="h3 find-book-heading ">Find the books that you are looking for</span>
+                    <span className="h3 find-book-heading">Find the books that you are looking for</span>
                     <InputGroup className="mb-3 mt-3 bg-white p-2 rounded">
-                        {/* <Form.Control
-                            className="border-0 rounded"
-                            placeholder="Search Books....."
-                            aria-label="Recipient's username"
-                            aria-describedby="basic-addon2"
-                            onChange={serachtext}
-                        /> */}
                         <AsyncTypeahead
                             filterBy={() => true}
                             id="async-example"
@@ -172,37 +188,20 @@ function HomePage() {
                             labelKey="title"
                             className="border-0 p-0 form-control rounded"
                             minLength={3}
-                            onSearch={serachtext}
+                            onSearch={handleSearch}
                             options={searchedContentList}
                             placeholder="Search Books by Title, Author"
-                            renderMenuItemChildren={(option) => (
-                                <span onClick={() => navigate('/product/product-detail', {
-                                    state: {
-                                        productId: option.id
-                                    }
-                                })}>
-                                    <img
-                                        onError={replaceLogo}
-                                        alt={option.title}
-                                        src={MEDIA_URL + 'product/' + option.image}
-                                        style={{
-                                            height: '24px',
-                                            marginRight: '10px',
-                                            width: '24px',
-                                        }}
-                                    />
-                                    <span>{option.title}</span>
-                                </span>
-                            )}
+                            renderMenuItemChildren={renderSearchResult}
                         />
-                        <Button id="basic-addon2"
+                        <Button
+                            id="basic-addon2"
                             onClick={() => {
-                                if (!searchText || searchText === '') {
-                                    return
+                                if (searchText) {
+                                    navigate('/product?st=' + searchText);
                                 }
-                                navigate('/product?st=' + searchText)
                             }}
-                            className="ml-2 px-4 align-items-center d-flex">
+                            className="ml-2 px-4 align-items-center d-flex"
+                        >
                             <Image
                                 className="mr-2"
                                 src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}search-icon-white.svg`}
@@ -210,7 +209,6 @@ function HomePage() {
                             Find Book
                         </Button>
                     </InputGroup>
-
                 </Col>
             </Row>
 
@@ -221,64 +219,37 @@ function HomePage() {
                 <div className="category-container">
                     <div className="category-scroll-wrapper">
                         <div className="category-list">
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setSelectCatID(undefined)
-                                }}
-                                className={`category-btn ${!selectCatID ? 'active' : ''}`}>
-                                All
-                            </button>
-
-                            {categoriesList && categoriesList.map((cl, index) =>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setSelectCatID(cl?.id)
-                                    }}
-                                    className={`category-btn ${selectCatID === cl?.id ? 'active' : ''}`}
-                                    key={index + 'cl'}>
-                                    {cl?.name}
-                                </button>
-                            )}
+                            {categoryButtons}
                         </div>
                     </div>
                 </div>
-                {(!isProductLoading && productList?.length === 0) &&
-                    <div
-                        style={{ height: '200px' }}
-                        className="text-center pt-5 h2 fw-bold">
+
+                {!isProductLoading && productList.length === 0 && (
+                    <div style={{ height: '200px' }} className="text-center pt-5 h2 fw-bold">
                         No product found!
                     </div>
-                }
-                <Row lg={"5"} md={"4"} sm={"2"} xs={"2"} className="justify-content-center">
+                )}
 
+                <Row lg="5" md="4" sm="2" xs="2" className="justify-content-center">
                     {isProductLoading && <ProductCardSkeleton cards={10} />}
-
-                    {!isProductLoading && productList && productList.map((items, index) =>
-                        <React.Fragment key={index + 'prd'}>
-                            <ProductItemUI items={items} className='px-2' />
-                        </React.Fragment>
-                    )}
-
+                    {!isProductLoading && productList.map((items) => (
+                        <ProductItemUI key={items.id} items={items} className="px-2" />
+                    ))}
                 </Row>
 
-                {!isProductLoading &&
+                {!isProductLoading && (
                     <Button
-                        onClick={() => navigate('/product', {
-                            state: {
-                                productId: selectCatID
-                            }
-                        })}
+                        onClick={() => navigate('/product', { state: { productId: selectCatID } })}
                         variant="dark"
-                        disabled={productList?.length === 0}
-                        className="ml-2 px-4 align-items-center d-flex mx-auto mt-5">
+                        disabled={productList.length === 0}
+                        className="ml-2 px-4 align-items-center d-flex mx-auto mt-5"
+                    >
                         View More
                     </Button>
-                }
+                )}
             </Container>
         </>
-    )
+    );
 }
 
 export default HomePage;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { Col, Image, Row } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import Skeleton from 'react-loading-skeleton'
@@ -11,51 +11,67 @@ import AddToCartButton from "../../components/AddtoCart";
 import '../../styles/product-detail.scss';
 
 function ProductByID() {
+    const location = useLocation();
+    const productId = location?.state?.productId;
 
-    const location = useLocation()
+    const [productDetail, setProductDetail] = useState(null);
+    const [contentLoading, setContentLoading] = useState(true);
+    const [isEditAble, setIsEditAble] = useState(false);
 
-    const [productDetail, setProductDetail] = useState()
-    const [contentLoading, setContentLoading] = useState()
+    // Refs
+    const isMounted = useRef(true);
+    const hasFetched = useRef(false);
 
-    const [isEditAble, setIsEditAble] = useState(false)
+    // Get logged user ID once
+    const loggedUserId = useMemo(() => Auth.loggedInUser()?.id, []);
 
-    const getProductByIdHandler = (async () => {
-        setContentLoading(true)
+    // Memoized fetch handler
+    const getProductByIdHandler = useCallback(async (id) => {
+        if (!id || hasFetched.current) return;
 
-        let APIUrl = 'product/' + location?.state?.productId
+        hasFetched.current = true;
+        setContentLoading(true);
 
-        axiosInstance.get(`${APIUrl}`).then((response) => {
-            if (response) {
-                setProductDetail(response?.data)
-                setContentLoading(false)
-
+        try {
+            const response = await axiosInstance.get(`product/${id}`);
+            if (response && isMounted.current) {
+                setProductDetail(response?.data);
+                // Check if current user is the creator
+                if (response?.data?.created_by_user?.id === loggedUserId) {
+                    setIsEditAble(true);
+                }
             }
-        }).catch(() => {
-            setContentLoading(false)
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    });
-
-    useEffect(() => {
-        if (productDetail?.created_by_user?.id === Auth.loggedInUser()?.id) {
-            setIsEditAble(true)
+        } catch (error) {
+            console.error('Failed to load product');
+        } finally {
+            if (isMounted.current) {
+                setContentLoading(false);
+            }
         }
-        document.title = 'Book Detail | Kitaab Juction';
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [Auth.loggedInUser()?.id])
+    }, [loggedUserId]);
 
+    // Initial load effect
     useEffect(() => {
-        getProductByIdHandler()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location?.state?.productId])
+        isMounted.current = true;
+        hasFetched.current = false;
+        document.title = 'Book Detail | Kitaab Junction';
 
-    const calculateDiscount = () => {
+        if (productId) {
+            getProductByIdHandler(productId);
+        }
+
+        return () => {
+            isMounted.current = false;
+        };
+    }, [productId, getProductByIdHandler]);
+
+    // Memoized discount calculation
+    const discountPercentage = useMemo(() => {
         if (productDetail?.sale_price && productDetail?.price) {
-            const discount = ((productDetail.price - productDetail.sale_price) / productDetail.price * 100).toFixed(0);
-            return discount;
+            return ((productDetail.price - productDetail.sale_price) / productDetail.price * 100).toFixed(0);
         }
         return 0;
-    };
+    }, [productDetail?.sale_price, productDetail?.price]);
 
     return (
         <div className="product-detail-container">
@@ -109,6 +125,7 @@ function ProductByID() {
                                         onError={replaceLogo}
                                         src={MEDIA_URL + 'product/' + productDetail?.image}
                                         alt={productDetail?.title}
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className="product-badges">
@@ -153,7 +170,7 @@ function ProductByID() {
                                                 <>
                                                     <span className="price-original">₹ {productDetail?.price}</span>
                                                     <span className="discount-badge">
-                                                        {calculateDiscount()}% OFF
+                                                        {discountPercentage}% OFF
                                                     </span>
                                                 </>
                                             )}
@@ -230,7 +247,7 @@ function ProductByID() {
                 </>
             )}
         </div>
-    )
+    );
 }
 
 export default ProductByID;
