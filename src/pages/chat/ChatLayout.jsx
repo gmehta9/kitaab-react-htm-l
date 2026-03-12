@@ -1,7 +1,8 @@
-import { Button, Container, Form, Modal, Row } from "react-bootstrap";
+import { Container, Modal, Row } from "react-bootstrap";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 
 import '../../styles/chat.scss';
+import '../../styles/onboarding.scss';
 import { useCallback, useEffect, useState } from "react";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
@@ -85,13 +86,16 @@ function ChatLayout() {
     }, [setIsContentLoading, joinChannelListget]);
 
     const generateColorFromId = (id) => {
-        // Convert the ID to a number (assuming it's a string)
-        const idNumber = parseInt(id, 10);
-
-        // Generate RGB values based on the ID
-        const r = (idNumber * 456) % 256; // Red component
-        const g = (idNumber * 789) % 256; // Green component
-        const b = (idNumber * 123) % 256; // Blue component
+        const str = String(id || '');
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        const r = Math.abs(hash * 456) % 256;
+        const g = Math.abs(hash * 789) % 256;
+        const b = Math.abs(hash * 123) % 256;
 
         return `rgb(${r}, ${g}, ${b})`;
     };
@@ -218,52 +222,43 @@ function ChatLayout() {
             <Modal
                 centered
                 show={showModal}
-                onHide={handleClose}>
-                <Modal.Header>
-                    <Modal.Title>Join Channel</Modal.Title>
-                    <Button
-                        variant="close"
-                        className="p-0"
-                        onClick={handleClose}>
-                        <i className='bx bx-x h2 mb-0'></i>
-                    </Button>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
+                onHide={handleClose}
+                dialogClassName="onboarding-modal">
+                <div className="modal-accent" />
 
-                        <div className="text-center">
-                            {selectedChannel?.status === 'pending'
-                                ? 'Your request to join the channel has already been submitted. Please wait for approval.'
-                                : `Request to join ${selectedChannel?.name} channel.`}
-                        </div>
+                <button
+                    onClick={handleClose}
+                    className="modal-close-btn"
+                    aria-label="Close">
+                    <i className="bi bi-x-lg" />
+                </button>
 
-                        {selectedChannel?.status !== 'pending' && (
-                            <div className="text-center mt-3">
-                                <Button
-                                    variant="primary"
-                                    className="mx-auto"
-                                    onClick={joinChannelRequestHandler}
-                                    type="button">
-                                    Join
-                                </Button>
-                            </div>
-                        )}
-                        {/* <div className="text-center">
-                            Request to join  {selectedChannel?.name} channel.
-                        </div>
+                <div className="onboarding-header">
+                    <div className="brand-icon">
+                        {selectedChannel?.status === 'pending'
+                            ? <i className="bi bi-hourglass-split" style={{ color: '#f59e0b' }} />
+                            : <i className="bi bi-people" style={{ color: '#019D5F' }} />
+                        }
+                    </div>
+                    <h2>{selectedChannel?.status === 'pending' ? 'Request Pending' : 'Join Channel'}</h2>
+                    <p>
+                        {selectedChannel?.status === 'pending'
+                            ? 'Your request has already been submitted. Please wait for admin approval.'
+                            : <>Join <strong>{selectedChannel?.name}</strong> to start chatting</>
+                        }
+                    </p>
+                </div>
 
-                        <div className="text-center mt-3">
-                            <Button
-                                variant="primary"
-                                className="mx-auto"
-                                onClick={joinChannelRequestHandler}
-                                type="button">
-                                Join
-                            </Button>
-                        </div>
-                        */}
-                    </Form>
-                </Modal.Body>
+                <div className="onboarding-body" style={{ paddingTop: 0 }}>
+                    {selectedChannel?.status !== 'pending' && (
+                        <button
+                            className="ob-submit-btn"
+                            onClick={joinChannelRequestHandler}
+                            type="button">
+                            <i className="bi bi-box-arrow-in-right me-1" /> Join Channel
+                        </button>
+                    )}
+                </div>
             </Modal>
         </>
     )

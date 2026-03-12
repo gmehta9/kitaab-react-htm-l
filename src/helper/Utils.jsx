@@ -1,5 +1,6 @@
 import axios from "axios";
 import { apiUrl } from "../axios/axios-config";
+import Auth from "../auth/Auth";
 
 export const MEDIA_URL = process.env.REACT_APP_MEDIA_URL
 
@@ -20,9 +21,14 @@ export const FileUploadhandler = async (file, uploadKeyName) => {
     formData.append('type', uploadKeyName)
     formData.append('file', file)
 
-    return axios.post(apiUrl + 'upload-image', formData).then((res) => {
+    const token = Auth.token();
+    return axios.post(apiUrl + 'upload-image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+        },
+    }).then((res) => {
         return res.data.image
-        // upload_profile_image
     }).catch((error) => {
 
     });

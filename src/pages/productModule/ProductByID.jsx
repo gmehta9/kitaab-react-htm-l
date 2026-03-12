@@ -103,7 +103,7 @@ function ProductByID() {
                 </Row>
             ) : (
                 <>
-                    {productDetail?.is_approved === '0' && (
+                    {String(productDetail?.is_approved) === '0' && (
                         <div className="approval-alert">
                             <div className="alert-icon">
                                 <i className='bx bx-time-five'></i>
@@ -129,7 +129,7 @@ function ProductByID() {
                                     />
                                 </div>
                                 <div className="product-badges">
-                                    {productDetail?.is_approved === '1' && (
+                                    {String(productDetail?.is_approved) === '1' && (
                                         <span className="badge badge-status">
                                             <i className='bx bx-check-circle'></i>
                                             Verified

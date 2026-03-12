@@ -15,7 +15,6 @@ function ProductByList() {
     const { setIsContentLoading } = useOutletContext();
 
     const [categoriesList, setCategoriesList] = useState([]);
-    const [isEditAble, setIsEditAble] = useState(false);
     const [catListShow, setCatListShow] = useState(true);
     const [selectedCat, setSelectedCat] = useState([]);
     const [searchByAuthorText, setSearchByAuthorText] = useState('');
@@ -154,7 +153,6 @@ function ProductByList() {
             getCategoriesListHandler();
         }
 
-        setIsEditAble(isSellShareMode);
     }, [isSellShareMode, getCategoriesListHandler]);
 
     // Load products when filters change
@@ -315,9 +313,8 @@ function ProductByList() {
                         {isProductLoading && <ProductCardSkeleton cards={12} className="mb-4" />}
                         {!isProductLoading && productList.map((items) => (
                             <ProductItemUI
-                                key={items.id}
+                                key={items._id || items.id}
                                 items={items}
-                                isEditAble={isEditAble}
                                 className="mb-4 px-2"
                             />
                         ))}

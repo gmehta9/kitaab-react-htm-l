@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import MainContext from "../context/Mcontext.context";
 import { openLoginModal } from "../redux/authModalSlice";
 import { useDispatch } from "react-redux";
+import '../styles/onboarding.scss';
 
 function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordShow, meanuID, setMenuShow }) {
 
@@ -248,16 +249,32 @@ function Menu({ className, isUserLoggedIn, setIsUserLoggedIn, setChangePasswordS
             <Modal
                 show={comingSoon}
                 centered
-                onHide={() => setCominingSoon(!comingSoon)}>
+                onHide={() => setCominingSoon(false)}
+                dialogClassName="onboarding-modal">
+                <div className="modal-accent" />
+
                 <button
-                    style={{
-                        display: 'flex',
-                        width: '40px',
-                        position: 'absolute',
-                        right: '0'
-                    }}
-                    className="btn " onClick={() => setCominingSoon(!comingSoon)} >✖</button>
-                <Image className="w-100" src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}coming-soon.jpg`} />
+                    onClick={() => setCominingSoon(false)}
+                    className="modal-close-btn"
+                    aria-label="Close">
+                    <i className="bi bi-x-lg" />
+                </button>
+
+                <div className="onboarding-header">
+                    <div className="brand-icon">
+                        <i className="bi bi-rocket-takeoff" style={{ color: '#019D5F' }} />
+                    </div>
+                    <h2>Coming Soon</h2>
+                    <p>This feature is under development. Stay tuned!</p>
+                </div>
+
+                <div style={{ padding: '0 2rem 2rem', textAlign: 'center' }}>
+                    <Image
+                        className="w-100"
+                        style={{ borderRadius: '12px' }}
+                        src={`${process.env.REACT_APP_MEDIA_LOCAL_URL}coming-soon.jpg`}
+                    />
+                </div>
             </Modal>
         </>
     )

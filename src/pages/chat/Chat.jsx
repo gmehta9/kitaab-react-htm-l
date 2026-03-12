@@ -260,13 +260,16 @@ const Chat = () => {
     }
 
     const generateColorFromId = (id) => {
-        // Convert the ID to a number (assuming it's a string)
-        const idNumber = parseInt(id, 15);
-
-        // Generate RGB values based on the ID
-        const r = (idNumber * 456) % 256; // Red component
-        const g = (idNumber * 789) % 256; // Green component
-        const b = (idNumber * 123) % 256; // Blue component
+        const str = String(id || '');
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        const r = Math.abs(hash * 456) % 256;
+        const g = Math.abs(hash * 789) % 256;
+        const b = Math.abs(hash * 123) % 256;
 
         return `rgb(${r}, ${g}, ${b})`;
     };
@@ -336,7 +339,7 @@ const Chat = () => {
         if (selectedChannel?.id) {
             const pusherChannel = pusher.subscribe(`channel-${selectedChannel?.id}`);
             pusherChannel.bind('client-new-message', (data) => {
-                if (data.user_id !== loggedUser.id && selectedChannel?.id === +data.channel_id) {
+                if (String(data.user_id) !== String(loggedUser.id) && String(selectedChannel?.id) === String(data.channel_id)) {
                     // setChatList((prevMessages) => [...prevMessages, { ...data, user: { name: data.name } }]);
                     // setTimeout(() => { chatBoxScrollHandler() }, 100)
                     setChatList((prevMessages) => {

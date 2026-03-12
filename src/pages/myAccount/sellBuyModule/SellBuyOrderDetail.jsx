@@ -1,139 +1,202 @@
-import { Image, Modal, Table } from "react-bootstrap";
+import { Image, Modal } from "react-bootstrap";
 import { MEDIA_URL, replaceLogo } from "../../../helper/Utils";
 import { useEffect } from "react";
 import '../../../styles/order-detail-modal.scss';
 
 function SellBuyOrderDetail({ type, data, modalShow, setModalShow }) {
     useEffect(() => {
-        document.title = 'Sell Order | Kitaab Juction';
+        document.title = 'Order Detail | Kitaab Junction';
     }, [])
+
+    const isSell = data?.transact_type === 'sell';
+    const price = data?.sale_price || data?.price;
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
 
     return (
         <Modal
             show={modalShow}
-            size="lg"
             aria-labelledby="contained-modal-title-vcenter"
             className="order-detail-modal"
+            dialogClassName="order-detail-dialog"
             centered>
-            <div className="modal-header-custom">
-                <div className="modal-title-custom">
-                    Order Details <span className="order-id">({data?.unique_id})</span>
+
+            <div className="od-accent" />
+
+            <button
+                className="od-close-btn"
+                onClick={() => setModalShow(undefined)}
+                aria-label="Close">
+                <i className="bi bi-x-lg" />
+            </button>
+
+            {/* Header */}
+            <div className="od-header">
+                <div className="od-icon">
+                    <i className="bi bi-receipt" />
                 </div>
-                <button
-                    className="close-btn-custom"
-                    onClick={() => setModalShow(undefined)}>
-                    ×
-                </button>
+                <h2>Order Details</h2>
+                <span className="od-order-id">{data?.unique_id}</span>
             </div>
 
-            <Modal.Body>
-                <div className="row">
-                    {/* Customer Info - Show when viewing from buyer's perspective */}
-                    {/* {type !== 'sell' && data?.shipping_name && (
-                        <div className="col-md-6 mb-4">
-                            <div className="info-card">
-                                <div className="card-header-custom">
-                                    <i className="bi bi-person-circle"></i>
-                                    Customer Information
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Name:</span>
-                                    <span className="info-value text-capitalize">{data?.shipping_name}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Email:</span>
-                                    <span className="info-value">{data?.shipping_email}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Address:</span>
-                                    <span className="info-value">{data?.shipping_address}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">City:</span>
-                                    <span className="info-value text-capitalize">{data?.shipping_city}</span>
-                                </div>
-                            </div>
-                        </div>
-                    )} */}
+            <div className="od-body">
+                {/* Product Card */}
+                <div className="od-product-card">
+                    <div className="od-product-image">
+                        <Image
+                            onError={replaceLogo}
+                            src={MEDIA_URL + 'product/' + data?.image}
+                            alt={data?.title}
+                        />
+                    </div>
+                    <div className="od-product-info">
+                        <h3 className="od-product-title">{data?.title}</h3>
+                        <p className="od-product-author">
+                            <i className="bi bi-person" /> {data?.auther}
+                        </p>
 
-                    {/* Seller Info - Show when viewing from seller's perspective */}
-                    {/* {type !== 'buy' && data?.product_owner_name && (
-                        <div className="col-md-6 mb-4">
-                            <div className="info-card">
-                                <div className="card-header-custom">
-                                    <i className="bi bi-shop"></i>
-                                    Seller Information
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Name:</span>
-                                    <span className="info-value">{data?.product_owner_name}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Email:</span>
-                                    <span className="info-value">{data?.product_owner_email}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">Address:</span>
-                                    <span className="info-value text-capitalize">{data?.product_owner_address}</span>
-                                </div>
-                                <div className="info-row">
-                                    <span className="info-label">City:</span>
-                                    <span className="info-value text-capitalize">{data?.product_owner_city}</span>
-                                </div>
-                            </div>
+                        <div className="od-meta-row">
+                            <span className={`od-type-badge ${data?.transact_type}`}>
+                                {isSell ? 'Purchase' : 'Shared'}
+                            </span>
+                            <span className="od-price">
+                                {isSell ? `₹ ${price}/-` : 'Free'}
+                            </span>
                         </div>
-                    )} */}
+                    </div>
                 </div>
 
-                {/* Order Type Badge */}
-                <div className="order-type-badge">
-                    <span className="badge-label">Order Type:</span>
-                    <span className="badge-value">
-                        {data?.shipping_order_type === 'self_pickup' ? '📦 Self Pickup' : '🚚 Paid Delivery'}
+                {/* Order Info Grid */}
+                <div className="od-info-grid">
+                    {data?.quantity && (
+                        <div className="od-info-item">
+                            <span className="od-info-label">Quantity</span>
+                            <span className="od-info-value">{data.quantity}</span>
+                        </div>
+                    )}
+                    {(data?.created_at || data?.createdAt) && (
+                        <div className="od-info-item">
+                            <span className="od-info-label">Order Date</span>
+                            <span className="od-info-value">{formatDate(data.created_at || data.createdAt)}</span>
+                        </div>
+                    )}
+                    {data?.shipping_price && (
+                        <div className="od-info-item">
+                            <span className="od-info-label">Delivery Charge</span>
+                            <span className="od-info-value">₹ {data.shipping_price}/-</span>
+                        </div>
+                    )}
+                    {(data?.status || data?.order_status) && (
+                        <div className="od-info-item">
+                            <span className="od-info-label">Status</span>
+                            <span className="od-info-value od-status-value text-capitalize">
+                                {data.status || data.order_status}
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                {/* Delivery Info */}
+                <div className="od-delivery-strip">
+                    <i className={`bi ${data?.shipping_order_type === 'self_pickup' ? 'bi-box-seam' : 'bi-truck'}`} />
+                    <span>
+                        {data?.shipping_order_type === 'self_pickup' ? 'Self Pickup' : 'Paid Delivery'}
                     </span>
                 </div>
 
-                {/* Order Details Table */}
-                <div className="order-details-table table-responsive">
-                    <Table>
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Image</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Type</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>{data?.unique_id}</strong></td>
-                                <td>
-                                    <Image
-                                        onError={replaceLogo}
-                                        src={MEDIA_URL + 'product/' + data?.image}
-                                        className="product-image"
-                                        alt={data?.title}
-                                    />
-                                </td>
-                                <td><strong>{data?.title}</strong></td>
-                                <td>{data?.auther}</td>
-                                <td>
-                                    <span className={`transact-type-badge ${data?.transact_type}`}>
-                                        {data?.transact_type}
+                {/* Shipping Details */}
+                {data?.shipping_name && (
+                    <div className="od-section">
+                        <div className="od-section-title">
+                            <i className="bi bi-geo-alt" /> Shipping Details
+                        </div>
+                        <div className="od-detail-list">
+                            <div className="od-detail-row">
+                                <span className="od-detail-label">Name</span>
+                                <span className="od-detail-value text-capitalize">{data.shipping_name}</span>
+                            </div>
+                            {data?.shipping_email && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Email</span>
+                                    <span className="od-detail-value">{data.shipping_email}</span>
+                                </div>
+                            )}
+                            {data?.shipping_phone_no && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Phone</span>
+                                    <span className="od-detail-value">{data.shipping_phone_no}</span>
+                                </div>
+                            )}
+                            {data?.shipping_address && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Address</span>
+                                    <span className="od-detail-value text-capitalize">{data.shipping_address}</span>
+                                </div>
+                            )}
+                            {(data?.shipping_city || data?.shipping_state) && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Location</span>
+                                    <span className="od-detail-value text-capitalize">
+                                        {[data.shipping_city, data.shipping_state].filter(Boolean).join(', ')}
+                                        {data?.shipping_pin_code ? ` - ${data.shipping_pin_code}` : ''}
                                     </span>
-                                </td>
-                                <td className="price-value">
-                                    {data?.transact_type === 'sell'
-                                        ? `₹ ${data?.sale_price || data?.price}/-`
-                                        : 'Free'}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </Table>
-                </div>
-            </Modal.Body>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* Seller / Buyer Info */}
+                {type === 'buy' && data?.product_owner_name && (
+                    <div className="od-section">
+                        <div className="od-section-title">
+                            <i className="bi bi-shop" /> Seller Info
+                        </div>
+                        <div className="od-detail-list">
+                            <div className="od-detail-row">
+                                <span className="od-detail-label">Name</span>
+                                <span className="od-detail-value text-capitalize">{data.product_owner_name}</span>
+                            </div>
+                            {data?.product_owner_email && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Email</span>
+                                    <span className="od-detail-value">{data.product_owner_email}</span>
+                                </div>
+                            )}
+                            {data?.product_owner_city && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">City</span>
+                                    <span className="od-detail-value text-capitalize">{data.product_owner_city}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {type === 'sell' && data?.buyer_name && (
+                    <div className="od-section">
+                        <div className="od-section-title">
+                            <i className="bi bi-person-circle" /> Buyer Info
+                        </div>
+                        <div className="od-detail-list">
+                            <div className="od-detail-row">
+                                <span className="od-detail-label">Name</span>
+                                <span className="od-detail-value text-capitalize">{data.buyer_name}</span>
+                            </div>
+                            {data?.buyer_email && (
+                                <div className="od-detail-row">
+                                    <span className="od-detail-label">Email</span>
+                                    <span className="od-detail-value">{data.buyer_email}</span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                )}
+            </div>
         </Modal>
     )
 }

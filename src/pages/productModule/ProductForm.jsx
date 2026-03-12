@@ -224,7 +224,7 @@ function ProductForm() {
                     setIsContentLoading(false);
                     return;
                 }
-                body.image = uploadedImage;
+                body.images = uploadedImage;
             }
 
             const api = isEditMode ? `product/${location.state.pId}` : 'product';

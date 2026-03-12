@@ -1,128 +1,182 @@
 import { useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from 'react-hot-toast';
 import { useForm } from "react-hook-form";
-
+import "../../styles/onboarding.scss";
 
 function ChangePassword({ changePasswordShow, setChangePasswordShow }) {
 
-    const [isContentLoading, setIsContentLoading] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [showOldPass, setShowOldPass] = useState(false)
+    const [showNewPass, setShowNewPass] = useState(false)
+    const [showConfirmPass, setShowConfirmPass] = useState(false)
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm({ mode: 'onChange' })
 
+    const handleClose = () => {
+        reset()
+        setChangePasswordShow(false)
+    }
+
     const changePasswordFormSubmitHandler = (data) => {
-        setIsContentLoading(true)
+        setIsSubmitting(true)
         axiosInstance.post("auth/pass-change", data).then((res) => {
             if (res) {
-                toast.success("Password update Successfully!");
-                setIsContentLoading(false)
-                // Auth.login({ user: res.user, token: res.token }, true)
-                setChangePasswordShow(false)
+                toast.success("Password updated successfully!");
+                setIsSubmitting(false)
+                handleClose()
             }
         }).catch((error) => {
-            setIsContentLoading(false)
+            setIsSubmitting(false)
         });
     }
 
-    // useEffect(() => {
-
-    // }, [reset])
     return (
-        <>
-            <Modal backdrop="static" centered show={changePasswordShow} >
-                <Modal.Header className="position-relative justify-content-center border-0">
-                    <Modal.Title className="font-weight-bold">Change Password</Modal.Title>
-                    <button
-                        onClick={() => {
-                            reset()
-                            setChangePasswordShow(false)
-                        }}
-                        className="bg-transparent border-0 position-absolute close-btn">
-                        ✖
-                    </button>
-                </Modal.Header>
-                <Form autoComplete="false" onSubmit={handleSubmit(changePasswordFormSubmitHandler)}>
-                    <Modal.Body className="border-0 px-5">
-                        <Form.Group className="mb-4" controlId="old_password">
-                            <Form.Label>Old Password<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
+        <Modal
+            backdrop="static"
+            centered
+            show={changePasswordShow}
+            dialogClassName="onboarding-modal"
+        >
+            <div className="modal-accent" />
+
+            <button
+                onClick={handleClose}
+                className="modal-close-btn"
+                aria-label="Close"
+            >
+                <i className="bi bi-x-lg" />
+            </button>
+
+            <div className="onboarding-header">
+                <div className="brand-icon">
+                    <i className="bi bi-shield-lock" style={{ color: '#019D5F' }} />
+                </div>
+                <h2>Change Password</h2>
+                <p>Keep your account secure with a strong password</p>
+            </div>
+
+            <form autoComplete="off" onSubmit={handleSubmit(changePasswordFormSubmitHandler)}>
+                <div className="onboarding-body">
+
+                    {/* Old Password */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            Current Password <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-lock ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.old_password ? 'has-error' : ''}`}
+                                autoComplete="current-password"
                                 {...register('old_password', {
-                                    required: 'Please enter your old password.',
-                                    maxLength: {
+                                    required: 'Please enter your current password.',
+                                    minLength: {
                                         value: 8,
-                                        message: 'Password length must 8 charachter.'
+                                        message: 'Password must be at least 8 characters.'
                                     }
                                 })}
-                                placeholder="Enter your old password."
-                                type="password"
+                                placeholder="Enter your current password"
+                                type={showOldPass ? 'text' : 'password'}
                             />
-                            {errors?.password &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.password?.message}
-                                </span>
-                            }
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="new_password">
-                            <Form.Label>New Password<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowOldPass(!showOldPass)}
+                                tabIndex={-1}
+                            >
+                                <i className={`bi ${showOldPass ? 'bi-eye-slash' : 'bi-eye'}`} />
+                            </button>
+                        </div>
+                        {errors?.old_password &&
+                            <span className="ob-error">{errors.old_password.message}</span>
+                        }
+                    </div>
+
+                    {/* New Password */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            New Password <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-lock-fill ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.new_password ? 'has-error' : ''}`}
+                                autoComplete="new-password"
                                 {...register('new_password', {
                                     required: 'Please enter your new password.',
-                                    maxLength: {
+                                    minLength: {
                                         value: 8,
-                                        message: 'Password length must be 8 charachter.'
+                                        message: 'Password must be at least 8 characters.'
                                     }
                                 })}
-                                placeholder="Enter your new password."
-                                type="password"
+                                placeholder="Enter your new password"
+                                type={showNewPass ? 'text' : 'password'}
                             />
-                            {errors?.new_password &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.new_password?.message}
-                                </span>
-                            }
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="password_confirmation">
-                            <Form.Label>Confrim Password<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowNewPass(!showNewPass)}
+                                tabIndex={-1}
+                            >
+                                <i className={`bi ${showNewPass ? 'bi-eye-slash' : 'bi-eye'}`} />
+                            </button>
+                        </div>
+                        {errors?.new_password &&
+                            <span className="ob-error">{errors.new_password.message}</span>
+                        }
+                    </div>
+
+                    {/* Confirm Password */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            Confirm Password <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-check2-circle ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.password_confirmation ? 'has-error' : ''}`}
+                                autoComplete="new-password"
                                 {...register('password_confirmation', {
-                                    required: 'Field is required.',
+                                    required: 'Please confirm your new password.',
                                     validate: (val) => {
                                         if (watch("new_password") !== val) {
-                                            return "The new and confirmation password does not match.";
+                                            return "New password and confirmation do not match.";
                                         }
                                     },
                                 })}
-                                placeholder="Enter your password confirmation."
-                                type="password"
+                                placeholder="Re-enter your new password"
+                                type={showConfirmPass ? 'text' : 'password'}
                             />
-                            {errors?.password_confirmation &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.password_confirmation?.message}
-                                </span>
-                            }
-                        </Form.Group>
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowConfirmPass(!showConfirmPass)}
+                                tabIndex={-1}
+                            >
+                                <i className={`bi ${showConfirmPass ? 'bi-eye-slash' : 'bi-eye'}`} />
+                            </button>
+                        </div>
+                        {errors?.password_confirmation &&
+                            <span className="ob-error">{errors.password_confirmation.message}</span>
+                        }
+                    </div>
 
-                    </Modal.Body>
-
-                    <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
-
-                        <Button
-                            className="px-4 mb-3"
-                            variant="primary"
-                            type="submit"
-                            disabled={isContentLoading}
-                        >
-                            Submit
-                        </Button>
-
-                    </Modal.Footer>
-                </Form>
-            </Modal>
-        </>
+                    <button
+                        className="ob-submit-btn"
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <span className="btn-spinner" />
+                        ) : (
+                            <>Update Password</>
+                        )}
+                    </button>
+                </div>
+            </form>
+        </Modal>
     )
 }
 

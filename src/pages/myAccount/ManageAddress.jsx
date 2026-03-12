@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../axios/axios-config";
 import Auth from "../../auth/Auth";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import '../../styles/onboarding.scss';
 
 function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, setCartBtnClick, cartData, setIsContentLoading }) {
     const navigate = useNavigate();
@@ -25,20 +26,34 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
 
     // Order handler
     const orderPlacesHandler = useCallback(async (data) => {
-        const order = cartData.filter(cd => cd.isReadyForOrder).map(item => item.id);
+        const readyItems = cartData.filter(cd => cd.isReadyForOrder);
+        // Use cart document _id if available, otherwise fall back to product id
+        const order = readyItems
+            .map(item => item._id || item.id)
+            .filter(Boolean);
 
         if (!order || order.length === 0) {
             toast.error("No order Selected in cart!", { duration: 2000 });
             return;
         }
 
+        // Remove empty optional fields so backend validation doesn't reject them
+        const payload = {
+            ...data,
+            shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
+            cart_ids: order
+        };
+
+        // Strip empty strings — backend rejects empty optional fields
+        Object.keys(payload).forEach(key => {
+            if (payload[key] === '') {
+                delete payload[key];
+            }
+        });
+
         setIsContentLoading(true);
         try {
-            const res = await axiosInstance.post('order', {
-                ...data,
-                shipping_price: getValues('shipping_order_type') === 'self_pickup' ? '20' : '40',
-                cart_ids: order
-            });
+            const res = await axiosInstance.post('order', payload);
 
             if (res && isMounted.current) {
                 toast.success("Order Placed successfully, Please check your email.", { duration: 5000 });
@@ -123,152 +138,202 @@ function ManageAddress({ setAddressModalShow, addressModalShow, setCartData, set
     }, [watchedShippingState, stateList]);
 
     return (
-        <Modal size="lg" show={addressModalShow} onHide={handleClose}>
-            <Modal.Header>
-                <Modal.Title>Shipping Address</Modal.Title>
-                <button type="button" onClick={handleClose} className="closed btn">X</button>
-            </Modal.Header>
-            <Modal.Body>
-                <Form autoComplete="off" onSubmit={handleSubmit(orderPlacesHandler)}>
-                    <Modal.Body className="border-0 px-5">
-                        <Row className="mb-4">
-                            <Col xs="12">
-                                <div className="delivery-info-box border rounded p-3 bg-light">
-                                    <h6 className="font-weight-bold mb-3">Delivery Information:</h6>
-                                    <ul className="mb-2">
-                                        <li className="mb-2">A delivery charge of <strong>Rs. 20/ book</strong> to be paid, if you are <strong>buying</strong> the book.</li>
-                                        <li className="mb-2">A delivery charge of <strong>Rs. 40/ book</strong> to be paid, if you are <strong>borrowing</strong> the book.</li>
-                                    </ul>
-                                    <p className="mb-0 small text-muted">
-                                        <strong>Note:</strong> Book will be delivered at the security gate of your organization/ school.
-                                    </p>
-                                </div>
-                            </Col>
-                        </Row>
+        <Modal
+            size="lg"
+            show={addressModalShow}
+            onHide={handleClose}
+            dialogClassName="onboarding-modal signup-modal"
+            centered>
+            <div className="modal-accent" />
 
-                        <input type="hidden" value="paid_delivery" {...register('shipping_order_type')} />
+            <button
+                type="button"
+                onClick={handleClose}
+                className="modal-close-btn"
+                aria-label="Close">
+                <i className="bi bi-x-lg" />
+            </button>
 
-                        <Form.Group className="mb-4" controlId="shippingName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control
+            <div className="onboarding-header">
+                <div className="brand-icon">
+                    <i className="bi bi-truck" style={{ color: '#019D5F' }} />
+                </div>
+                <h2>Shipping Address</h2>
+                <p>Confirm your delivery details to place the order</p>
+            </div>
+
+            <form autoComplete="off" onSubmit={handleSubmit(orderPlacesHandler)}>
+                <div className="onboarding-body">
+
+                    {/* Delivery info banner */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, rgba(1,157,95,0.06) 0%, rgba(1,157,95,0.02) 100%)',
+                        border: '1px solid rgba(1,157,95,0.15)',
+                        borderRadius: '10px',
+                        padding: '14px 16px',
+                        marginBottom: '1.5rem',
+                        fontSize: '0.8rem',
+                        color: '#495057'
+                    }}>
+                        <div style={{ fontWeight: 600, marginBottom: '6px', color: '#1a1a2e' }}>
+                            <i className="bi bi-info-circle me-1" style={{ color: '#019D5F' }} /> Delivery Information
+                        </div>
+                        <ul style={{ margin: 0, paddingLeft: '18px' }}>
+                            <li>Delivery charge: <strong>Rs. 20/book</strong> (buying)</li>
+                            <li>Delivery charge: <strong>Rs. 40/book</strong> (borrowing)</li>
+                        </ul>
+                        <div style={{ marginTop: '6px', fontSize: '0.75rem', color: '#6b7280' }}>
+                            Book will be delivered at the security gate of your organization/school.
+                        </div>
+                    </div>
+
+                    <input type="hidden" value="paid_delivery" {...register('shipping_order_type')} />
+
+                    {/* Name */}
+                    <div className="ob-field">
+                        <label className="ob-label">Name <span className="required">*</span></label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-person ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.shipping_name ? 'has-error' : ''}`}
                                 type="text"
                                 autoComplete="off"
                                 {...register('shipping_name', { required: 'Please enter your name.' })}
-                                placeholder="Enter your name."
+                                placeholder="Enter your name"
                             />
-                            {errors?.shipping_name && (
-                                <span className="text-danger small">{errors?.shipping_name?.message}</span>
-                            )}
-                        </Form.Group>
+                        </div>
+                        {errors?.shipping_name &&
+                            <span className="ob-error">{errors.shipping_name.message}</span>
+                        }
+                    </div>
 
-                        <Row>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="shippingEmail">
-                                    <Form.Label>Email ID</Form.Label>
-                                    <Form.Control
+                    {/* Email & Phone */}
+                    <div className="ob-row">
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">Email <span className="required">*</span></label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-envelope ob-input-icon" />
+                                    <input
+                                        className={`ob-input ${errors?.shipping_email ? 'has-error' : ''}`}
                                         type="text"
                                         autoComplete="off"
                                         {...register('shipping_email', { required: 'Please enter your email.' })}
-                                        placeholder="Enter your email."
+                                        placeholder="Email address"
                                     />
-                                    {errors?.shipping_email && (
-                                        <span className="text-danger small">{errors?.shipping_email?.message}</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="shippingPhone">
-                                    <Form.Label>Phone</Form.Label>
-                                    <Form.Control
+                                </div>
+                                {errors?.shipping_email &&
+                                    <span className="ob-error">{errors.shipping_email.message}</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">Phone <span className="required">*</span></label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-phone ob-input-icon" />
+                                    <input
+                                        className={`ob-input ${errors?.shipping_phone_no ? 'has-error' : ''}`}
                                         type="text"
                                         autoComplete="off"
                                         {...register('shipping_phone_no', { required: 'Please enter your phone.' })}
-                                        placeholder="Enter your phone."
+                                        placeholder="Phone number"
                                     />
-                                    {errors?.shipping_phone_no && (
-                                        <span className="text-danger small">{errors?.shipping_phone_no?.message}</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                                </div>
+                                {errors?.shipping_phone_no &&
+                                    <span className="ob-error">{errors.shipping_phone_no.message}</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-                        <Form.Group className="mb-4" controlId="shippingAddress">
-                            <Form.Label>Organization/ School</Form.Label>
-                            <Form.Control
+                    {/* Organization */}
+                    <div className="ob-field">
+                        <label className="ob-label">Organization / School <span className="required">*</span></label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-building ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.shipping_address ? 'has-error' : ''}`}
                                 type="text"
                                 autoComplete="off"
                                 {...register('shipping_address', { required: 'Please enter your address.' })}
-                                placeholder="Enter your address."
+                                placeholder="Your organization or school"
                             />
-                            {errors?.shipping_address && (
-                                <span className="text-danger small">{errors?.shipping_address?.message}</span>
-                            )}
-                        </Form.Group>
+                        </div>
+                        {errors?.shipping_address &&
+                            <span className="ob-error">{errors.shipping_address.message}</span>
+                        }
+                    </div>
 
-                        <Row>
-                            <Col lg="4">
-                                <Form.Group className="mb-4" controlId="shippingState">
-                                    <Form.Label>State</Form.Label>
-                                    <Form.Select
-                                        className="form-control"
-                                        {...register('shipping_state', { required: 'Please select state.' })}
-                                    >
+                    {/* State, City, Pin Code */}
+                    <div className="ob-row">
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">State <span className="required">*</span></label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-geo-alt ob-input-icon" />
+                                    <select
+                                        className={`ob-input ${errors?.shipping_state ? 'has-error' : ''}`}
+                                        {...register('shipping_state', { required: 'Please select state.' })}>
                                         <option value="">Select State</option>
                                         {stateList.map((state) => (
                                             <option key={state.value} value={state.value}>{state.label}</option>
                                         ))}
-                                    </Form.Select>
-                                    {errors?.shipping_state && (
-                                        <span className="text-danger small">{errors?.shipping_state?.message}</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                            <Col lg="4">
-                                <Form.Group className="mb-4" controlId="shippingCity">
-                                    <Form.Label>City</Form.Label>
-                                    <Form.Select
-                                        className="form-control"
-                                        {...register('shipping_city', { required: 'Please select city.' })}
-                                    >
+                                    </select>
+                                </div>
+                                {errors?.shipping_state &&
+                                    <span className="ob-error">{errors.shipping_state.message}</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">City <span className="required">*</span></label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-pin-map ob-input-icon" />
+                                    <select
+                                        className={`ob-input ${errors?.shipping_city ? 'has-error' : ''}`}
+                                        {...register('shipping_city', { required: 'Please select city.' })}>
                                         <option value="">Select City</option>
                                         {cityList.map((city) => (
                                             <option key={city.value} value={city.value}>{city.label}</option>
                                         ))}
-                                    </Form.Select>
-                                    {errors?.shipping_city && (
-                                        <span className="text-danger small">{errors?.shipping_city?.message}</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                            <Col lg="4">
-                                <Form.Group className="mb-4" controlId="shippingPinCode">
-                                    <Form.Label>Pin Code</Form.Label>
-                                    <Form.Control
+                                    </select>
+                                </div>
+                                {errors?.shipping_city &&
+                                    <span className="ob-error">{errors.shipping_city.message}</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">Pin Code</label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-mailbox ob-input-icon" />
+                                    <input
+                                        className={`ob-input ${errors?.shipping_pin_code ? 'has-error' : ''}`}
                                         type="text"
                                         autoComplete="off"
-                                        pattern="[0-9]*"
                                         inputMode="numeric"
                                         {...register('shipping_pin_code', {
                                             maxLength: { value: 6, message: 'Enter a valid pin code' },
                                             pattern: { value: /^\d+$/, message: 'Invalid pin code.' }
                                         })}
-                                        placeholder="Enter pin code (Optional)"
+                                        placeholder="Pin code (optional)"
                                     />
-                                    {errors?.shipping_pin_code && (
-                                        <span className="text-danger small">{errors?.shipping_pin_code?.message}</span>
-                                    )}
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                    </Modal.Body>
+                                </div>
+                                {errors?.shipping_pin_code &&
+                                    <span className="ob-error">{errors.shipping_pin_code.message}</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-                    <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
-                        <Button className="px-4 mb-3" variant="primary" type="submit">
-                            Place Your Order
-                        </Button>
-                    </Modal.Footer>
-                </Form>
-            </Modal.Body>
+                    <button className="ob-submit-btn" type="submit">
+                        <i className="bi bi-bag-check me-1" /> Place Your Order
+                    </button>
+                </div>
+            </form>
         </Modal>
     );
 }

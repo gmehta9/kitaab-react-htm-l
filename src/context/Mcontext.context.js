@@ -4,6 +4,28 @@ import Auth from '../auth/Auth';
 
 const MainContext = createContext(null);
 
+// Helper to get a consistent product ID from a cart item (handles both old and new API format)
+export const getProductId = (item) => {
+    if (!item) return null;
+    // New format: product_id is a populated object with _id
+    if (typeof item.product_id === 'object' && item.product_id !== null) {
+        return item.product_id._id || item.product_id.id;
+    }
+    // Old format: product_id is a string/number, or fallback to _id/id
+    return item.product_id || item._id || item.id;
+};
+
+// Helper to get product details from a cart item
+export const getProduct = (item) => {
+    if (!item) return {};
+    // New format: product details nested in product_id object
+    if (typeof item.product_id === 'object' && item.product_id !== null) {
+        return item.product_id;
+    }
+    // Old format: product details are flat on the item itself, or in item.product
+    return item.product || item;
+};
+
 export const MainProvider = ({ children }) => {
     const [cartData, setCartData] = useState([]);
     const [isCartLoading, setIsCartLoading] = useState(false);
@@ -27,12 +49,13 @@ export const MainProvider = ({ children }) => {
         axiosInstance.get('cart')
             .then((res) => {
                 if (res && isMounted.current) {
-                    const upList = res.data.map((itm) => ({
+                    const items = res.data?.data || res.data || [];
+                    const upList = items.map((itm) => ({
                         ...itm,
                         isReadyForOrder: true
                     }));
                     setCartData(upList);
-                    setCopyCartData(res.data);
+                    setCopyCartData(items);
                     setIsCartLoading(false);
                 }
             })
@@ -48,7 +71,7 @@ export const MainProvider = ({ children }) => {
         if (!Auth.isUserAuthenticated()) return;
 
         const cd = cartData.map(item => ({
-            product_id: item.product_id || item.id,
+            product_id: getProductId(item),
             quantity: +item.quantity
         }));
 

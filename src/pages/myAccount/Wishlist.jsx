@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Table, Button, Form, Modal, Image, Spinner } from "react-bootstrap";
+import { Table, Modal, Image, Spinner } from "react-bootstrap";
 import { PaginationControl } from "react-bootstrap-pagination-control";
 import { useForm } from "react-hook-form";
 import { axiosInstance } from "../../axios/axios-config";
 import { formatDateTime } from "../../helper/Helper";
 import { useOutletContext } from "react-router-dom";
+import '../../styles/onboarding.scss';
 
 function Wishlist() {
     const [years, setYears] = useState();
@@ -202,103 +203,107 @@ function Wishlist() {
                 />
             }
 
-            <Modal backdrop="static" centered show={modalShowWL ? true : false} >
-                <Modal.Header className="position-relative justify-content-center border-0">
-                    <Modal.Title className="font-weight-bold">
-                        {modalShowWL === 'edit' ? 'Edit' : 'Create'} Wish List
-                    </Modal.Title>
-                    <button
-                        type="button"
-                        onClick={onHideModal}
-                        className="bg-transparent border-0 position-absolute close-btn">
-                        ✖
-                    </button>
-                </Modal.Header>
-                <Form autoComplete="false" onSubmit={handleSubmit(wishListSubmitHandler)}>
-                    <Modal.Body className="border-0 px-5">
-                        <Form.Group className="mb-4" controlId="old_password">
-                            <Form.Label>Book Title<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
-                                {...register('title', {
-                                    required: 'Please enter book title.',
+            <Modal
+                backdrop="static"
+                centered
+                show={modalShowWL ? true : false}
+                dialogClassName="onboarding-modal">
+                <div className="modal-accent" />
 
-                                })}
-                                placeholder="Enter your book title."
-                                type="text"
-                            />
+                <button
+                    type="button"
+                    onClick={onHideModal}
+                    className="modal-close-btn"
+                    aria-label="Close">
+                    <i className="bi bi-x-lg" />
+                </button>
+
+                <div className="onboarding-header">
+                    <div className="brand-icon">
+                        <i className={`bi ${modalShowWL === 'edit' ? 'bi-pencil-square' : 'bi-heart'}`} style={{ color: '#019D5F' }} />
+                    </div>
+                    <h2>{modalShowWL === 'edit' ? 'Edit' : 'Add to'} Wish List</h2>
+                    <p>{modalShowWL === 'edit' ? 'Update your wishlist entry' : 'Add a book you\'re looking for'}</p>
+                </div>
+
+                <form autoComplete="off" onSubmit={handleSubmit(wishListSubmitHandler)}>
+                    <div className="onboarding-body">
+                        <div className="ob-field">
+                            <label className="ob-label">
+                                Book Title <span className="required">*</span>
+                            </label>
+                            <div className="ob-input-wrapper">
+                                <i className="bi bi-book ob-input-icon" />
+                                <input
+                                    className={`ob-input ${errors?.title ? 'has-error' : ''}`}
+                                    autoComplete="off"
+                                    {...register('title', {
+                                        required: 'Please enter book title.',
+                                    })}
+                                    placeholder="Enter book title"
+                                    type="text"
+                                />
+                            </div>
                             {errors?.title &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.title?.message}
-                                </span>
+                                <span className="ob-error">{errors.title.message}</span>
                             }
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="old_password">
-                            <Form.Label>Book Author<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
-                                {...register('author', {
-                                    required: 'Please enter book Author.',
+                        </div>
 
-                                })}
-                                placeholder="Enter book author."
-                                type="text"
-                            />
+                        <div className="ob-field">
+                            <label className="ob-label">
+                                Book Author <span className="required">*</span>
+                            </label>
+                            <div className="ob-input-wrapper">
+                                <i className="bi bi-person ob-input-icon" />
+                                <input
+                                    className={`ob-input ${errors?.author ? 'has-error' : ''}`}
+                                    autoComplete="off"
+                                    {...register('author', {
+                                        required: 'Please enter book author.',
+                                    })}
+                                    placeholder="Enter book author"
+                                    type="text"
+                                />
+                            </div>
                             {errors?.author &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.author?.message}
-                                </span>
+                                <span className="ob-error">{errors.author.message}</span>
                             }
-                        </Form.Group>
+                        </div>
 
-                        <Form.Group className="mb-4" controlId="old_password">
-                            <Form.Label>Publication year<sup className="text-danger small">*</sup></Form.Label>
-                            {/* <Form.Control
-                                autoComplete="false"
-                                {...register('publication_date', {
-                                    required: 'Please enter publication date.',
-
-                                })}
-                                placeholder="Enter Publication Date."
-                                type="text"
-                            /> */}
-                            <Form.Select
-                                className="form-control"
-                                aria-label="Default select example"
-                                {...register('publication_year', {
-                                    required: 'Please enter publication date.',
-
-                                })}>
-                                <option value="">Select Publication year</option>
-                                {years && years.map((y, index) =>
-                                    <option key={index + 'y'} value={y}>{y}</option>
-                                )}
-
-                            </Form.Select>
-
+                        <div className="ob-field">
+                            <label className="ob-label">
+                                Publication Year <span className="required">*</span>
+                            </label>
+                            <div className="ob-input-wrapper">
+                                <i className="bi bi-calendar-event ob-input-icon" />
+                                <select
+                                    className={`ob-input ${errors?.publication_year ? 'has-error' : ''}`}
+                                    {...register('publication_year', {
+                                        required: 'Please select publication year.',
+                                    })}>
+                                    <option value="">Select year</option>
+                                    {years && years.map((y, index) =>
+                                        <option key={index + 'y'} value={y}>{y}</option>
+                                    )}
+                                </select>
+                            </div>
                             {errors?.publication_year &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.publication_year?.message}
-                                </span>
+                                <span className="ob-error">{errors.publication_year.message}</span>
                             }
-                        </Form.Group>
+                        </div>
 
-
-                    </Modal.Body>
-
-                    <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
-
-                        <Button
-                            className="px-4 mb-3"
-                            variant="primary"
+                        <button
+                            className="ob-submit-btn"
                             type="submit"
-                            disabled={isContentLoading}
-                        >
-                            {isContentLoading ? 'Please wait...' : `${modalShowWL === 'edit' ? 'Update' : 'Submit'}`}
-                        </Button>
-
-                    </Modal.Footer>
-                </Form>
+                            disabled={isContentLoading}>
+                            {isContentLoading ? (
+                                <span className="btn-spinner" />
+                            ) : (
+                                <>{modalShowWL === 'edit' ? 'Update' : 'Add to Wish List'}</>
+                            )}
+                        </button>
+                    </div>
+                </form>
             </Modal>
         </>
     )

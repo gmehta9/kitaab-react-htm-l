@@ -3,11 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 import { MEDIA_URL, replaceLogo } from "../helper/Utils";
 import AddToCartButton from "./AddtoCart";
+import Auth from "../auth/Auth";
 import '../styles/product-card.scss';
 
-function ProductItemUI({ items, className, isEditAble }) {
+function ProductItemUI({ items, className }) {
     const navigate = useNavigate()
-    // const { setCartData, cartData } = useContext(MainContext)
+
+    const loggedUserId = Auth.loggedInUser()?.id;
+    const productOwnerId = items?.created_by_user?.id;
+    const isOwnProduct = loggedUserId && productOwnerId && loggedUserId === productOwnerId;
+
+    const itemId = items?._id || items?.id;
+
     const ClikedItem = (items_id) => {
         navigate('/product/product-detail', {
             state: {
@@ -15,28 +22,6 @@ function ProductItemUI({ items, className, isEditAble }) {
             }
         })
     }
-    // const updateQuantity = (id, newQuantity) => {
-    //     setCartData(prevCart => prevCart.map(item =>
-    //         item.id === id ? { ...item, quantity: newQuantity } : item
-    //     ));
-    // };
-
-    // const cartItemHandler = (items) => {
-    //     console.log('items,', items);
-    //     const existingItem = cartData.find(item => item.id === items.id);
-    //     console.log('existingItem', existingItem);
-
-    //     if (!cartData && cartData.length === 0) {
-    //         setCartData([{ ...items, quantity: 1 }]);
-    //         return
-    //     }
-    //     if (existingItem) {
-    //         updateQuantity(existingItem.id, existingItem.quantity + 1);
-    //     } else {
-    //         setCartData([...cartData, { ...items, quantity: 1 }]);
-    //     }
-
-    // }
 
     const truncatedTitle = items?.title
         ? (items.title.length > 50 ? items.title.slice(0, 50) + '...' : items.title)
@@ -47,26 +32,32 @@ function ProductItemUI({ items, className, isEditAble }) {
             <div className="book-card clickable" >
                 <div className="product-thumb-container">
                     {items?.is_approved === '0' &&
-                        <div onClick={() => ClikedItem(items.id)} className="approval-status">
+                        <div onClick={() => ClikedItem(itemId)} className="approval-status">
                             Pending For Approval
                         </div>
+                    }
+
+                    {isOwnProduct &&
+                        <span className="own-product-badge">
+                            <i className="bi bi-person-check" /> Your Listing
+                        </span>
                     }
 
                     <Image
                         onError={replaceLogo}
                         loading="lazy"
                         src={MEDIA_URL + 'product/' + items.image}
-                        onClick={() => ClikedItem(items.id)}
+                        onClick={() => ClikedItem(itemId)}
                         className="product-thumb"
                         alt={truncatedTitle}
                     />
                 </div>
 
                 <div className="book-info" >
-                    <div className="author-name" onClick={() => ClikedItem(items.id)} >
+                    <div className="author-name" onClick={() => ClikedItem(itemId)} >
                         {items.auther}
                     </div>
-                    <div className="book-name" onClick={() => ClikedItem(items.id)}>
+                    <div className="book-name" onClick={() => ClikedItem(itemId)}>
                         {truncatedTitle}
                     </div>
 
@@ -86,7 +77,7 @@ function ProductItemUI({ items, className, isEditAble }) {
                     )}
 
                     <div className="action-btn">
-                        <AddToCartButton isEditAble={isEditAble} productDetail={items} />
+                        <AddToCartButton productDetail={items} />
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ const onRequest = (config) => {
   const token = Auth.token();
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`;
+    config.headers['x-token'] = token;
   }
   config.headers['Accept'] = `application/json`;
   config.headers['Content-Type'] = `application/json`;
@@ -59,7 +60,7 @@ const onResponseError = (error) => {
     Auth.logout()
 
     setTimeout(() => {
-      window.location.href = 'https://kitaabjunction.com/'
+      window.location.href = '/'
     }, 300);
 
   }

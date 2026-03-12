@@ -1,17 +1,61 @@
-
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../../axios/axios-config";
 import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
-import Select from 'react-select'
+import Select from 'react-select';
 import { useDispatch } from "react-redux";
 import { closeSignupModal, openLoginModal } from "../../redux/authModalSlice";
+import "../../styles/onboarding.scss";
+
+const selectStyles = {
+    control: (base, state) => ({
+        ...base,
+        background: state.isFocused ? '#fff' : '#f7f8fa',
+        border: state.isFocused ? '1.5px solid #019D5F' : '1.5px solid transparent',
+        borderRadius: '10px',
+        minHeight: '44px',
+        fontSize: '0.9rem',
+        boxShadow: state.isFocused ? '0 0 0 3px rgba(1, 157, 95, 0.08)' : 'none',
+        transition: 'all 0.2s',
+        '&:hover': {
+            background: state.isFocused ? '#fff' : '#eef0f3',
+        },
+    }),
+    placeholder: (base) => ({
+        ...base,
+        color: '#b0b7c3',
+    }),
+    option: (base, state) => ({
+        ...base,
+        fontSize: '0.875rem',
+        background: state.isSelected ? '#019D5F' : state.isFocused ? 'rgba(1, 157, 95, 0.08)' : '#fff',
+        color: state.isSelected ? '#fff' : '#2d3748',
+        cursor: 'pointer',
+        '&:active': {
+            background: 'rgba(1, 157, 95, 0.15)',
+        },
+    }),
+    menu: (base) => ({
+        ...base,
+        borderRadius: '10px',
+        overflow: 'hidden',
+        boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+        border: '1px solid #eef0f3',
+        zIndex: 9999,
+    }),
+    menuPortal: (base) => ({
+        ...base,
+        zIndex: 9999,
+    }),
+};
 
 function SignUp({ signUpShowModal, setIsContentLoading }) {
 
     const dispatch = useDispatch();
+    const [showPassword, setShowPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleClose = () => {
         dispatch(closeSignupModal());
@@ -24,16 +68,19 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
     const { register, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm({ mode: 'onChange' })
 
     const formSubmitHandler = (data) => {
+        setIsSubmitting(true)
         setIsContentLoading(true)
         axiosInstance.post("auth/sign-up", data).then((res) => {
             if (res) {
-                toast.success("SignUp Successfully!");
+                toast.success("Account created successfully!");
                 handleClose()
                 dispatch(openLoginModal())
                 setIsContentLoading(false)
+                setIsSubmitting(false)
             }
         }).catch((error) => {
             setIsContentLoading(false)
+            setIsSubmitting(false)
         });
     }
 
@@ -56,225 +103,256 @@ function SignUp({ signUpShowModal, setIsContentLoading }) {
 
 
     return (
-        <>
-            <Modal backdrop="static" centered show={signUpShowModal} onHide={() => handleClose()}>
-                <Modal.Header className="position-relative justify-content-center border-0">
-                    <Modal.Title className="font-weight-bold">Create Account</Modal.Title>
+        <Modal
+            backdrop="static"
+            centered
+            show={signUpShowModal}
+            onHide={handleClose}
+            dialogClassName="onboarding-modal signup-modal"
+        >
+            <div className="modal-accent" />
 
-                    <button
-                        onClick={() => {
-                            reset()
-                            handleClose()
-                        }}
-                        className="bg-transparent border-0 position-absolute close-btn">
-                        ✖
-                    </button>
+            <button
+                onClick={() => { reset(); handleClose(); }}
+                className="modal-close-btn"
+                aria-label="Close"
+            >
+                <i className="bi bi-x-lg" />
+            </button>
 
-                </Modal.Header>
-                <Form autoComplete="false" onSubmit={handleSubmit(formSubmitHandler)}>
-                    <Modal.Body className="border-0 px-5">
+            <div className="onboarding-header">
+                <div className="brand-icon">
+                    <i className="bi bi-person-plus" style={{ color: '#019D5F' }} />
+                </div>
+                <h2>Create Account</h2>
+                <p>Join Kitaab and start exploring</p>
+            </div>
 
-                        {/* <Row className="mb-3">
-                            <Col className="text-center">
-                                <div className="radio-ui">
-                                    <input type="radio" id="buyerUser" name="userType" className="d-none" />
-                                    <label htmlFor="buyerUser" className="radio-label">Buyer</label>
-                                </div>
-                            </Col>
-                            <Col className="text-center">
-                                <div className="radio-ui">
-                                    <input type="radio" id="sellerUser" name="userType" className="d-none" />
-                                    <label htmlFor="sellerUser" className="radio-label">Seller</label>
-                                </div>
-                            </Col>
-                        </Row> */}
-                        <Form.Group className="mb-4" controlId="name">
-                            <Form.Label>Name<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
+            <form autoComplete="off" onSubmit={handleSubmit(formSubmitHandler)}>
+                <div className="onboarding-body">
+
+                    {/* Name */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            Full Name <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-person ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.name ? 'has-error' : ''}`}
                                 type="text"
-                                autoComplete="false"
-                                name="name"
+                                autoComplete="name"
                                 {...register('name', {
-                                    required: 'Please enter name.'
+                                    required: 'Please enter your name.'
                                 })}
-                                placeholder="Enter your Name"
+                                placeholder="Enter your full name"
                                 autoFocus
                             />
+                        </div>
+                        {errors?.name &&
+                            <span className="ob-error">{errors.name.message}</span>
+                        }
+                    </div>
 
-                            {errors?.name &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.name?.message}
-                                </span>
-                            }
-                        </Form.Group>
-
-                        <Row>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="emailid">
-                                    <Form.Label>Email
-                                        {/* <sup className="text-danger small">*</sup> */}
-                                    </Form.Label>
-                                    <Form.Control
+                    {/* Email & Phone */}
+                    <div className="ob-row">
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">Email</label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-envelope ob-input-icon" />
+                                    <input
+                                        className={`ob-input ${errors?.email ? 'has-error' : ''}`}
                                         type="text"
-                                        autoComplete="false"
-                                        name="email"
+                                        autoComplete="email"
                                         {...register('email', {
-                                            // required: "Email is required",
                                             pattern: {
                                                 value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                                                message: "Enter valid email",
+                                                message: "Enter a valid email",
                                             }
                                         })}
-                                        placeholder="Enter Your Email ID"
-                                        autoFocus
+                                        placeholder="Email address"
                                     />
-                                    {errors?.email &&
-                                        <span className="text-danger small position-absolute">
-                                            {errors?.email?.message}
-                                        </span>
-                                    }
-                                </Form.Group>
-                            </Col>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="phone_number">
-                                    <Form.Label>Phone no<sup className="text-danger small">*</sup></Form.Label>
-                                    <Form.Control
+                                </div>
+                                {errors?.email &&
+                                    <span className="ob-error">{errors.email.message}</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">
+                                    Phone <span className="required">*</span>
+                                </label>
+                                <div className="ob-input-wrapper">
+                                    <i className="bi bi-phone ob-input-icon" />
+                                    <input
+                                        className={`ob-input ${errors?.phone_number ? 'has-error' : ''}`}
                                         type="text"
-                                        autoComplete="false"
-                                        name="phone_number"
+                                        autoComplete="tel"
                                         {...register('phone_number', {
-                                            required: "Phone no is required.",
+                                            required: "Phone number is required.",
                                             minLength: {
                                                 value: 10,
-                                                message: "The Phone no. must be 10 digits.",
+                                                message: "Must be 10 digits.",
                                             },
                                             maxLength: {
                                                 value: 10,
-                                                message: "The Phone no. must be 10 digits.",
+                                                message: "Must be 10 digits.",
                                             },
                                             pattern: {
-                                                // value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
                                                 value: /^[0-9]{10}$/,
-                                                message: "The Phone no. must be 10 digits.",
+                                                message: "Must be 10 digits.",
                                             },
                                         })}
-                                        placeholder="Enter Your Phone"
-                                        autoFocus
+                                        placeholder="Phone number"
                                     />
-                                    {errors?.phone_number &&
-                                        <span className="text-danger small position-absolute">
-                                            {errors?.phone_number?.message}
-                                        </span>
-                                    }
-                                </Form.Group>
-                            </Col>
-                        </Row>
+                                </div>
+                                {errors?.phone_number &&
+                                    <span className="ob-error">{errors.phone_number.message}</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-                        <Form.Group className="mb-4" controlId="password">
-                            <Form.Label>Password<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
-                                name="password"
-                                // isValid={!errors?.password}
+                    {/* Password */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            Password <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-lock ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.password ? 'has-error' : ''}`}
+                                autoComplete="new-password"
                                 {...register('password', {
-                                    required: 'Please enter password.',
+                                    required: 'Please enter a password.',
                                     minLength: {
                                         value: 8,
-                                        message: 'Password length must be 8 characters.'
+                                        message: 'Password must be at least 8 characters.'
                                     }
                                 })}
-                                type="password"
+                                placeholder="Minimum 8 characters"
+                                type={showPassword ? 'text' : 'password'}
                             />
-                            {errors?.password &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.password?.message}
-                                </span>
-                            }
-                        </Form.Group>
-                        <Form.Group className="mb-4" controlId="organization">
-                            <Form.Label>Organization/School<sup className="text-danger small">*</sup></Form.Label>
-                            <Form.Control
-                                autoComplete="false"
-                                name="organization"
+                            <button
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowPassword(!showPassword)}
+                                tabIndex={-1}
+                            >
+                                <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} />
+                            </button>
+                        </div>
+                        {errors?.password &&
+                            <span className="ob-error">{errors.password.message}</span>
+                        }
+                    </div>
+
+                    {/* Organization */}
+                    <div className="ob-field">
+                        <label className="ob-label">
+                            Organization / School <span className="required">*</span>
+                        </label>
+                        <div className="ob-input-wrapper">
+                            <i className="bi bi-building ob-input-icon" />
+                            <input
+                                className={`ob-input ${errors?.organization ? 'has-error' : ''}`}
+                                autoComplete="organization"
                                 {...register('organization', {
-                                    required: 'Please enter organization.'
+                                    required: 'Please enter your organization.'
                                 })}
                                 type="text"
+                                placeholder="Your school or organization"
                             />
-                            {errors?.organization &&
-                                <span className="text-danger small position-absolute">
-                                    {errors?.organization?.message}
-                                </span>
-                            }
-                        </Form.Group>
-                        {/* {stateList} */}
-                        <Row>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="state">
-                                    <Form.Label>State<sup className="text-danger small">*</sup></Form.Label>
-                                    <Select
-                                        options={stateList}
-                                        value={state}
-                                        name="state"
-                                        onChange={(e) => {
-                                            setState(e)
-                                            setValue('state', e.value)
-                                            setCity(null)
-                                            clearErrors('state')
-                                            setValue('city', '')
-                                            setCityList(e.cities)
-                                        }}
-                                    />
-                                    {errors?.state &&
-                                        <span className="text-danger small position-absolute">
-                                            {errors?.state?.message}
-                                        </span>
-                                    }
-                                </Form.Group>
-                            </Col>
-                            <Col lg="6">
-                                <Form.Group className="mb-4" controlId="city">
-                                    <Form.Label>City<sup className="text-danger small">*</sup></Form.Label>
-
-                                    <Select
-                                        options={cityList}
-                                        ref={selectInputRef}
-                                        value={city}
-                                        onChange={(e) => {
-                                            setCity(e)
-                                            clearErrors('city')
-                                            setValue('city', e.value)
-                                        }}
-                                    />
-                                    {errors?.city &&
-                                        <span className="text-danger small position-absolute">
-                                            {errors?.city?.message}
-                                        </span>
-                                    }
-                                </Form.Group>
-                            </Col>
-                        </Row>
-
-                    </Modal.Body>
-                    <Modal.Footer className="justify-content-center flex-column border-0 pt-0">
-
-                        <Button
-                            className="px-4 mb-3"
-                            variant="primary"
-                            type="submit"
-                        >
-                            Submit
-                        </Button>
-                        <div className="mb-4">
-                            <Link type="button" onClick={() => {
-                                dispatch(openLoginModal())
-                                handleClose()
-                            }} >Login</Link>
                         </div>
-                    </Modal.Footer>
-                </Form>
-            </Modal>
-        </>
+                        {errors?.organization &&
+                            <span className="ob-error">{errors.organization.message}</span>
+                        }
+                    </div>
+
+                    {/* State & City */}
+                    <div className="ob-row">
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">
+                                    State <span className="required">*</span>
+                                </label>
+                                <Select
+                                    options={stateList}
+                                    value={state}
+                                    name="state"
+                                    styles={selectStyles}
+                                    placeholder="Select state"
+                                    menuPortalTarget={document.body}
+                                    onChange={(e) => {
+                                        setState(e)
+                                        setValue('state', e.value)
+                                        setCity(null)
+                                        clearErrors('state')
+                                        setValue('city', '')
+                                        setCityList(e.cities)
+                                    }}
+                                />
+                                {errors?.state &&
+                                    <span className="ob-error">{errors.state.message}</span>
+                                }
+                            </div>
+                        </div>
+                        <div className="ob-col">
+                            <div className="ob-field">
+                                <label className="ob-label">
+                                    City <span className="required">*</span>
+                                </label>
+                                <Select
+                                    options={cityList}
+                                    ref={selectInputRef}
+                                    value={city}
+                                    styles={selectStyles}
+                                    placeholder="Select city"
+                                    menuPortalTarget={document.body}
+                                    onChange={(e) => {
+                                        setCity(e)
+                                        clearErrors('city')
+                                        setValue('city', e.value)
+                                    }}
+                                />
+                                {errors?.city &&
+                                    <span className="ob-error">{errors.city.message}</span>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        className="ob-submit-btn"
+                        type="submit"
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <span className="btn-spinner" />
+                        ) : (
+                            <>Create Account</>
+                        )}
+                    </button>
+                </div>
+            </form>
+
+            <div className="onboarding-footer">
+                <p className="ob-switch-text">
+                    Already have an account?
+                    <Link
+                        className="ob-switch-link"
+                        onClick={() => {
+                            dispatch(openLoginModal())
+                            handleClose()
+                        }}
+                    >
+                        Sign In
+                    </Link>
+                </p>
+            </div>
+        </Modal>
     )
 }
 

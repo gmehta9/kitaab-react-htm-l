@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 function ProfilePage() {
     const { setIsContentLoading } = useOutletContext();
     const [stateList, setStateList] = useState([]);
-    const [cityList, setCityList] = useState([]);
+    const [cityList, setCityList] = useState([]); // eslint-disable-line no-unused-vars
 
     const { register, handleSubmit, watch, setValue } = useForm({ mode: 'onChange' });
 
